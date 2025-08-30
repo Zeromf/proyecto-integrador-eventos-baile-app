@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eventos de Baile</title>
+  <link rel="stylesheet" href="estilos.css" />
+</head>
+<body>
+  <!-- HEADER -->
+  <header>
+    <div class="logo">Logo</div>
+    <h1>Clases y Eventos de Baile</h1>
+  </header>
+
+  <div class="container">
+    <!-- SIDEBAR -->
+    <aside>
+      <h2>Categorías</h2>
+      <ul>
+        <li><a href="#" class="filtro" data-cat="salsa">Salsa</a></li>
+        <li><a href="#" class="filtro" data-cat="bachata">Bachata</a></li>
+        <li><a href="#" class="filtro" data-cat="kizomba">Kizomba</a></li>
+        <li><a href="#" class="filtro" data-cat="zumba">Zumba</a></li>
+      </ul>
+      <hr style="border:0;border-top:1px solid #232a37;margin:1rem 0" />
+      <nav aria-label="Sitio">
+        <a class="btn" href="contacto.html">Contacto</a>
+      </nav>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main aria-live="polite">
+      <!-- Toolbar con 3 filtros -->
+      <div class="toolbar" role="search">
+        <input id="txtBuscar" type="search" placeholder="Buscar (ej: salsa, bachata)" />
+        <select id="selFecha" aria-label="Fecha">
+          <option value="">Todas las fechas</option>
+          <option value="today">Hoy</option>
+          <option value="this_week">Esta semana</option>
+          <option value="next_week">Próxima semana</option>
+        </select>
+        <select id="selUbicacion" aria-label="Ubicación">
+          <option value="">Argentina</option>
+          <option value="la plata">La Plata</option>
+          <option value="buenos aires">Buenos Aires</option>
+          <option value="cordoba">Córdoba</option>
+        </select>
+        <button id="btnBuscar" class="btn btn-primary">Buscar</button>
+      </div>
+
+      <!-- Grid de resultados -->
+      <section id="resultados" aria-label="Resultados de búsqueda"></section>
+
+      <!-- Paginación -->
+      <nav id="paginacion" aria-label="Paginación"></nav>
+
+      <!-- Guarda la query actual para paginar -->
+      <input type="hidden" id="qActual" value="salsa" />
+    </main>
+
+    <!-- Publicidad (solo desktop por CSS) -->
+    <section class="ad" aria-label="Publicidad">
+      <h3>Publicidad</h3>
+      <p>Este bloque solo aparece en Desktop...</p>
+    </section>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>&copy; 2025 Mi Startup - Todos los derechos reservados</p>
+  </footer>
+
+  <!-- jQuery + Script -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="app.js" defer></script>
+  <noscript>Necesitas habilitar JavaScript para ver los eventos.</noscript>
+</body>
+</html>
