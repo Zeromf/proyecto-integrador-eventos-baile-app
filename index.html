@@ -4,12 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Eventos de Baile</title>
-  <link rel="stylesheet" href="estilos.css" />
+  <link rel="stylesheet" href="css/estilos.css" />
 </head>
 <body>
   <!-- HEADER -->
   <header>
-    <div class="logo">Logo</div>
+     <div class="logo">
+      <a href="index.html">
+        <img src="img/logo.png" alt="Logo de la página">
+      </a>
+  </div>
     <h1>Clases y Eventos de Baile</h1>
   </header>
 
@@ -18,62 +22,165 @@
     <aside>
       <h2>Categorías</h2>
       <ul>
-        <li><a href="#" class="filtro" data-cat="salsa">Salsa</a></li>
-        <li><a href="#" class="filtro" data-cat="bachata">Bachata</a></li>
-        <li><a href="#" class="filtro" data-cat="kizomba">Kizomba</a></li>
-        <li><a href="#" class="filtro" data-cat="zumba">Zumba</a></li>
+        <li><a href="#salsa-category" class="filtro" data-cat="salsa">Salsa</a></li>
+        <li><a href="#bachata-category" class="filtro" data-cat="bachata">Bachata</a></li>
+        <li><a href="#kizomba-category" class="filtro" data-cat="kizomba">Kizomba</a></li>
+        <li><a href="#zumba-category" class="filtro" data-cat="zumba">Zumba</a></li>
       </ul>
       <hr style="border:0;border-top:1px solid #232a37;margin:1rem 0" />
       <nav aria-label="Sitio">
         <a class="btn" href="contacto.html">Contacto</a>
       </nav>
     </aside>
-
-    <!-- MAIN CONTENT -->
-    <main aria-live="polite">
-      <!-- Toolbar con 3 filtros -->
-      <div class="toolbar" role="search">
-        <input id="txtBuscar" type="search" placeholder="Buscar (ej: salsa, bachata)" />
-        <select id="selFecha" aria-label="Fecha">
-          <option value="">Todas las fechas</option>
-          <option value="today">Hoy</option>
-          <option value="this_week">Esta semana</option>
-          <option value="next_week">Próxima semana</option>
-        </select>
-        <select id="selUbicacion" aria-label="Ubicación">
-          <option value="">Argentina</option>
-          <option value="la plata">La Plata</option>
-          <option value="buenos aires">Buenos Aires</option>
-          <option value="cordoba">Córdoba</option>
-        </select>
-        <button id="btnBuscar" class="btn btn-primary">Buscar</button>
-      </div>
+    
+<!--{
+      id: "fb1",
+      name: { text: `Clase de ${capitalize(tipo)} Inicial` },
+      start: { local: fmt(setTime(addDays(1), 19, 0)) },
+      url: "#",
+      logo: { url: baseImg },
+      venue: { address: { localized_address_display: "Estudio Centro, La Plata" } }
+    }-->
 
       <!-- Grid de resultados -->
-      <section id="resultados" aria-label="Resultados de búsqueda"></section>
-
-      <!-- Paginación -->
-      <nav id="paginacion" aria-label="Paginación"></nav>
-
-      <!-- Guarda la query actual para paginar -->
-      <input type="hidden" id="qActual" value="salsa" />
+    <main aria-label="Categorias">
+      <section id="salsa-category">
+        <h1 class="category-title">Salsa</h1>
+        <div class="category-items">
+          <article class="evento">
+            <img loading="lazy" src="https://www.chassedance.es/wp-content/uploads/2024/06/Como-bailar-bachata.jpg" alt="Clase de Salsa Inicial">
+            <div class="content">
+              <h3>Clase de Salsa Inicial</h3>
+              <p>🗓️ 12/12/2025</p>
+              <p>📍 "Estudio Centro, La Plata"</p>
+              <a class="btn" href="${evt.url}" target="_blank" rel="noopener">Ver más</a>
+            </div>
+          </article>
+          <article class="evento">
+            <img loading="lazy" src="https://www.chassedance.es/wp-content/uploads/2024/06/Como-bailar-bachata.jpg" alt="Clase de Salsa Inicial">
+            <div class="content">
+              <h3>Clase de Salsa Inicial</h3>
+              <p>🗓️ 12/12/2025</p>
+              <p>📍 "Estudio Centro, La Plata"</p>
+              <a class="btn" href="${evt.url}" target="_blank" rel="noopener">Ver más</a>
+            </div>
+          </article>
+          <article class="evento">
+            <img loading="lazy" src="https://www.chassedance.es/wp-content/uploads/2024/06/Como-bailar-bachata.jpg" alt="Clase de Salsa Inicial">
+            <div class="content">
+              <h3>Clase de Salsa Inicial</h3>
+              <p>🗓️ 12/12/2025</p>
+              <p>📍 "Estudio Centro, La Plata"</p>
+              <a class="btn" href="${evt.url}" target="_blank" rel="noopener">Ver más</a>
+            </div>
+          </article>
+        </div>
+      </section>
+      <section id="bachata-category" >
+        <h1 class="category-title">Bachata</h1>
+        <div class="category-items">
+          <article class="evento">
+            <img loading="lazy" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_vD8WpIciJ8b9pCeDP4erfalp02n5oUiK1Q&s" alt="Clase de Bachata Inicial">
+            <div class="content">
+              <h3>Clase de Bachata Inicial</h3>
+              <p>🗓️ 12/09/2025</p>
+              <p>📍 "Club Social, Tolosa"</p>
+              <a class="btn" href="${evt.url}" target="_blank" rel="noopener">Ver más</a>
+            </div>
+          </article>
+          <article class="evento">
+            <img loading="lazy" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_vD8WpIciJ8b9pCeDP4erfalp02n5oUiK1Q&s" alt="Clase de Bachata Inicial">
+            <div class="content">
+              <h3>Clase de Bachata Inicial</h3>
+              <p>🗓️ 12/09/2025</p>
+              <p>📍 "Club Social, Tolosa"</p>
+              <a class="btn" href="${evt.url}" target="_blank" rel="noopener">Ver más</a>
+            </div>
+          </article>
+          <article class="evento">
+            <img loading="lazy" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_vD8WpIciJ8b9pCeDP4erfalp02n5oUiK1Q&s" alt="Clase de Bachata Inicial">
+            <div class="content">
+              <h3>Clase de Bachata Inicial</h3>
+              <p>🗓️ 12/09/2025</p>
+              <p>📍 "Club Social, Tolosa"</p>
+              <a class="btn" href="${evt.url}" target="_blank" rel="noopener">Ver más</a>
+            </div>
+          </article>
+        </div>
+      </section>
+      <section id="kizomba-category">
+        <h1 class="category-title">Kizomba</h1>
+        <div class="category-items">
+          <article class="evento">
+            <img loading="lazy" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYVKa1RCJsy_jFgZZ3QLo1ovAarhwXVN8p5Q&s" alt="Clase de Kizomba Inicial">
+            <div class="content">
+              <h3>Clase de Kizomba Inicial</h3>
+              <p>🗓️ 12/09/2025</p>
+              <p>📍 "Club Social, Tolosa"</p>
+              <a class="btn" href="${evt.url}" target="_blank" rel="noopener">Ver más</a>
+            </div>
+          </article>
+          <article class="evento">
+            <img loading="lazy" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYVKa1RCJsy_jFgZZ3QLo1ovAarhwXVN8p5Q&s" alt="Clase de Kizomba Inicial">
+            <div class="content">
+              <h3>Clase de Kizomba Inicial</h3>
+              <p>🗓️ 12/09/2025</p>
+              <p>📍 "Club Social, Tolosa"</p>
+              <a class="btn" href="${evt.url}" target="_blank" rel="noopener">Ver más</a>
+            </div>
+          </article>
+          <article class="evento">
+            <img loading="lazy" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYVKa1RCJsy_jFgZZ3QLo1ovAarhwXVN8p5Q&s" alt="Clase de Kizomba Inicial">
+            <div class="content">
+              <h3>Clase de Kizomba Inicial</h3>
+              <p>🗓️ 12/09/2025</p>
+              <p>📍 "Club Social, Tolosa"</p>
+              <a class="btn" href="${evt.url}" target="_blank" rel="noopener">Ver más</a>
+            </div>
+          </article>
+        </div>
+      </section>
+      <section id="zumba-category">
+        <h1 class="category-title">Zumba</h1>
+        <div class="category-items">
+          <article class="evento">
+            <img loading="lazy" src="https://www.arthritis.org//getmedia/22ed138c-e58f-4647-92bd-009f174f5207/zumba_dance-based_fitness_600x400.jpg" alt="Clase de Zumba Inicial">
+            <div class="content">
+              <h3>Clase de Zumba Inicial</h3>
+              <p>🗓️ 12/09/2025</p>
+              <p>📍 "Club Social, Tolosa"</p>
+              <a class="btn" href="${evt.url}" target="_blank" rel="noopener">Ver más</a>
+            </div>
+          </article>
+          <article class="evento">
+            <img loading="lazy" src="https://www.arthritis.org//getmedia/22ed138c-e58f-4647-92bd-009f174f5207/zumba_dance-based_fitness_600x400.jpg" alt="Clase de Zumba Inicial">
+            <div class="content">
+              <h3>Clase de Zumba Inicial</h3>
+              <p>🗓️ 12/09/2025</p>
+              <p>📍 "Club Social, Tolosa"</p>
+              <a class="btn" href="${evt.url}" target="_blank" rel="noopener">Ver más</a>
+            </div>
+          </article>
+          <article class="evento">
+            <img loading="lazy" src="https://www.arthritis.org//getmedia/22ed138c-e58f-4647-92bd-009f174f5207/zumba_dance-based_fitness_600x400.jpg" alt="Clase de Zumba Inicial">
+            <div class="content">
+              <h3>Clase de Zumba Inicial</h3>
+              <p>🗓️ 12/09/2025</p>
+              <p>📍 "Club Social, Tolosa"</p>
+              <a class="btn" href="${evt.url}" target="_blank" rel="noopener">Ver más</a>
+            </div>
+          </article>
+        </div>
+      </section>
     </main>
-
-    <!-- Publicidad (solo desktop por CSS) -->
-    <section class="ad" aria-label="Publicidad">
-      <h3>Publicidad</h3>
-      <p>Este bloque solo aparece en Desktop...</p>
-    </section>
   </div>
 
   <!-- FOOTER -->
   <footer>
     <p>&copy; 2025 Mi Startup - Todos los derechos reservados</p>
+    <p class="credit">
+      <em>Desarrollado por Enzo Ferreyra y Fiorella Adami · Aplicaciones Móviles · Universidad Nacional Arturo Jauretche</em>
+    </p>
   </footer>
-
-  <!-- jQuery + Script -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="app.js" defer></script>
-  <noscript>Necesitas habilitar JavaScript para ver los eventos.</noscript>
 </body>
 </html>
