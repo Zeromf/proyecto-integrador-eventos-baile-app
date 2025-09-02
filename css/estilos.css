@@ -7,6 +7,7 @@
   --text: #e7eaf0;
   --muted: #9aa3b2;
   --primary: #F18B10;
+  --accent: #ff537a; /* para el botón calendario */
   --radius: 14px;
   --shadow: 0 8px 24px rgba(0,0,0,.25);
 }
@@ -180,11 +181,7 @@ main{ display: grid; grid-template-columns: 1fr; gap: 1rem; }
 .promo-content p { margin: .4rem 0; color: var(--muted); }
 
 /* CTAs de la promo */
-.promo-ctas,
-.promo-buttons{ /* alias para compatibilidad con tu HTML anterior */
-  margin-top: 1rem;
-  display: flex; gap: .8rem; flex-wrap: wrap;
-}
+.promo-ctas{ margin-top: 1rem; display: flex; gap: .8rem; flex-wrap: wrap; }
 
 /* Métricas de la promo */
 .promo-stats{
@@ -224,7 +221,7 @@ main{ display: grid; grid-template-columns: 1fr; gap: 1rem; }
 .evento{
   background: var(--panel);
   border: 1px solid #232a37;
-  border-radius: var(--radius);
+  border-radius: 18px;
   overflow: hidden;
   box-shadow: var(--shadow);
   transition: transform .15s ease, box-shadow .15s ease;
@@ -240,32 +237,62 @@ main{ display: grid; grid-template-columns: 1fr; gap: 1rem; }
   object-fit: cover;
   display:block;
   border-bottom: 2px solid #232a37;
+  border-bottom-left-radius: 0; border-bottom-right-radius: 0;
 }
 
 .evento .content{
-  padding: 1rem;
-  text-align: center;
+  padding: 1rem 1rem 1.1rem;
+  text-align: left;
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
-.evento h3{
-  margin:.5rem 0 .7rem; font-size: 1.1rem; font-weight: 700; color: #fff;
-}
-.evento p{ margin:.3rem 0; color: var(--muted); font-size:.95rem; }
-.evento a.btn{
-  margin-top: auto; align-self: center;
-  display: inline-block;
-  padding:.6rem 1.1rem; text-decoration: none;
-  background: var(--primary); color:#fff; border-radius: 12px; font-weight:600;
-  transition: background .2s ease, transform .1s ease;
-}
-.evento a.btn:hover{ background:#D97A0A; border-color: #D97A0A; transform: translateY(-1px); }
 
-/* Estados */
-#category-items p{ margin:.25rem 0; } /* por si usás ese ID */
+/* Chips */
+.tags{ display: flex; gap:.4rem; flex-wrap: wrap; margin-bottom:.55rem; }
+.chip{
+  display:inline-flex; align-items:center; gap:.35rem;
+  padding:.28rem .56rem; border-radius:999px;
+  background:#10151e; border:1px solid #273046; color:#cfd6e3;
+  font-size:.82rem; line-height:1; font-weight:600;
+}
+.chip-free{ background:#11261c; border-color:#1f7a46; color:#b7ffd6; }
 
+/* Título de la card */
+.evento-title{
+  margin:.35rem 0 .3rem;
+  font-size:1.15rem; line-height:1.25; letter-spacing:.2px;
+  color:#fff;
+}
+
+/* Lista de meta (fecha / lugar) */
+.evento-meta{
+  list-style:none; padding:0; margin:.2rem 0 .9rem;
+  display:flex; flex-direction:column; gap:.5rem; color:var(--muted);
+}
+.evento-meta .ico{
+  width:18px; height:18px; flex:0 0 18px; opacity:.9;
+}
+.evento-meta li{
+  display:flex; align-items:flex-start; gap:.45rem;
+}
+
+/* Acciones */
+.evento-actions{ display:flex; gap:.6rem; margin-bottom:.7rem; }
+.btn-ghost{ background:#1c2230; border-color:#2c3446; }
+
+/* Botón calendario grande */
+.btn-calendar{
+  display:block; width:100%; text-align:center;
+  background: var(--accent); border-color: var(--accent);
+  color:#fff; font-weight:800; border-radius: 999px;
+  padding:.72rem 1rem; letter-spacing:.15px;
+  box-shadow: inset 0 -2px 0 rgba(0,0,0,.12);
+}
+.btn-calendar:hover{ filter:brightness(1.05); transform: translateY(-1px); }
+
+/* Estados vacíos/errores */
 .empty, .error{
   background:#151a24; border:1px dashed #2a3346; color:#9aa3b2;
   border-radius:12px; padding:1rem; text-align:center;
@@ -300,7 +327,7 @@ footer{
 @media (min-width: 1024px){
   .container{ grid-template-columns: 220px 1fr; } /* 2 columnas (aside + main) */
   .category-items{ grid-template-columns: repeat(3, minmax(0, 1fr)); } /* 3 columnas en desktop */
-  .ad{ display:block; } /* si agregás un bloque .ad en el HTML */
+  .ad{ display:block; } /* por si agregás un bloque .ad */
 }
 
 /* Accesibilidad y scroll */
