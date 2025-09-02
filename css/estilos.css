@@ -11,9 +11,7 @@
   --shadow: 0 8px 24px rgba(0,0,0,.25);
 }
 
-.category-title {
-  margin-top: 0;
-}
+.category-title { margin-top: 0; scroll-margin-top: 84px; }
 
 html,body{
   margin:0;
@@ -46,7 +44,7 @@ header .logo {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100%; /* ocupa toda la altura del header */
+  height: 100%;
 }
 
 /* Enlace dentro del logo */
@@ -54,8 +52,8 @@ header .logo a {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100%;   /* ocupa toda la altura del contenedor */
-  text-decoration: none; 
+  height: 100%;
+  text-decoration: none;
 }
 
 /* Imagen del logo */
@@ -65,14 +63,16 @@ header .logo img {
   display: block;
 }
 
-header h1{ margin:0; text-align:center; font-size: clamp(1.1rem, 2vw, 1.6rem); }
+header h1{
+  margin:0; text-align:center; font-size: clamp(1.1rem, 2vw, 1.6rem);
+}
 
 /* Layout principal */
 .container{
   display: grid;
-  grid-template-columns: 1fr;  
+  grid-template-columns: 1fr;
   gap: 1rem;
-  max-width: 1280px;           
+  max-width: 1280px;
   margin: 0 auto; padding: 1rem;
 }
 
@@ -92,7 +92,7 @@ aside a{
 }
 aside a:hover{ background: #212836; }
 
-/* Publicidad (solo desktop) */
+/* Publicidad opcional */
 .ad{
   display: none;
   background: var(--panel-2);
@@ -111,24 +111,113 @@ input[type="text"], input[type="search"], select{
   padding:.55rem .65rem; outline:none;
 }
 input::placeholder{ color:#7e8899; }
+
+/* Botones base */
 button, .btn{
   background:#242b3a; color:var(--text);
   border:1px solid #2c3446; border-radius:10px;
   padding:.5rem .8rem; cursor:pointer; text-decoration:none;
-  transition: filter .18s ease, transform .12s ease;
+  transition: filter .18s ease, transform .12s ease, box-shadow .12s ease;
+  box-shadow: 0 0 0 rgba(0,0,0,0);
 }
-button:hover, .btn:hover{ filter:brightness(1.08); }
+button:hover, .btn:hover{ filter:brightness(1.08); transform: translateY(-1px); }
 .btn-primary{ background: var(--primary); border-color: #F18B10; color:#fff; }
+
+/* Tamaños/variantes CTA */
+.btn-lg{ padding:.75rem 1.1rem; border-radius: 999px; font-weight:700; }
+.btn-ghost{ background:#1c2230; border-color:#2c3446; }
 
 /* Contenedor de resultados */
 main{ display: grid; grid-template-columns: 1fr; gap: 1rem; }
 
+/* ===== Sección promocional ===== */
+.promo-section {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  background: var(--panel-2);
+  border: 1px solid #232a37;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.promo-image { position: relative; }
+
+.promo-image img {
+  width: 100%;
+  border-radius: var(--radius);
+  object-fit: cover;
+  aspect-ratio: 16/9;
+  display: block;
+}
+
+/* overlay del texto BACHATA */
+.promo-overlay {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  background: rgba(0,0,0,.55);
+  color: #fff;
+  padding: .55rem .8rem;
+  border-radius: 10px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  line-height: 1.1;
+  font-size: clamp(1.2rem, 3vw, 2rem);
+}
+.promo-overlay span{
+  display:block;
+  font-weight:600;
+  letter-spacing:.18em;
+  opacity:.95;
+  font-size: clamp(.8rem, 1.6vw, 1.05rem);
+}
+
+.promo-content h2 { margin: 0 0 .5rem; font-size: clamp(1.3rem, 2.2vw, 1.8rem); }
+.promo-content p { margin: .4rem 0; color: var(--muted); }
+
+/* CTAs de la promo */
+.promo-ctas,
+.promo-buttons{ /* alias para compatibilidad con tu HTML anterior */
+  margin-top: 1rem;
+  display: flex; gap: .8rem; flex-wrap: wrap;
+}
+
+/* Métricas de la promo */
+.promo-stats{
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: .9rem;
+}
+.stat{
+  background: #141a25;
+  border: 1px solid #232a37;
+  border-radius: 16px;
+  padding: .9rem 1rem;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+.stat-number{
+  font-size: 1.1rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+.stat-label{
+  color: var(--muted);
+  margin-top: .15rem;
+  font-size: .95rem;
+}
+
 /* ===== Grilla de cards ===== */
 .category-items{
   display: grid;
-  grid-template-columns: repeat(3, 1fr);     
+  grid-template-columns: 1fr;   /* móvil: 1 columna */
   gap: 2rem;
-  align-items: stretch;             
+  align-items: stretch;
 }
 
 /* Card de evento */
@@ -139,8 +228,6 @@ main{ display: grid; grid-template-columns: 1fr; gap: 1rem; }
   overflow: hidden;
   box-shadow: var(--shadow);
   transition: transform .15s ease, box-shadow .15s ease;
-
-  /* alturas parejas */
   display: flex;
   flex-direction: column;
 }
@@ -177,9 +264,7 @@ main{ display: grid; grid-template-columns: 1fr; gap: 1rem; }
 .evento a.btn:hover{ background:#D97A0A; border-color: #D97A0A; transform: translateY(-1px); }
 
 /* Estados */
-#category-items p{ 
-  margin:.25rem 0; 
-}
+#category-items p{ margin:.25rem 0; } /* por si usás ese ID */
 
 .empty, .error{
   background:#151a24; border:1px dashed #2a3346; color:#9aa3b2;
@@ -204,14 +289,18 @@ footer{
 /* ===== Breakpoints ===== */
 @media (min-width: 600px){
   .container{ grid-template-columns: 220px 1fr; align-items: start; }
-  #category-items{ grid-template-columns: repeat(2, minmax(0, 1fr)); } /* 2 columnas en tablet */
+  .category-items{ grid-template-columns: repeat(2, minmax(0, 1fr)); } /* 2 columnas en tablet */
+  .promo-stats{ grid-template-columns: repeat(3, 1fr); } /* métricas lado a lado */
+}
+
+@media (min-width: 768px){
+  .promo-section{ grid-template-columns: 1fr 1fr; align-items: center; }
 }
 
 @media (min-width: 1024px){
-  .container{ grid-template-columns: 220px 1fr 280px; }
-  /* 👇 Forzado a 3 columnas en desktop */
-  #category-items{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .ad{ display:block; }
+  .container{ grid-template-columns: 220px 1fr; } /* 2 columnas (aside + main) */
+  .category-items{ grid-template-columns: repeat(3, minmax(0, 1fr)); } /* 3 columnas en desktop */
+  .ad{ display:block; } /* si agregás un bloque .ad en el HTML */
 }
 
 /* Accesibilidad y scroll */

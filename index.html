@@ -13,7 +13,7 @@
       <a href="index.html">
         <img src="img/logo.png" alt="Logo de la página">
       </a>
-  </div>
+    </div>
     <h1>Flow Dance</h1>
   </header>
 
@@ -33,17 +33,52 @@
       </nav>
     </aside>
     
-<!--{
-      id: "fb1",
-      name: { text: `Clase de ${capitalize(tipo)} Inicial` },
-      start: { local: fmt(setTime(addDays(1), 19, 0)) },
-      url: "#",
-      logo: { url: baseImg },
-      venue: { address: { localized_address_display: "Estudio Centro, La Plata" } }
-    }-->
-
-      <!-- Grid de resultados -->
+    <!-- CONTENIDO PRINCIPAL -->
     <main aria-label="Categorias">
+
+<!-- 🔥 Sección Promocional -->
+<section class="promo-section">
+  <div class="promo-image">
+    <img src="https://i.ytimg.com/vi/il4xFqDeUro/maxresdefault.jpg" alt="Clases de Bachata - Flow Dance">
+    <div class="promo-overlay">BACHATA <br><span>Todos los niveles</span></div>
+  </div>
+
+  <div class="promo-content">
+    <h2>¿Buscás aprender a bailar desde cero?</h2>
+    <p>Llegaste al lugar indicado.</p>
+    <p>
+      En <strong>Flow Dance</strong> encontrás clases y prácticas de 
+      <em>salsa</em> y <em>bachata</em> para principiantes y avanzados. 
+      Descubrí eventos cerca tuyo y armá tu semana de baile.
+    </p>
+
+    <!-- CTA -->
+    <div class="promo-ctas">
+      <a href="#bachata-category" class="btn btn-primary btn-lg">Buscar clases y eventos</a>
+      <a href="#salsa-category" class="btn btn-ghost btn-lg">Ver lo que hay hoy</a>
+    </div>
+
+    <!-- Métricas -->
+    <div class="promo-stats">
+      <div class="stat">
+        <div class="stat-number">+100</div>
+        <div class="stat-label">eventos/mes</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">10</div>
+        <div class="stat-label">ciudades</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">Gratis</div>
+        <div class="stat-label">y pagos</div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- 🔥 Fin Sección Promocional -->
+
+
+      <!-- CATEGORÍAS -->
       <section id="salsa-category">
         <h1 class="category-title">Salsa</h1>
         <div class="category-items">
@@ -52,8 +87,8 @@
             <div class="content">
               <h3>Clase de Salsa Inicial</h3>
               <p>🗓️ 12/12/2025</p>
-              <p>📍 "Estudio Centro, La Plata"</p>
-              <a class="btn" href="${evt.url}" target="_blank" rel="noopener">Ver más</a>
+              <p>📍 Estudio Centro, La Plata</p>
+              <a class="btn" href="#" target="_blank" rel="noopener">Ver más</a>
             </div>
           </article>
           <article class="evento">
@@ -61,8 +96,8 @@
             <div class="content">
               <h3>Clase de Salsa Inicial</h3>
               <p>🗓️ 12/12/2025</p>
-              <p>📍 "Estudio Centro, La Plata"</p>
-              <a class="btn" href="${evt.url}" target="_blank" rel="noopener">Ver más</a>
+              <p>📍 Estudio Centro, La Plata</p>
+              <a class="btn" href="#" target="_blank" rel="noopener">Ver más</a>
             </div>
           </article>
           <article class="evento">
@@ -70,13 +105,14 @@
             <div class="content">
               <h3>Clase de Salsa Inicial</h3>
               <p>🗓️ 12/12/2025</p>
-              <p>📍 "Estudio Centro, La Plata"</p>
-              <a class="btn" href="${evt.url}" target="_blank" rel="noopener">Ver más</a>
+              <p>📍 Estudio Centro, La Plata</p>
+              <a class="btn" href="#" target="_blank" rel="noopener">Ver más</a>
             </div>
           </article>
         </div>
       </section>
-      <section id="bachata-category" >
+
+      <section id="bachata-category">
         <h1 class="category-title">Bachata</h1>
         <div class="category-items">
           <article class="evento">
@@ -84,8 +120,8 @@
             <div class="content">
               <h3>Clase de Bachata Inicial</h3>
               <p>🗓️ 12/09/2025</p>
-              <p>📍 "Club Social, Tolosa"</p>
-              <a class="btn" href="${evt.url}" target="_blank" rel="noopener">Ver más</a>
+              <p>📍 Club Social, Tolosa</p>
+              <a class="btn" href="#" target="_blank" rel="noopener">Ver más</a>
             </div>
           </article>
           <article class="evento">
@@ -93,8 +129,8 @@
             <div class="content">
               <h3>Clase de Bachata Inicial</h3>
               <p>🗓️ 12/09/2025</p>
-              <p>📍 "Club Social, Tolosa"</p>
-              <a class="btn" href="${evt.url}" target="_blank" rel="noopener">Ver más</a>
+              <p>📍 Club Social, Tolosa</p>
+              <a class="btn" href="#" target="_blank" rel="noopener">Ver más</a>
             </div>
           </article>
           <article class="evento">
@@ -102,12 +138,13 @@
             <div class="content">
               <h3>Clase de Bachata Inicial</h3>
               <p>🗓️ 12/09/2025</p>
-              <p>📍 "Club Social, Tolosa"</p>
-              <a class="btn" href="${evt.url}" target="_blank" rel="noopener">Ver más</a>
+              <p>📍 Club Social, Tolosa</p>
+              <a class="btn" href="#" target="_blank" rel="noopener">Ver más</a>
             </div>
           </article>
         </div>
       </section>
+
       <section id="kizomba-category">
         <h1 class="category-title">Kizomba</h1>
         <div class="category-items">
@@ -116,8 +153,8 @@
             <div class="content">
               <h3>Clase de Kizomba Inicial</h3>
               <p>🗓️ 12/09/2025</p>
-              <p>📍 "Club Social, Tolosa"</p>
-              <a class="btn" href="${evt.url}" target="_blank" rel="noopener">Ver más</a>
+              <p>📍 Club Social, Tolosa</p>
+              <a class="btn" href="#" target="_blank" rel="noopener">Ver más</a>
             </div>
           </article>
           <article class="evento">
@@ -125,8 +162,8 @@
             <div class="content">
               <h3>Clase de Kizomba Inicial</h3>
               <p>🗓️ 12/09/2025</p>
-              <p>📍 "Club Social, Tolosa"</p>
-              <a class="btn" href="${evt.url}" target="_blank" rel="noopener">Ver más</a>
+              <p>📍 Club Social, Tolosa</p>
+              <a class="btn" href="#" target="_blank" rel="noopener">Ver más</a>
             </div>
           </article>
           <article class="evento">
@@ -134,12 +171,13 @@
             <div class="content">
               <h3>Clase de Kizomba Inicial</h3>
               <p>🗓️ 12/09/2025</p>
-              <p>📍 "Club Social, Tolosa"</p>
-              <a class="btn" href="${evt.url}" target="_blank" rel="noopener">Ver más</a>
+              <p>📍 Club Social, Tolosa</p>
+              <a class="btn" href="#" target="_blank" rel="noopener">Ver más</a>
             </div>
           </article>
         </div>
       </section>
+
       <section id="zumba-category">
         <h1 class="category-title">Zumba</h1>
         <div class="category-items">
@@ -148,8 +186,8 @@
             <div class="content">
               <h3>Clase de Zumba Inicial</h3>
               <p>🗓️ 12/09/2025</p>
-              <p>📍 "Club Social, Tolosa"</p>
-              <a class="btn" href="${evt.url}" target="_blank" rel="noopener">Ver más</a>
+              <p>📍 Club Social, Tolosa</p>
+              <a class="btn" href="#" target="_blank" rel="noopener">Ver más</a>
             </div>
           </article>
           <article class="evento">
@@ -157,8 +195,8 @@
             <div class="content">
               <h3>Clase de Zumba Inicial</h3>
               <p>🗓️ 12/09/2025</p>
-              <p>📍 "Club Social, Tolosa"</p>
-              <a class="btn" href="${evt.url}" target="_blank" rel="noopener">Ver más</a>
+              <p>📍 Club Social, Tolosa</p>
+              <a class="btn" href="#" target="_blank" rel="noopener">Ver más</a>
             </div>
           </article>
           <article class="evento">
@@ -166,8 +204,8 @@
             <div class="content">
               <h3>Clase de Zumba Inicial</h3>
               <p>🗓️ 12/09/2025</p>
-              <p>📍 "Club Social, Tolosa"</p>
-              <a class="btn" href="${evt.url}" target="_blank" rel="noopener">Ver más</a>
+              <p>📍 Club Social, Tolosa</p>
+              <a class="btn" href="#" target="_blank" rel="noopener">Ver más</a>
             </div>
           </article>
         </div>
