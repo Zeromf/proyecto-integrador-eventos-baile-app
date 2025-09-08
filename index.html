@@ -9,7 +9,7 @@
 <body>
   <!-- HEADER -->
   <header>
-     <div class="logo">
+    <div class="logo">
       <a href="index.html">
         <img src="img/logo.png" alt="Logo de la página">
       </a>
@@ -22,21 +22,22 @@
     <aside>
       <h2>Categorías</h2>
       <ul>
-        <li><a href="#salsa-category" class="filtro" data-cat="salsa">Salsa</a></li>
+        <!-- anclas a las secciones de abajo -->
+        <li><a href="#salsa-category"   class="filtro" data-cat="salsa">Salsa</a></li>
         <li><a href="#bachata-category" class="filtro" data-cat="bachata">Bachata</a></li>
         <li><a href="#kizomba-category" class="filtro" data-cat="kizomba">Kizomba</a></li>
-        <li><a href="#zumba-category" class="filtro" data-cat="zumba">Zumba</a></li>
+        <li><a href="#zumba-category"   class="filtro" data-cat="zumba">Zumba</a></li>
       </ul>
       <hr style="border:0;border-top:1px solid #232a37;margin:1rem 0" />
       <nav aria-label="Sitio">
         <a class="btn" href="contacto.html">Contacto</a>
       </nav>
     </aside>
-    
-    <!-- CONTENIDO PRINCIPAL -->
-    <main aria-label="Categorias">
 
-      <!-- 🔥 Sección Promocional -->
+    <!-- CONTENIDO PRINCIPAL -->
+    <main aria-label="Contenido principal">
+
+      <!-- 🔥 Sección Promocional (estática) -->
       <section class="promo-section">
         <div class="promo-image">
           <img src="https://i.ytimg.com/vi/il4xFqDeUro/maxresdefault.jpg" alt="Clases de Bachata - Flow Dance">
@@ -47,18 +48,16 @@
           <h2>¿Buscás aprender a bailar desde cero?</h2>
           <p>Llegaste al lugar indicado.</p>
           <p>
-            En <strong>Flow Dance</strong> encontrás clases y prácticas de 
-            <em>salsa</em> y <em>bachata</em> para principiantes y avanzados. 
+            En <strong>Flow Dance</strong> encontrás clases y prácticas de
+            <em>salsa</em> y <em>bachata</em> para principiantes y avanzados.
             Descubrí eventos cerca tuyo y armá tu semana de baile.
           </p>
 
-          <!-- CTA -->
           <div class="promo-ctas">
             <a href="#bachata-category" class="btn btn-primary btn-lg">Buscar clases y eventos</a>
             <a href="#salsa-category" class="btn btn-ghost btn-lg">Ver lo que hay hoy</a>
           </div>
 
-          <!-- Métricas -->
           <div class="promo-stats">
             <div class="stat">
               <div class="stat-number">+100</div>
@@ -75,16 +74,44 @@
           </div>
         </div>
       </section>
-      <!-- 🔥 Fin Sección Promocional -->
 
-      <!-- ========== CATEGORÍAS ========== -->
+
+
+
+      <!-- 🔎 Buscador dinámico (usa js/app.js) -->
+      <section class="buscador">
+        <div class="buscador-row">
+          <input id="txtBuscar" type="search" placeholder="Buscar (salsa, bachata, kizomba, zumba)" />
+          <select id="selFecha">
+            <option value="">Cualquier fecha</option>
+            <option value="today">Hoy</option>
+            <option value="this_week">Esta semana</option>
+            <option value="next_week">La semana que viene</option>
+          </select>
+          <select id="selUbicacion">
+            <option value="Buenos Aires" selected>Buenos Aires</option>
+            <option value="La Plata">La Plata</option>
+            <option value="Córdoba">Córdoba</option>
+            <option value="Rosario">Rosario</option>
+          </select>
+          <button id="btnBuscar" class="btn btn-primary">Buscar</button>
+        </div>
+      </section>
+
+      <!-- 🧾 Resultados dinámicos -->
+      <section id="eventbrite-resultados" aria-label="Resultados de búsqueda">
+        <h2>Eventos</h2>
+        <div id="resultados" class="category-items"></div>
+        <div id="paginacion" class="pager"></div>
+      </section>
+
+      <!-- ========== CATEGORÍAS (estáticas de muestra) ========== -->
 
       <!-- SALSA -->
       <section id="salsa-category">
         <h1 class="category-title">Salsa</h1>
         <div class="category-items">
-
-          <!-- Card 1 -->
+          <!-- 👉 Reemplazá/duplicá estos <article> por tus cards -->
           <article class="evento">
             <img loading="lazy" src="https://www.chassedance.es/wp-content/uploads/2024/06/Como-bailar-bachata.jpg" alt="Clase de Salsa Inicial">
             <div class="content">
@@ -93,97 +120,18 @@
                 <span class="chip">Nivel Inicial</span>
                 <span class="chip">Salsa</span>
               </div>
-
               <h3 class="evento-title">Clase de Salsa Inicial</h3>
-
               <ul class="evento-meta">
-                <li>
-                  <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M7 2v2M17 2v2M3 8h18M4 6h16a1 1 0 0 1 1 1v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a1 1 0 0 1 1-1zM7 11h4v4H7z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                  <time datetime="2025-09-02T22:00">2 sept 2025, 10:00 p. m.</time>
-                </li>
-                <li>
-                  <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M12 21s-7-5.2-7-11a7 7 0 1 1 14 0c0 5.8-7 11-7 11zM12 10.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                  Estudio Centro, La Plata
-                </li>
+                <li>🗓️ <time datetime="2025-09-02T22:00">2 sept 2025, 10:00 p. m.</time></li>
+                <li>📍 Estudio Centro, La Plata</li>
               </ul>
-
               <div class="evento-actions">
                 <a class="btn btn-ghost" href="#">Ver más</a>
               </div>
               <a class="btn btn-calendar" href="#">Agregar a calendario</a>
             </div>
           </article>
-
-          <!-- Card 2 -->
-          <article class="evento">
-            <img loading="lazy" src="https://www.chassedance.es/wp-content/uploads/2024/06/Como-bailar-bachata.jpg" alt="Taller Intensivo de Salsa">
-            <div class="content">
-              <div class="tags">
-                <span class="chip">Nivel Intermedio</span>
-                <span class="chip">Salsa</span>
-              </div>
-
-              <h3 class="evento-title">Taller Intensivo de Salsa</h3>
-
-              <ul class="evento-meta">
-                <li>
-                  <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M7 2v2M17 2v2M3 8h18M4 6h16a1 1 0 0 1 1 1v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a1 1 0 0 1 1-1zM7 11h4v4H7z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                  <time datetime="2025-09-04T23:30">4 sept 2025, 11:30 p. m.</time>
-                </li>
-                <li>
-                  <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M12 21s-7-5.2-7-11a7 7 0 1 1 14 0c0 5.8-7 11-7 11zM12 10.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                  Sala 2, City Bell
-                </li>
-              </ul>
-
-              <div class="evento-actions">
-                <a class="btn btn-ghost" href="#">Ver más</a>
-              </div>
-              <a class="btn btn-calendar" href="#">Agregar a calendario</a>
-            </div>
-          </article>
-
-          <!-- Card 3 -->
-          <article class="evento">
-            <img loading="lazy" src="https://www.chassedance.es/wp-content/uploads/2024/06/Como-bailar-bachata.jpg" alt="Práctica Social de Salsa">
-            <div class="content">
-              <div class="tags">
-                <span class="chip">Social</span>
-                <span class="chip">Salsa</span>
-              </div>
-
-              <h3 class="evento-title">Práctica Social de Salsa</h3>
-
-              <ul class="evento-meta">
-                <li>
-                  <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M7 2v2M17 2v2M3 8h18M4 6h16a1 1 0 0 1 1 1v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a1 1 0 0 1 1-1zM7 11h4v4H7z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                  <time datetime="2025-09-06T21:00">6 sept 2025, 9:00 p. m.</time>
-                </li>
-                <li>
-                  <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M12 21s-7-5.2-7-11a7 7 0 1 1 14 0c0 5.8-7 11-7 11zM12 10.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                  Club Central, La Plata
-                </li>
-              </ul>
-
-              <div class="evento-actions">
-                <a class="btn btn-ghost" href="#">Ver más</a>
-              </div>
-              <a class="btn btn-calendar" href="#">Agregar a calendario</a>
-            </div>
-          </article>
-
+          <!-- otras cards de Salsa -->
         </div>
       </section>
 
@@ -191,83 +139,7 @@
       <section id="bachata-category">
         <h1 class="category-title">Bachata</h1>
         <div class="category-items">
-
-          <article class="evento">
-            <img loading="lazy" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_vD8WpIciJ8b9pCeDP4erfalp02n5oUiK1Q&s" alt="Clase de Bachata Inicial">
-            <div class="content">
-              <div class="tags">
-                <span class="chip chip-free">Gratis</span>
-                <span class="chip">Nivel Inicial</span>
-                <span class="chip">Bachata</span>
-              </div>
-              <h3 class="evento-title">Clase de Bachata Inicial</h3>
-              <ul class="evento-meta">
-                <li>
-                  <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2v2M17 2v2M3 8h18M4 6h16a1 1 0 0 1 1 1v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a1 1 0 0 1 1-1zM7 11h4v4H7z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  <time datetime="2025-09-12T20:00">12 sept 2025, 8:00 p. m.</time>
-                </li>
-                <li>
-                  <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-5.2-7-11a7 7 0 1 1 14 0c0 5.8-7 11-7 11zM12 10.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  Club Social, Tolosa
-                </li>
-              </ul>
-              <div class="evento-actions">
-                <a class="btn btn-ghost" href="#">Ver más</a>
-              </div>
-              <a class="btn btn-calendar" href="#">Agregar a calendario</a>
-            </div>
-          </article>
-
-          <article class="evento">
-            <img loading="lazy" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_vD8WpIciJ8b9pCeDP4erfalp02n5oUiK1Q&s" alt="Bachata Intermedio">
-            <div class="content">
-              <div class="tags">
-                <span class="chip">Nivel Intermedio</span>
-                <span class="chip">Bachata</span>
-              </div>
-              <h3 class="evento-title">Bachata Intermedio</h3>
-              <ul class="evento-meta">
-                <li>
-                  <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2v2M17 2v2M3 8h18M4 6h16a1 1 0 0 1 1 1v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a1 1 0 0 1 1-1zM7 11h4v4H7z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  <time datetime="2025-09-15T21:00">15 sept 2025, 9:00 p. m.</time>
-                </li>
-                <li>
-                  <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-5.2-7-11a7 7 0 1 1 14 0c0 5.8-7 11-7 11zM12 10.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  Estudio Centro, La Plata
-                </li>
-              </ul>
-              <div class="evento-actions">
-                <a class="btn btn-ghost" href="#">Ver más</a>
-              </div>
-              <a class="btn btn-calendar" href="#">Agregar a calendario</a>
-            </div>
-          </article>
-
-          <article class="evento">
-            <img loading="lazy" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_vD8WpIciJ8b9pCeDP4erfalp02n5oUiK1Q&s" alt="Social Bachata & Friends">
-            <div class="content">
-              <div class="tags">
-                <span class="chip">Social</span>
-                <span class="chip">Bachata</span>
-              </div>
-              <h3 class="evento-title">Social Bachata & Friends</h3>
-              <ul class="evento-meta">
-                <li>
-                  <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2v2M17 2v2M3 8h18M4 6h16a1 1 0 0 1 1 1v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a1 1 0 0 1 1-1zM7 11h4v4H7z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  <time datetime="2025-09-18T22:00">18 sept 2025, 10:00 p. m.</time>
-                </li>
-                <li>
-                  <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-5.2-7-11a7 7 0 1 1 14 0c0 5.8-7 11-7 11zM12 10.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  Sala 1, City Bell
-                </li>
-              </ul>
-              <div class="evento-actions">
-                <a class="btn btn-ghost" href="#">Ver más</a>
-              </div>
-              <a class="btn btn-calendar" href="#">Agregar a calendario</a>
-            </div>
-          </article>
-
+          <!-- cards de Bachata -->
         </div>
       </section>
 
@@ -275,72 +147,7 @@
       <section id="kizomba-category">
         <h1 class="category-title">Kizomba</h1>
         <div class="category-items">
-
-          <article class="evento">
-            <img loading="lazy" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYVKa1RCJsy_jFgZZ3QLo1ovAarhwXVN8p5Q&s" alt="Clase de Kizomba Inicial">
-            <div class="content">
-              <div class="tags">
-                <span class="chip">Nivel Inicial</span>
-                <span class="chip">Kizomba</span>
-              </div>
-              <h3 class="evento-title">Clase de Kizomba Inicial</h3>
-              <ul class="evento-meta">
-                <li>
-                  <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2v2M17 2v2M3 8h18M4 6h16a1 1 0 0 1 1 1v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a1 1 0 0 1 1-1zM7 11h4v4H7z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  <time datetime="2025-09-12T19:00">12 sept 2025, 7:00 p. m.</time>
-                </li>
-                <li>
-                  <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-5.2-7-11a7 7 0 1 1 14 0c0 5.8-7 11-7 11zM12 10.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  Club Social, Tolosa
-                </li>
-              </ul>
-              <div class="evento-actions">
-                <a class="btn btn-ghost" href="#">Ver más</a>
-              </div>
-              <a class="btn btn-calendar" href="#">Agregar a calendario</a>
-            </div>
-          </article>
-
-          <article class="evento">
-  <img loading="lazy" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYVKa1RCJsy_jFgZZ3QLo1ovAarhwXVN8p5Q&s" alt="Taller de Kizomba Intermedio">
-  <div class="content">
-    <div class="tags"><span class="chip">Nivel Intermedio</span><span class="chip">Kizomba</span></div>
-    <h3 class="evento-title">Taller de Kizomba Intermedio</h3>
-    <ul class="evento-meta">
-      <li>
-        <svg class="ico" viewBox="0 0 24 24"><path d="M7 2v2M17 2v2M3 8h18M4 6h16a1 1 0 0 1 1 1v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a1 1 0 0 1 1-1zM7 11h4v4H7z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <time datetime="2025-09-14T20:00">14 sept 2025, 8:00 p. m.</time>
-      </li>
-      <li>
-        <svg class="ico" viewBox="0 0 24 24"><path d="M12 21s-7-5.2-7-11a7 7 0 1 1 14 0c0 5.8-7 11-7 11zM12 10.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Estudio Centro, La Plata
-      </li>
-    </ul>
-    <div class="evento-actions"><a class="btn btn-ghost" href="#">Ver más</a></div>
-    <a class="btn btn-calendar" href="#">Agregar a calendario</a>
-  </div>
-</article>
-
-<article class="evento">
-  <img loading="lazy" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYVKa1RCJsy_jFgZZ3QLo1ovAarhwXVN8p5Q&s" alt="Práctica Social de Kizomba">
-  <div class="content">
-    <div class="tags"><span class="chip">Social</span><span class="chip">Kizomba</span></div>
-    <h3 class="evento-title">Práctica Social de Kizomba</h3>
-    <ul class="evento-meta">
-      <li>
-        <svg class="ico" viewBox="0 0 24 24"><path d="M7 2v2M17 2v2M3 8h18M4 6h16a1 1 0 0 1 1 1v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a1 1 0 0 1 1-1zM7 11h4v4H7z" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
-        <time datetime="2025-09-19T21:00">19 sept 2025, 9:00 p. m.</time>
-      </li>
-      <li>
-        <svg class="ico" viewBox="0 0 24 24"><path d="M12 21s-7-5.2-7-11a7 7 0 1 1 14 0c0 5.8-7 11-7 11zM12 10.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
-        Sala 1, City Bell
-      </li>
-    </ul>
-    <div class="evento-actions"><a class="btn btn-ghost" href="#">Ver más</a></div>
-    <a class="btn btn-calendar" href="#">Agregar a calendario</a>
-  </div>
-</article>
-
+          <!--cards de Kizomba -->
         </div>
       </section>
 
@@ -348,73 +155,10 @@
       <section id="zumba-category">
         <h1 class="category-title">Zumba</h1>
         <div class="category-items">
-
-          <article class="evento">
-            <img loading="lazy" src="https://www.arthritis.org//getmedia/22ed138c-e58f-4647-92bd-009f174f5207/zumba_dance-based_fitness_600x400.jpg" alt="Clase de Zumba Inicial">
-            <div class="content">
-              <div class="tags">
-                <span class="chip chip-free">Gratis</span>
-                <span class="chip">Zumba</span>
-              </div>
-              <h3 class="evento-title">Clase de Zumba Inicial</h3>
-              <ul class="evento-meta">
-                <li>
-                  <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2v2M17 2v2M3 8h18M4 6h16a1 1 0 0 1 1 1v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a1 1 0 0 1 1-1zM7 11h4v4H7z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  <time datetime="2025-09-12T18:00">12 sept 2025, 6:00 p. m.</time>
-                </li>
-                <li>
-                  <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-5.2-7-11a7 7 0 1 1 14 0c0 5.8-7 11-7 11zM12 10.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  Sala Multiuso, City Bell
-                </li>
-              </ul>
-              <div class="evento-actions">
-                <a class="btn btn-ghost" href="#">Ver más</a>
-              </div>
-              <a class="btn btn-calendar" href="#">Agregar a calendario</a>
-            </div>
-          </article>
-<article class="evento">
-  <img loading="lazy" src="https://www.arthritis.org//getmedia/22ed138c-e58f-4647-92bd-009f174f5207/zumba_dance-based_fitness_600x400.jpg" alt="Zumba Intermedio">
-  <div class="content">
-    <div class="tags"><span class="chip">Nivel Intermedio</span><span class="chip">Zumba</span></div>
-    <h3 class="evento-title">Zumba Intermedio</h3>
-    <ul class="evento-meta">
-      <li>
-        <svg class="ico" viewBox="0 0 24 24"><path d="M7 2v2M17 2v2M3 8h18M4 6h16a1 1 0 0 1 1 1v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a1 1 0 0 1 1-1zM7 11h4v4H7z" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
-        <time datetime="2025-09-14T19:00">14 sept 2025, 7:00 p. m.</time>
-      </li>
-      <li>
-        <svg class="ico" viewBox="0 0 24 24"><path d="M12 21s-7-5.2-7-11a7 7 0 1 1 14 0c0 5.8-7 11-7 11zM12 10.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
-        Gimnasio Norte, La Plata
-      </li>
-    </ul>
-    <div class="evento-actions"><a class="btn btn-ghost" href="#">Ver más</a></div>
-    <a class="btn btn-calendar" href="#">Agregar a calendario</a>
-  </div>
-</article>
-
-<article class="evento">
-  <img loading="lazy" src="https://www.arthritis.org//getmedia/22ed138c-e58f-4647-92bd-009f174f5207/zumba_dance-based_fitness_600x400.jpg" alt="Masterclass Zumba">
-  <div class="content">
-    <div class="tags"><span class="chip chip-free">Gratis</span><span class="chip">Zumba</span></div>
-    <h3 class="evento-title">Masterclass Zumba</h3>
-    <ul class="evento-meta">
-      <li>
-        <svg class="ico" viewBox="0 0 24 24"><path d="M7 2v2M17 2v2M3 8h18M4 6h16a1 1 0 0 1 1 1v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a1 1 0 0 1 1-1zM7 11h4v4H7z" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
-        <time datetime="2025-09-20T18:00">20 sept 2025, 6:00 p. m.</time>
-      </li>
-      <li>
-        <svg class="ico" viewBox="0 0 24 24"><path d="M12 21s-7-5.2-7-11a7 7 0 1 1 14 0c0 5.8-7 11-7 11zM12 10.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
-        Parque Saavedra, La Plata
-      </li>
-    </ul>
-    <div class="evento-actions"><a class="btn btn-ghost" href="#">Ver más</a></div>
-    <a class="btn btn-calendar" href="#">Agregar a calendario</a>
-  </div>
-</article>
-
+          <!-- cards de Zumba -->
         </div>
       </section>
+
     </main>
   </div>
 
@@ -425,5 +169,9 @@
       <em>Desarrollado por Enzo Ferreyra y Fiorella Adami · Aplicaciones Móviles · Universidad Nacional Arturo Jauretche</em>
     </p>
   </footer>
+
+  <!-- SCRIPTS -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
+  <script src="js/app.js"></script>
 </body>
 </html>

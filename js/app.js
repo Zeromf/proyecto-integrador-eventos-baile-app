@@ -1,5 +1,13 @@
-const TOKEN = "4VNDIVBJAW6OUHOTOWVL"; // tu token
-const API = "https://www.eventbriteapi.com/v3/events/search/";
+/* ===========================
+   Eventbrite – Demo
+   =========================== */
+
+// token queda visible en el front 
+const TOKEN  = "4VNDIVBJAW6OUHOTOWVL";
+const ORG_ID = "2892465566371";
+
+// se puede usar la búsqueda general o por organización
+const API = `https://www.eventbriteapi.com/v3/organizations/${ORG_ID}/events/?expand=venue&status=all`;
 
 /* --------- Fallback local si la API falla --------- */
 const FALLBACK_IMAGES = {
@@ -14,7 +22,7 @@ function fallbackData(tipo = "salsa") {
   const baseImg = FALLBACK_IMAGES[tipo] || FALLBACK_IMAGES.default;
   const hoy = new Date();
   const addDays = (n) => new Date(hoy.getTime() + n*24*60*60*1000);
-  const fmt = (d) => d.toISOString().slice(0,16); // YYYY-MM-DDTHH:mm
+  const fmt = (d) => d.toISOString().slice(0,16);
 
   return [
     {
@@ -44,24 +52,65 @@ function fallbackData(tipo = "salsa") {
   ];
 }
 
-function setTime(date, hh, mm=0){ const d = new Date(date); d.setHours(hh, mm, 0, 0); return d; }
-function capitalize(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
+/* --------- filtros en memoria --------- */
+function filtrarEventos(events, { q, fecha, ubic }) {
+  let out = Array.isArray(events) ? events : [];
 
-/* --------- helpers --------- */
-function buildUrl(q, page = 1, fecha = "", ubic = "") {
-  const params = new URLSearchParams({
-    q,
-    "location.address": ubic || "Argentina",
-    "location.within": "300km",
-    expand: "venue",
-    sort_by: "date",
-    page: String(page),
-    token: TOKEN
-  });
-  // fecha: usa keywords válidos para Eventbrite (today, this_week, next_week)
-  if (fecha) params.append("start_date.keyword", fecha);
-  return `${API}?${params.toString()}`;
+  if (q) {
+    const k = q.toLowerCase();
+    out = out.filter(e =>
+      (e.name?.text || "").toLowerCase().includes(k) ||
+      (e.summary || "").toLowerCase().includes(k)
+    );
+  }
+
+  if (ubic) {
+    const k = ubic.toLowerCase();
+    out = out.filter(e =>
+      (e.venue?.address?.localized_address_display || "").toLowerCase().includes(k)
+    );
+  }
+
+  if (fecha) {
+    const now = new Date();
+    const start = new Date();
+    const end = new Date();
+
+    if (fecha === "today") {
+      start.setHours(0,0,0,0);
+      end.setHours(23,59,59,999);
+    } else if (fecha === "this_week") {
+      const day = now.getDay(); // 0=dom
+      start.setHours(0,0,0,0);
+      end.setDate(now.getDate() + (7 - day));
+      end.setHours(23,59,59,999);
+    } else if (fecha === "next_week") {
+      const day = now.getDay();
+      const nextMon = new Date(now);
+      nextMon.setDate(now.getDate() + (8 - (day || 7)));
+      nextMon.setHours(0,0,0,0);
+      const nextSun = new Date(nextMon);
+      nextSun.setDate(nextMon.getDate() + 6);
+      nextSun.setHours(23,59,59,999);
+      start.setTime(nextMon.getTime());
+      end.setTime(nextSun.getTime());
+    }
+
+    if (fecha === "today" || fecha === "this_week" || fecha === "next_week") {
+      out = out.filter(e => {
+        const when = e.start?.utc || e.start?.local;
+        if (!when) return false;
+        const d = new Date(when);
+        return d >= start && d <= end;
+      });
+    }
+  }
+
+  return out;
 }
+
+function setTime(date, hh, mm=0){ const d = new Date(date); d.setHours(hh, mm, 0, 0); return d; }
+function capitalize(s){ return s ? s.charAt(0).toUpperCase()+s.slice(1) : s; }
 
 function formatDateTime(isoLocal){
   if(!isoLocal) return "Fecha a confirmar";
@@ -71,6 +120,7 @@ function formatDateTime(isoLocal){
   return `${fecha} • ${hora}`;
 }
 
+/* --------- render --------- */
 function renderEventos(arr){
   const $res = $("#resultados").empty();
   if (!arr || arr.length === 0) {
@@ -85,45 +135,40 @@ function renderEventos(arr){
 
     $res.append(`
       <article class="evento">
-        <img loading="lazy" src="${img}" alt="${evt.name.text}">
+        <img loading="lazy" src="${img}" alt="${evt.name?.text || 'Evento'}">
         <div class="content">
-          <h3>${evt.name.text}</h3>
+          <h3>${evt.name?.text || 'Evento'}</h3>
           <p>🗓️ ${fecha}</p>
           <p>📍 ${lugar}</p>
-          <a class="btn" href="${evt.url}" target="_blank" rel="noopener">Ver más</a>
+          <a class="btn" href="${evt.url || '#'}" target="_blank" rel="noopener">Ver más</a>
         </div>
       </article>
     `);
   });
 }
 
-function renderPaginacion(pagination, q, fecha, ubic){
-  const $p = $("#paginacion").empty();
-  if (!pagination || pagination.page_count <= 1) return;
-
-  const { page_number, has_more_items } = pagination;
-  if (page_number > 1) $p.append(`<button id="prevPage">Anterior</button>`);
-  if (has_more_items)  $p.append(`<button id="nextPage">Siguiente</button>`);
-
-  $("#prevPage").on("click", () => buscarEventos(q, page_number - 1, fecha, ubic));
-  $("#nextPage").on("click", () => buscarEventos(q, page_number + 1, fecha, ubic));
-}
+function renderPaginacion(){ $("#paginacion").empty(); } // listamos todo junto
 
 /* --------- flujo principal --------- */
-function buscarEventos(query, page = 1, fecha = "", ubic = "") {
-  $("#qActual").val(query);
+function buscarEventos(query, _page = 1, fecha = "", ubic = "") {
   $.ajax({
-    url: buildUrl(query, page, fecha, ubic),
+    url: API,
     method: "GET",
     dataType: "json",
-    success: (data) => {
-      renderEventos(data?.events);
-      renderPaginacion(data?.pagination, query, fecha, ubic);
+    timeout: 12000,
+    headers: {
+      "Authorization": `Bearer ${TOKEN}`
     },
-    error: (xhr) => {
-      console.warn("API error:", xhr.status, xhr.responseText);
+    success: (data) => {
+      const filtrados = filtrarEventos(data?.events, { q: query, fecha, ubic });
+      renderEventos(filtrados);
+      renderPaginacion();
+    },
+    error: (_xhr, _status, err) => {
+      // Si falla (CORS/401/etc.), mostramos fallback para no romper la UX
+      console.warn("Fallo la llamada directa a Eventbrite:", err);
       renderEventos(fallbackData(query));
-      $("#paginacion").empty();
+      renderPaginacion();
     }
   });
 }
