@@ -1,18 +1,22 @@
 /* ===========================
-   Eventbrite
+   Eventbrite + Calendario (Google) + Paginación
    =========================== */
 
-// El token queda visible en el front 
-const TOKEN  = "4VNDIVBJAW6OUHOTOWVL";   //token
-const ORG_ID = "2892465566371";          //organización
-
-// + forzamos locale a es-AR
+/* ========== Config ========== */
+const TOKEN  = "4VNDIVBJAW6OUHOTOWVL";   // token personal (demo)
+const ORG_ID = "2892465566371";          // organización
 const API_BASE = `https://www.eventbriteapi.com/v3/organizations/${ORG_ID}/events/?expand=venue&status=all&order_by=start_asc&locale=es_AR`;
+// const API_BASE = `https://cors.isomorphic-git.org/https://www.eventbriteapi.com/v3/organizations/${ORG_ID}/events/?expand=venue&status=all&order_by=start_asc&locale=es_AR`; // pruebas sin CORS
 
-// Si te choca CORS en el navegador, activá esta línea y comentá la de arriba (solo pruebas)
-// const API_BASE = `https://cors.isomorphic-git.org/https://www.eventbriteapi.com/v3/organizations/${ORG_ID}/events/?expand=venue&status=all&order_by=start_asc&locale=es_AR`;
+/* ========== Estado de paginación ========== */
+const PAGE_SIZE = 3;
+window._pagination = {
+  data: [],
+  page: 1,
+  pageSize: PAGE_SIZE
+};
 
-/* --------- Fallback si la API falla --------- */
+/* ========== Fallback imágenes si la API falla ========== */
 const FALLBACK_IMAGES = {
   salsa:  "https://www.chassedance.es/wp-content/uploads/2024/06/Como-bailar-bachata.jpg",
   bachata:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_vD8WpIciJ8b9pCeDP4erfalp02n5oUiK1Q&s",
@@ -21,10 +25,12 @@ const FALLBACK_IMAGES = {
   default:"https://via.placeholder.com/1200x675?text=Evento"
 };
 
+/* ========== Helpers generales ========== */
 function setTime(date, hh, mm=0){ const d=new Date(date); d.setHours(hh,mm,0,0); return d; }
 function capitalize(s){ return s? s.charAt(0).toUpperCase()+s.slice(1): s; }
+function clamp(n,min,max){ return Math.max(min, Math.min(max, n)); }
 
-/* --------- fechas en español --------- */
+/* --------- fechas legibles en español --------- */
 function formatDateTime(iso){
   if(!iso) return "Fecha a confirmar";
   const d = new Date(iso);
@@ -33,7 +39,7 @@ function formatDateTime(iso){
   return `${f} • ${h}`;
 }
 
-/* --------- filtro en memoria (opcional por palabra/fecha/ubicación) --------- */
+/* --------- filtro en memoria --------- */
 function filtrarEventos(events, { q, fecha, ubic }) {
   let out = Array.isArray(events) ? events : [];
 
@@ -84,41 +90,58 @@ const STATUS_ES = {
   canceled:  "Cancelado",
   completed: "Completado"
 };
-
 function estadoChip(status){
   if(!status) return "";
-  const label = STATUS_ES[status] || status; // fallback si aparece uno nuevo
+  const label = STATUS_ES[status] || status;
   return `<span class="chip chip-${status}">${label}</span>`;
 }
 
 /* --------- chip de precio (Gratis / Pago) --------- */
 function precioChip(evt){
-  if (evt?.is_free === true) {
-    return `<span class="chip chip-free">Gratis</span>`;
-  }
-  // Si querés solo "Pago" sin precio:
+  if (evt?.is_free === true) return `<span class="chip chip-free">Gratis</span>`;
   return `<span class="chip chip-paid">Pago</span>`;
-
-  //mostrar precio real
-  // evt.ticket_availability?.minimum_ticket_price?.major_value / currency
-  // y armar un label con Intl.NumberFormat("es-AR", { style: "currency", currency })
 }
 
-/* --------- render --------- */
-function renderEventos(arr){
-  const $res = $("#resultados").empty();
-  if (!arr || !arr.length) return $res.html(`<p class="empty">No se encontraron eventos.</p>`);
+/* ========== Helpers Calendario (Google) ========== */
+function toUTCStamp(iso){
+  const d = new Date(iso);
+  return d.toISOString().replace(/[-:]/g,"").split(".")[0]+"Z";
+}
+function addHours(iso, h=2){
+  const d = new Date(iso || Date.now());
+  d.setHours(d.getHours()+h);
+  return d.toISOString();
+}
 
-  arr.slice(0, 20).forEach(evt => {
+/* ========== Render tarjetas de una página ========== */
+function renderEventos(arr, page=1, pageSize=PAGE_SIZE){
+  const $res = $("#resultados").empty();
+  if (!arr || !arr.length) {
+    $("#paginacion").empty();
+    return $res.html(`<p class="empty">No se encontraron eventos.</p>`);
+  }
+
+  const total = arr.length;
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  const current = clamp(page, 1, totalPages);
+  const start = (current - 1) * pageSize;
+  const end = start + pageSize;
+  const pageItems = arr.slice(start, end);
+
+  pageItems.forEach(evt => {
     const img    = evt.logo?.url || FALLBACK_IMAGES.default;
     const fecha  = formatDateTime(evt.start?.local || evt.start?.utc);
     const lugar  = evt.venue?.address?.localized_address_display || "Online / Sin dirección";
     const estado = evt.status;
 
-    // 🔹 Fechas en formato Google Calendar
-    const startUtc = new Date(evt.start?.utc).toISOString().replace(/[-:]/g,"").split(".")[0]+"Z";
-    const endUtc   = new Date(evt.end?.utc || evt.start?.utc).toISOString().replace(/[-:]/g,"").split(".")[0]+"Z";
-    const gcalUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(evt.name?.text || 'Evento')}&dates=${startUtc}/${endUtc}&details=${encodeURIComponent(evt.summary || '')}&location=${encodeURIComponent(lugar)}&sf=true&output=xml`;
+    // Google Calendar
+    const startUtc = toUTCStamp(evt.start?.utc || evt.start?.local);
+    const endUtc   = toUTCStamp(evt.end?.utc   || addHours(evt.start?.utc || evt.start?.local, 2));
+    const gcalUrl  = `https://www.google.com/calendar/render?action=TEMPLATE&text=${
+      encodeURIComponent(evt.name?.text || 'Evento')
+    }&dates=${startUtc}/${endUtc}&details=${
+      encodeURIComponent((evt.summary || "") + (evt.url ? `\n\nMás info: ${evt.url}` : ""))
+    }&location=${encodeURIComponent(lugar)}&sf=true&output=xml`;
 
     $res.append(`
       <article class="evento">
@@ -135,18 +158,42 @@ function renderEventos(arr){
           </ul>
           <div class="evento-actions">
             <a class="btn" href="${evt.url || '#'}" target="_blank" rel="noopener">Ver más</a>
-            <a class="btn btn-calendar" href="${gcalUrl}" target="_blank" rel="noopener">Agregar a calendario</a>
+            <a class="btn btn-calendar" href="${gcalUrl}" target="_blank" rel="noopener">Agregar a Google Calendar</a>
           </div>
         </div>
       </article>
     `);
   });
+
+  renderPaginacion(totalPages, current);
+}
+
+/* ========== Render paginación ========== */
+function renderPaginacion(totalPages=1, current=1){
+  const $p = $("#paginacion").empty();
+
+  // si querés ocultar los controles cuando hay 1 página, dejá esta línea:
+  if (totalPages <= 1) return;
+
+  const btn = (label, page, isActive=false, isDisabled=false) => `
+    <button class="page-btn ${isActive ? 'is-active' : ''}" data-page="${page}" ${isDisabled?'disabled':''}>
+      ${label}
+    </button>`;
+
+  let html = "";
+  html += btn("« Anterior", Math.max(1, current-1), false, current===1);
+
+  for (let i = 1; i <= totalPages; i++) {
+    html += btn(String(i), i, i===current);
+  }
+
+  html += btn("Siguiente »", Math.min(totalPages, current+1), false, current===totalPages);
+  $p.html(html);
 }
 
 
-function renderPaginacion(){ $("#paginacion").empty(); }
 
-/* --------- flujo principal --------- */
+/* ========== Flujo principal ========== */
 function buscarEventos(query="", _page=1, fecha="", ubic=""){
   $.ajax({
     url: API_BASE,
@@ -156,31 +203,32 @@ function buscarEventos(query="", _page=1, fecha="", ubic=""){
     headers: { "Authorization": `Bearer ${TOKEN}` },
     success: (data) => {
       const filtrados = filtrarEventos(data?.events, { q: query, fecha, ubic });
-      renderEventos(filtrados);
-      renderPaginacion();
+      window._pagination.data = filtrados;
+      window._pagination.page = 1;
+      renderEventos(window._pagination.data, window._pagination.page, window._pagination.pageSize);
     },
     error: (_xhr, _status, err) => {
       console.warn("Fallo llamada directa a Eventbrite:", err);
-      // Fallback simple con la palabra buscada
       const baseImg = query && FALLBACK_IMAGES[query] ? query : "default";
       const hoy = new Date();
       const addDays = (n) => new Date(hoy.getTime() + n*864e5);
       const fmt = (d) => d.toISOString().slice(0,16);
-      const fake = ["a","b","c"].map((_,i)=>({
+      const fake = Array.from({length:15}, (_,i)=>({
         id:"fb"+i,
         name:{text:`${capitalize(query||"Bachata")} demo ${i+1}`},
-        start:{local:fmt(setTime(addDays(i+1), 19+i, 0))},
+        start:{local:fmt(setTime(addDays(i+1), 19+(i%3), 0))},
         url:"#",
         logo:{url:FALLBACK_IMAGES[baseImg]},
         venue:{address:{localized_address_display:"Demo venue"}}
       }));
-      renderEventos(fake);
-      renderPaginacion();
+      window._pagination.data = fake;
+      window._pagination.page = 1;
+      renderEventos(window._pagination.data, window._pagination.page, window._pagination.pageSize);
     }
   });
 }
 
-/* --------- Listeners --------- */
+/* ========== Listeners ========== */
 $(document).on("click", ".filtro", function(e){
   e.preventDefault();
   const cat = $(this).data("cat");
@@ -194,6 +242,16 @@ $("#btnBuscar").on("click", function(){
   buscarEventos(q, 1, fecha, ubic);
 });
 $("#txtBuscar").on("keydown", e => { if (e.key === "Enter") $("#btnBuscar").click(); });
+$(document).on("click", "#paginacion .page-btn", function(){
+  const raw = $(this).data("page");
+  const totalPages = Math.max(1, Math.ceil((window._pagination.data?.length || 0) / window._pagination.pageSize));
+  let next = parseInt(raw, 10);
+  if (isNaN(next)) return;
+  next = clamp(next, 1, totalPages);
+  if (next === window._pagination.page) return;
+  window._pagination.page = next;
+  renderEventos(window._pagination.data, window._pagination.page, window._pagination.pageSize);
+});
 
 /* Primera carga */
 $(function(){ buscarEventos(""); });

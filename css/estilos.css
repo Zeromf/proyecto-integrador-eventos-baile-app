@@ -493,3 +493,26 @@ textarea{ min-height: 110px; resize: vertical; }
   width: 100%;            /* opcional: que ocupen todo el ancho */
   text-align: center;
 }
+
+.pager {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+}
+.page-btn {
+  padding: .4rem .7rem;
+  border: 1px solid var(--border, #ddd);
+  background: var(--bg, #fff);
+  cursor: pointer;
+  border-radius: 8px;
+}
+.page-btn.is-active {
+  font-weight: 600;
+  border-color: var(--accent, #9c27b0);
+  box-shadow: 0 0 0 2px rgba(156,39,176,.15);
+}
+.page-btn[disabled] { opacity: .5; cursor: not-allowed; }
+.page-ellipsis { padding: 0 .25rem; color: #777; }
