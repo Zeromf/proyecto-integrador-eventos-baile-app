@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Encuesta</title>
+  <link rel="stylesheet" href="css/estilos.css" />
+</head>
+<body>
+
+  <header>
+    <div class="logo">
+      <a href="index.html"><img src="img/logo.png" alt="Logo de la página"></a>
+    </div>
+    <h1>Flow Dance</h1>
+    <nav class="menu-principal" aria-label="Menú principal">
+      <ul class="menu">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="encuesta.html">Encuesta</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="form-card">
+      <h2>Encuesta</h2>
+      <p class="muted">¡Tu opinión nos ayuda a mejorar!</p>
+
+      <form id="frmEncuesta" novalidate>
+        <div class="form-grid">
+          <!-- a) Nombre -->
+          <div>
+            <label for="nombre">Nombre *</label>
+            <input id="nombre" name="nombre" type="text" placeholder="Ej: Enzo" />
+            <div class="error-msg" id="err-nombre"></div>
+          </div>
+
+          <!-- b) Apellido -->
+          <div>
+            <label for="apellido">Apellido *</label>
+            <input id="apellido" name="apellido" type="text" placeholder="Ej: Ferreyra" />
+            <div class="error-msg" id="err-apellido"></div>
+          </div>
+
+          <!-- c) Fecha de Nacimiento -->
+          <div>
+            <label for="fecha">Fecha de Nacimiento (dd-mm-aaaa) *</label>
+            <input id="fecha" name="fecha" type="text" placeholder="dd-mm-aaaa" />
+            <div class="error-msg" id="err-fecha"></div>
+          </div>
+
+          <!-- d) Sexo -->
+          <div>
+            <fieldset class="fieldset">
+              <legend>Sexo *</legend>
+              <div class="inline">
+                <label><input type="radio" name="sexo" value="Femenino"> Femenino</label>
+                <label><input type="radio" name="sexo" value="Masculino"> Masculino</label>
+                <label><input type="radio" name="sexo" value="Otro"> Otro</label>
+              </div>
+            </fieldset>
+            <div class="error-msg" id="err-sexo"></div>
+          </div>
+
+          <!-- e) Valoración -->
+          <div class="full">
+            <fieldset class="fieldset">
+              <legend>Valoración de los cursos</legend>
+              <div class="inline">
+                <label><input type="radio" name="valoracion" value="Lamentable"> Lamentable</label>
+                <label><input type="radio" name="valoracion" value="Mala"> Mala</label>
+                <label><input type="radio" name="valoracion" value="Podría ser mejor"> Podría ser mejor</label>
+                <label><input type="radio" name="valoracion" value="Cumple con mis expectativas"> Cumple con mis expectativas</label>
+                <label><input type="radio" name="valoracion" value="Me encantó"> Me encantó</label>
+              </div>
+            </fieldset>
+            <div class="error-msg" id="err-valoracion"></div>
+          </div>
+
+          <!-- f) Email -->
+          <div class="full">
+            <label for="email">Email *</label>
+            <input id="email" name="email" type="text" placeholder="tu@correo.com" />
+            <div class="error-msg" id="err-email"></div>
+          </div>
+
+          <!-- g) Comentario -->
+          <div class="full">
+            <label for="comentario">Comentario</label>
+            <textarea id="comentario" name="comentario" placeholder="Escribe aquí..."></textarea>
+          </div>
+        </div>
+
+        <!-- h-i-j) Botones -->
+        <div class="actions">
+          <button id="btnEnviar" class="btn btn-primary" type="button">Enviar</button>
+          <button id="btnCancelar" class="btn btn-danger" type="button">Cancelar</button>
+          <button id="btnReset" class="btn btn-reset" type="button">Restablecer valores</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Mi Startup - Todos los derechos reservados</p>
+  </footer>
+
+  <script src="js/encuesta.js"></script>
+</body>
+</html>

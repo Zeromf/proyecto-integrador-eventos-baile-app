@@ -15,29 +15,34 @@
       </a>
     </div>
     <h1>Flow Dance</h1>
+
+    <!-- 🔹 Menú principal en línea -->
+    <nav class="menu-principal" aria-label="Menú principal">
+      <ul class="menu">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="encuesta.html">Encuesta</a></li>
+        <li><a href="contacto.html">Contacto</a></li>
+      </ul>
+    </nav>
   </header>
 
   <div class="container">
     <!-- SIDEBAR -->
     <aside>
-      <h2>Categorías</h2>
-      <ul>
-        <!-- anclas a las secciones de abajo -->
-        <li><a href="#salsa-category"   class="filtro" data-cat="salsa">Salsa</a></li>
-        <li><a href="#bachata-category" class="filtro" data-cat="bachata">Bachata</a></li>
-        <li><a href="#kizomba-category" class="filtro" data-cat="kizomba">Kizomba</a></li>
-        <li><a href="#zumba-category"   class="filtro" data-cat="zumba">Zumba</a></li>
-      </ul>
-      <hr style="border:0;border-top:1px solid #232a37;margin:1rem 0" />
-      <nav aria-label="Sitio">
-        <a class="btn" href="contacto.html">Contacto</a>
-      </nav>
-    </aside>
+    <h2>Categorías</h2>
+    <ul>
+      <li><a href="#salsa-category"   class="filtro" data-cat="salsa">Salsa</a></li>
+      <li><a href="#bachata-category" class="filtro" data-cat="bachata">Bachata</a></li>
+      <li><a href="#kizomba-category" class="filtro" data-cat="kizomba">Kizomba</a></li>
+      <li><a href="#zumba-category"   class="filtro" data-cat="zumba">Zumba</a></li>
+    </ul>
+  </aside>
+
 
     <!-- CONTENIDO PRINCIPAL -->
     <main aria-label="Contenido principal">
 
-      <!-- 🔥 Sección Promocional (estática) -->
+      <!-- 🔥 Sección Promocional -->
       <section class="promo-section">
         <div class="promo-image">
           <img src="https://i.ytimg.com/vi/il4xFqDeUro/maxresdefault.jpg" alt="Clases de Bachata - Flow Dance">
@@ -75,28 +80,29 @@
         </div>
       </section>
 
+  <!-- 🔎 Buscador dinámico -->
+  <section class="buscador">
+    <div class="search-bar">
+      <input id="txtBuscar" type="search" placeholder="Buscar (salsa, bachata, kizomba, zumba)" />
 
+      <select id="selFecha" aria-label="Fecha">
+        <option value="">Cualquier fecha</option>
+        <option value="today">Hoy</option>
+        <option value="this_week">Esta semana</option>
+        <option value="next_week">La semana que viene</option>
+      </select>
 
+      <select id="selUbicacion" aria-label="Ubicación">
+        <option value="Buenos Aires" selected>Buenos Aires</option>
+        <option value="La Plata">La Plata</option>
+        <option value="Córdoba">Córdoba</option>
+        <option value="Rosario">Rosario</option>
+      </select>
 
-      <!-- 🔎 Buscador dinámico (usa js/app.js) -->
-      <section class="buscador">
-        <div class="buscador-row">
-          <input id="txtBuscar" type="search" placeholder="Buscar (salsa, bachata, kizomba, zumba)" />
-          <select id="selFecha">
-            <option value="">Cualquier fecha</option>
-            <option value="today">Hoy</option>
-            <option value="this_week">Esta semana</option>
-            <option value="next_week">La semana que viene</option>
-          </select>
-          <select id="selUbicacion">
-            <option value="Buenos Aires" selected>Buenos Aires</option>
-            <option value="La Plata">La Plata</option>
-            <option value="Córdoba">Córdoba</option>
-            <option value="Rosario">Rosario</option>
-          </select>
-          <button id="btnBuscar" class="btn btn-primary">Buscar</button>
-        </div>
-      </section>
+      <button id="btnBuscar" class="btn btn-primary">Buscar</button>
+    </div>
+  </section>
+
 
       <!-- 🧾 Resultados dinámicos -->
       <section id="eventbrite-resultados" aria-label="Resultados de búsqueda">
@@ -111,7 +117,6 @@
       <section id="salsa-category">
         <h1 class="category-title">Salsa</h1>
         <div class="category-items">
-          <!-- 👉 Reemplazá/duplicá estos <article> por tus cards -->
           <article class="evento">
             <img loading="lazy" src="https://www.chassedance.es/wp-content/uploads/2024/06/Como-bailar-bachata.jpg" alt="Clase de Salsa Inicial">
             <div class="content">
@@ -131,7 +136,6 @@
               <a class="btn btn-calendar" href="#">Agregar a calendario</a>
             </div>
           </article>
-          <!-- otras cards de Salsa -->
         </div>
       </section>
 
@@ -147,7 +151,7 @@
       <section id="kizomba-category">
         <h1 class="category-title">Kizomba</h1>
         <div class="category-items">
-          <!--cards de Kizomba -->
+          <!-- cards de Kizomba -->
         </div>
       </section>
 
