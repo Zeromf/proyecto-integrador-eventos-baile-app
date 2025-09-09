@@ -1,8 +1,8 @@
 /* ===========================
-   Eventbrite – SIN Node
+   Eventbrite
    =========================== */
 
-// ⚠️ El token queda visible en el front 
+// El token queda visible en el front 
 const TOKEN  = "4VNDIVBJAW6OUHOTOWVL";   //token
 const ORG_ID = "2892465566371";          //organización
 
@@ -99,7 +99,7 @@ function precioChip(evt){
   // Si querés solo "Pago" sin precio:
   return `<span class="chip chip-paid">Pago</span>`;
 
-  // Si más adelante querés mostrar precio real, podés leer:
+  //mostrar precio real
   // evt.ticket_availability?.minimum_ticket_price?.major_value / currency
   // y armar un label con Intl.NumberFormat("es-AR", { style: "currency", currency })
 }
@@ -113,7 +113,12 @@ function renderEventos(arr){
     const img    = evt.logo?.url || FALLBACK_IMAGES.default;
     const fecha  = formatDateTime(evt.start?.local || evt.start?.utc);
     const lugar  = evt.venue?.address?.localized_address_display || "Online / Sin dirección";
-    const estado = evt.status; // 'draft' | 'live' | 'started' | 'ended' | 'canceled' ...
+    const estado = evt.status;
+
+    // 🔹 Fechas en formato Google Calendar
+    const startUtc = new Date(evt.start?.utc).toISOString().replace(/[-:]/g,"").split(".")[0]+"Z";
+    const endUtc   = new Date(evt.end?.utc || evt.start?.utc).toISOString().replace(/[-:]/g,"").split(".")[0]+"Z";
+    const gcalUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(evt.name?.text || 'Evento')}&dates=${startUtc}/${endUtc}&details=${encodeURIComponent(evt.summary || '')}&location=${encodeURIComponent(lugar)}&sf=true&output=xml`;
 
     $res.append(`
       <article class="evento">
@@ -128,12 +133,16 @@ function renderEventos(arr){
             <li>🗓️ ${fecha}</li>
             <li>📍 ${lugar}</li>
           </ul>
-          <a class="btn" href="${evt.url || '#'}" target="_blank" rel="noopener">Ver más</a>
+          <div class="evento-actions">
+            <a class="btn" href="${evt.url || '#'}" target="_blank" rel="noopener">Ver más</a>
+            <a class="btn btn-calendar" href="${gcalUrl}" target="_blank" rel="noopener">Agregar a calendario</a>
+          </div>
         </div>
       </article>
     `);
   });
 }
+
 
 function renderPaginacion(){ $("#paginacion").empty(); }
 

@@ -19,7 +19,6 @@
     <!-- 🔹 Menú principal en línea -->
     <nav class="menu-principal" aria-label="Menú principal">
       <ul class="menu">
-        <li><a href="index.html">Inicio</a></li>
         <li><a href="encuesta.html">Encuesta</a></li>
         <li><a href="contacto.html">Contacto</a></li>
       </ul>
@@ -29,15 +28,14 @@
   <div class="container">
     <!-- SIDEBAR -->
     <aside>
-    <h2>Categorías</h2>
-    <ul>
-      <li><a href="#salsa-category"   class="filtro" data-cat="salsa">Salsa</a></li>
-      <li><a href="#bachata-category" class="filtro" data-cat="bachata">Bachata</a></li>
-      <li><a href="#kizomba-category" class="filtro" data-cat="kizomba">Kizomba</a></li>
-      <li><a href="#zumba-category"   class="filtro" data-cat="zumba">Zumba</a></li>
-    </ul>
-  </aside>
-
+      <h2>Categorías</h2>
+      <ul>
+        <li><a href="#salsa-category"   class="filtro" data-cat="salsa">Salsa</a></li>
+        <li><a href="#bachata-category" class="filtro" data-cat="bachata">Bachata</a></li>
+        <li><a href="#kizomba-category" class="filtro" data-cat="kizomba">Kizomba</a></li>
+        <li><a href="#zumba-category"   class="filtro" data-cat="zumba">Zumba</a></li>
+      </ul>
+    </aside>
 
     <!-- CONTENIDO PRINCIPAL -->
     <main aria-label="Contenido principal">
@@ -80,29 +78,89 @@
         </div>
       </section>
 
-  <!-- 🔎 Buscador dinámico -->
-  <section class="buscador">
-    <div class="search-bar">
-      <input id="txtBuscar" type="search" placeholder="Buscar (salsa, bachata, kizomba, zumba)" />
+      <!-- ================== INFO ACADEMIA (BailaBA) ================== -->
+      <section class="academia" id="academia-bailaBA" aria-label="Información de la academia">
+        <h2>Flow Dance! Academia de baile en Buenos Aires</h2>
 
-      <select id="selFecha" aria-label="Fecha">
-        <option value="">Cualquier fecha</option>
-        <option value="today">Hoy</option>
-        <option value="this_week">Esta semana</option>
-        <option value="next_week">La semana que viene</option>
-      </select>
+        <div class="academia-grid">
+          <!-- Columna 1: foto + ¿Cómo son las clases? -->
+          <article class="academia-bloque">
+            <figure class="academia-media">
+              <img src="https://lamartorellsalsera.com/wp-content/uploads/2024/03/bailar-bachata-sensual-1024x683.webp" alt="Clase grupal de baile en Flow dance">
+            </figure>
+            <div class="academia-texto">
+              <h3>¿Cómo son las clases en nuestra academia de baile?</h3>
+              <p>
+                A la academia asisten personas que, al igual que vos, desean aprender a bailar.
+                Podés comenzar desde cero. Te enseñamos pasos de baile súper sencillos para
+                aprender con los profes. Luego, practicás estos pasos. ¡Vas a ver qué fácil es
+                aprender a bailar en Flow Dance!
+              </p>
+            </div>
+          </article>
 
-      <select id="selUbicacion" aria-label="Ubicación">
-        <option value="Buenos Aires" selected>Buenos Aires</option>
-        <option value="La Plata">La Plata</option>
-        <option value="Córdoba">Córdoba</option>
-        <option value="Rosario">Rosario</option>
-      </select>
+          <!-- Columna 2: primer clase + te esperamos -->
+          <article class="academia-bloque">
+            <div class="academia-texto">
+              <h3>¿Tu primer clase de baile? ¡Bienvenido a la academia Flow Dance!</h3>
+              <p>
+                Si nunca antes bailaste o te da vergüenza hacerlo, no lo dudes. En la academia
+                Flow Dance tenemos clases de baile para que aprendas a dar esos primeros pasos y
+                deposites tu confianza en nosotros: los profes de Flow Dance.
+              </p>
 
-      <button id="btnBuscar" class="btn btn-primary">Buscar</button>
-    </div>
-  </section>
+              <h3>Te esperamos en nuestra academia de baile</h3>
+              <p>
+                Podés comenzar cuando quieras: las inscripciones están abiertas todo el año.
+                Podés abonar por clase o por mes. ¡Informate!
+              </p>
+            </div>
+          </article>
+        </div>
 
+        <!-- Sección "La Academia de baile" -->
+        <div class="academia-detalle">
+          <div class="academia-detalle__texto">
+            <h3>La Academia de baile</h3>
+            <p>
+              Situada sobre Av. Scalabrini Ortiz al 540, la academia tiene un bar adelante y un
+              gran salón al fondo preparado para clases y eventos de baile.
+            </p>
+            <ul>
+              <li>Tenemos clases todos los días</li>
+              <li>Clases sueltas y cursos intensivos</li>
+              <li>También hay instructorados con salida laboral</li>
+            </ul>
+          </div>
+          <figure class="academia-detalle__media">
+            <img src="https://denomades-blog.imgix.net/blog/wp-content/uploads/2016/01/05164527/catedral-tango-buenos-aires.jpg?auto=compress%2Cformat&ixlib=php-3.3.1" alt="Salón de Flow Dance preparado para clases y eventos">
+          </figure>
+        </div>
+      </section>
+      <!-- ================== /INFO ACADEMIA ================== -->
+
+      <!-- 🔎 Buscador dinámico -->
+      <section class="buscador">
+        <div class="search-bar">
+          <input id="txtBuscar" type="search" placeholder="Buscar (salsa, bachata, kizomba, zumba)" />
+
+          <select id="selFecha" aria-label="Fecha">
+            <option value="">Cualquier fecha</option>
+            <option value="today">Hoy</option>
+            <option value="this_week">Esta semana</option>
+            <option value="next_week">La semana que viene</option>
+          </select>
+
+          <select id="selUbicacion" aria-label="Ubicación">
+            <option value="Buenos Aires" selected>Buenos Aires</option>
+            <option value="La Plata">La Plata</option>
+            <option value="Córdoba">Córdoba</option>
+            <option value="Rosario">Rosario</option>
+          </select>
+
+          <button id="btnBuscar" class="btn btn-primary">Buscar</button>
+        </div>
+      </section>
 
       <!-- 🧾 Resultados dinámicos -->
       <section id="eventbrite-resultados" aria-label="Resultados de búsqueda">
