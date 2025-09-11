@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Categorías · Flow Dance</title>
+  <title>Flow Dance</title>
   <link rel="stylesheet" href="css/categories.css" />
   <link rel="stylesheet" href="css/carrito.css" />
   <link rel="stylesheet" href="css/menu.css" />
@@ -13,14 +13,17 @@
   <!-- HEADER -->
   <header>
     <div class="logo">
-      <a href="index.html"><img src="img/logo.png" alt="Logo de la página"></a>
+      <a href="index.html">
+        <img src="img/logo.png" alt="Logo de la página">
+      </a>
     </div>
+
     <h1>Flow Dance</h1>
 
+    <!-- Menú principal en línea -->
     <nav class="menu-principal" aria-label="Menú principal">
       <ul class="menu">
-        <li><a href="index.html">Inicio</a></li>
-        <li><a href="categories.html">Categorías</a></li>
+        <li><a href="categories.html">Categorias</a></li>
         <li><a href="encuesta.html">Encuesta</a></li>
         <li>
           <button class="btn-carrito" onclick="abrirCarrito()">
@@ -30,29 +33,36 @@
       </ul>
     </nav>
 
-    <!-- Carrito lateral -->
+
+    <!-- 🔹 BOTÓN Y CARRITO LATERAL -->
+
     <aside class="carrito" id="carrito">
       <header>
         <h2>Tu carrito</h2>
         <span class="cerrar" onclick="cerrarCarrito()">&times;</span>
       </header>
+
       <div class="item">
         <p>Clase de Salsa Inicial</p>
         <small>12/12/2025 - Estudio Centro</small>
         <p>$1500</p>
       </div>
+
       <div class="item">
         <p>Clase de Bachata Inicial</p>
         <small>12/09/2025 - Club Social</small>
         <p>$1200</p>
       </div>
+
       <div class="total">Total: $2700</div>
+
       <button class="btn-checkout">Finalizar compra</button>
     </aside>
   </header>
 
+
   <div class="container">
-    <!-- Menú lateral -->
+    <!-- menú-->
     <nav class="vertical-menu">
       <h2>Categorías</h2>
       <ul>
@@ -61,11 +71,16 @@
         <li><a href="#kizomba-category" class="filtro" data-cat="kizomba">Kizomba</a></li>
         <li><a href="#zumba-category" class="filtro" data-cat="zumba">Zumba</a></li>
       </ul>
+      <hr style="border:0;border-top:1px solid #232a37;margin:1rem 0" />
+      <nav aria-label="Sitio">
+        <a class="btn" href="#">Contacto</a>
+      </nav>
     </nav>
 
-    <!-- Grid de resultados -->
+      <!-- Grid de resultados -->
     <main aria-label="Categorias">
-      <!-- SALSA -->
+
+      <!-- salsa -->
       <section id="salsa-category">
         <h1 class="category-title">Salsa</h1>
         <div class="category-items">
@@ -74,16 +89,33 @@
             <div class="content">
               <h3>Clase de Salsa Inicial</h3>
               <p>🗓️ 12/12/2025</p>
-              <p>📍 Estudio Centro, La Plata</p>
+              <p>📍 "Estudio Centro, La Plata"</p>
               <a class="btn" href="#">Ver más</a>
             </div>
           </article>
-          <!-- puedes duplicar más artículos aquí -->
+          <article class="evento">
+            <img loading="lazy" src="https://www.chassedance.es/wp-content/uploads/2024/06/Como-bailar-bachata.jpg" alt="Clase de Salsa Inicial">
+            <div class="content">
+              <h3>Clase de Salsa Inicial</h3>
+              <p>🗓️ 12/12/2025</p>
+              <p>📍 "Estudio Centro, La Plata"</p>
+              <a class="btn" href="#">Ver más</a>
+            </div>
+          </article>
+          <article class="evento">
+            <img loading="lazy" src="https://www.chassedance.es/wp-content/uploads/2024/06/Como-bailar-bachata.jpg" alt="Clase de Salsa Inicial">
+            <div class="content">
+              <h3>Clase de Salsa Inicial</h3>
+              <p>🗓️ 12/12/2025</p>
+              <p>📍 "Estudio Centro, La Plata"</p>
+              <a class="btn" href="#">Ver más</a>
+            </div>
+          </article>
         </div>
       </section>
 
-      <!-- BACHATA -->
-      <section id="bachata-category">
+      <!-- bachata -->
+      <section id="bachata-category" >
         <h1 class="category-title">Bachata</h1>
         <div class="category-items">
           <article class="evento">
@@ -91,14 +123,32 @@
             <div class="content">
               <h3>Clase de Bachata Inicial</h3>
               <p>🗓️ 12/09/2025</p>
-              <p>📍 Club Social, Tolosa</p>
+              <p>📍 "Club Social, Tolosa"</p>
+              <a class="btn" href="#">Ver más</a>
+            </div>
+          </article>
+          <article class="evento">
+            <img loading="lazy" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_vD8WpIciJ8b9pCeDP4erfalp02n5oUiK1Q&s" alt="Clase de Bachata Inicial">
+            <div class="content">
+              <h3>Clase de Bachata Inicial</h3>
+              <p>🗓️ 12/09/2025</p>
+              <p>📍 "Club Social, Tolosa"</p>
+              <a class="btn" href="#">Ver más</a>
+            </div>
+          </article>
+          <article class="evento">
+            <img loading="lazy" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_vD8WpIciJ8b9pCeDP4erfalp02n5oUiK1Q&s" alt="Clase de Bachata Inicial">
+            <div class="content">
+              <h3>Clase de Bachata Inicial</h3>
+              <p>🗓️ 12/09/2025</p>
+              <p>📍 "Club Social, Tolosa"</p>
               <a class="btn" href="#">Ver más</a>
             </div>
           </article>
         </div>
       </section>
 
-      <!-- KIZOMBA -->
+      <!-- kizomba -->
       <section id="kizomba-category">
         <h1 class="category-title">Kizomba</h1>
         <div class="category-items">
@@ -107,14 +157,32 @@
             <div class="content">
               <h3>Clase de Kizomba Inicial</h3>
               <p>🗓️ 12/09/2025</p>
-              <p>📍 Club Social, Tolosa</p>
+              <p>📍 "Club Social, Tolosa"</p>
+              <a class="btn" href="#">Ver más</a>
+            </div>
+          </article>
+          <article class="evento">
+            <img loading="lazy" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYVKa1RCJsy_jFgZZ3QLo1ovAarhwXVN8p5Q&s" alt="Clase de Kizomba Inicial">
+            <div class="content">
+              <h3>Clase de Kizomba Inicial</h3>
+              <p>🗓️ 12/09/2025</p>
+              <p>📍 "Club Social, Tolosa"</p>
+              <a class="btn" href="#">Ver más</a>
+            </div>
+          </article>
+          <article class="evento">
+            <img loading="lazy" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYVKa1RCJsy_jFgZZ3QLo1ovAarhwXVN8p5Q&s" alt="Clase de Kizomba Inicial">
+            <div class="content">
+              <h3>Clase de Kizomba Inicial</h3>
+              <p>🗓️ 12/09/2025</p>
+              <p>📍 "Club Social, Tolosa"</p>
               <a class="btn" href="#">Ver más</a>
             </div>
           </article>
         </div>
       </section>
 
-      <!-- ZUMBA -->
+      <!-- zumba -->
       <section id="zumba-category">
         <h1 class="category-title">Zumba</h1>
         <div class="category-items">
@@ -123,7 +191,25 @@
             <div class="content">
               <h3>Clase de Zumba Inicial</h3>
               <p>🗓️ 12/09/2025</p>
-              <p>📍 Club Social, Tolosa</p>
+              <p>📍 "Club Social, Tolosa"</p>
+              <a class="btn" href="#">Ver más</a>
+            </div>
+          </article>
+          <article class="evento">
+            <img loading="lazy" src="https://www.arthritis.org//getmedia/22ed138c-e58f-4647-92bd-009f174f5207/zumba_dance-based_fitness_600x400.jpg" alt="Clase de Zumba Inicial">
+            <div class="content">
+              <h3>Clase de Zumba Inicial</h3>
+              <p>🗓️ 12/09/2025</p>
+              <p>📍 "Club Social, Tolosa"</p>
+              <a class="btn" href="#">Ver más</a>
+            </div>
+          </article>
+          <article class="evento">
+            <img loading="lazy" src="https://www.arthritis.org//getmedia/22ed138c-e58f-4647-92bd-009f174f5207/zumba_dance-based_fitness_600x400.jpg" alt="Clase de Zumba Inicial">
+            <div class="content">
+              <h3>Clase de Zumba Inicial</h3>
+              <p>🗓️ 12/09/2025</p>
+              <p>📍 "Club Social, Tolosa"</p>
               <a class="btn" href="#">Ver más</a>
             </div>
           </article>
@@ -140,11 +226,17 @@
     </p>
   </footer>
 
-  <!-- JS -->
+    <!-- JS para abrir/cerrar carrito -->
   <script>
     const carrito = document.getElementById('carrito');
-    function abrirCarrito(){ carrito.classList.add('open'); }
-    function cerrarCarrito(){ carrito.classList.remove('open'); }
+
+    function abrirCarrito() {
+      carrito.classList.add('open');
+    }
+
+    function cerrarCarrito() {
+      carrito.classList.remove('open');
+    }
   </script>
 </body>
 </html>
