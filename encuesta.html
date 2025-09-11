@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Encuesta · Flow Dance</title>
+  <link rel="stylesheet" href="css/estilos.css" />
+  <link rel="stylesheet" href="css/carrito.css" />
+  <link rel="stylesheet" href="css/menu.css" />
+  <script src="https://kit.fontawesome.com/f222217ad3.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <header>
+    <div class="logo">
+      <a href="index.html"><img src="img/logo.png" alt="Logo de la página"></a>
+    </div>
+    <h1>Flow Dance</h1>
+
+    <nav class="menu-principal" aria-label="Menú principal">
+      <ul class="menu">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="categories.html">Categorías</a></li>
+        <li><a href="encuesta.html">Encuesta</a></li>
+        <li>
+          <button class="btn-carrito" onclick="abrirCarrito()">
+            <i class="fa-solid fa-cart-shopping"></i>
+          </button>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Carrito lateral -->
+    <aside class="carrito" id="carrito">
+      <header>
+        <h2>Tu carrito</h2>
+        <span class="cerrar" onclick="cerrarCarrito()">&times;</span>
+      </header>
+      <div class="item">
+        <p>Clase de Salsa Inicial</p>
+        <small>12/12/2025 - Estudio Centro</small>
+        <p>$1500</p>
+      </div>
+      <div class="item">
+        <p>Clase de Bachata Inicial</p>
+        <small>12/09/2025 - Club Social</small>
+        <p>$1200</p>
+      </div>
+      <div class="total">Total: $2700</div>
+      <button class="btn-checkout">Finalizar compra</button>
+    </aside>
+  </header>
+
+  <main>
+    <section class="form-card">
+      <h2>Encuesta</h2>
+      <p class="muted">¡Tu opinión nos ayuda a mejorar!</p>
+
+      <form id="frmEncuesta" novalidate>
+        <div class="form-grid">
+          <div>
+            <label for="nombre">Nombre *</label>
+            <input id="nombre" name="nombre" type="text" placeholder="Ej: Enzo" />
+            <div class="error-msg" id="err-nombre"></div>
+          </div>
+
+          <div>
+            <label for="apellido">Apellido *</label>
+            <input id="apellido" name="apellido" type="text" placeholder="Ej: Ferreyra" />
+            <div class="error-msg" id="err-apellido"></div>
+          </div>
+
+          <div>
+            <label for="fecha">Fecha de Nacimiento (dd-mm-aaaa) *</label>
+            <input id="fecha" name="fecha" type="text" placeholder="dd-mm-aaaa" />
+            <div class="error-msg" id="err-fecha"></div>
+          </div>
+
+          <div>
+            <fieldset class="fieldset">
+              <legend>Sexo *</legend>
+              <div class="inline">
+                <label><input type="radio" name="sexo" value="Femenino"> Femenino</label>
+                <label><input type="radio" name="sexo" value="Masculino"> Masculino</label>
+                <label><input type="radio" name="sexo" value="Otro"> Otro</label>
+              </div>
+            </fieldset>
+            <div class="error-msg" id="err-sexo"></div>
+          </div>
+
+          <div class="full">
+            <fieldset class="fieldset">
+              <legend>Valoración de los cursos</legend>
+              <div class="inline">
+                <label><input type="radio" name="valoracion" value="Inolvidable"> 💃 Inolvidable, me encantó</label>
+                <label><input type="radio" name="valoracion" value="Muy divertido"> 😍 Muy divertido</label>
+                <label><input type="radio" name="valoracion" value="Aprendí bastante"> 📚 Aprendí bastante</label>
+                <label><input type="radio" name="valoracion" value="Podría mejorar"> 🤔 Podría mejorar</label>
+                <label><input type="radio" name="valoracion" value="No fue lo que esperaba"> 😞 No fue lo que esperaba</label>
+              </div>
+            </fieldset>
+            <div class="error-msg" id="err-valoracion"></div>
+          </div>
+
+          <div class="full">
+            <label for="email">Email *</label>
+            <input id="email" name="email" type="text" placeholder="tu@correo.com" />
+            <div class="error-msg" id="err-email"></div>
+          </div>
+
+          <div class="full">
+            <label for="comentario">Comentario</label>
+            <textarea id="comentario" name="comentario" placeholder="Escribe aquí..."></textarea>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="btnEnviar" class="btn btn-primary" type="button">Enviar</button>
+          <button id="btnCancelar" class="btn btn-danger" type="button">Cancelar</button>
+          <button id="btnReset" class="btn btn-reset" type="button">Restablecer valores</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Flow Dance - Todos los derechos reservados</p>
+  </footer>
+
+  <!-- JS -->
+  <script src="js/encuesta.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    const carrito = document.getElementById('carrito');
+    function abrirCarrito(){ carrito.classList.add('open'); }
+    function cerrarCarrito(){ carrito.classList.remove('open'); }
+  </script>
+</body>
+</html>

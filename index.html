@@ -3,77 +3,201 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Eventos de Baile</title>
-  <link rel="stylesheet" href="estilos.css" />
+  <title>Flow Dance</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/estilos.css" />
+  <link rel="stylesheet" href="css/menu.css" />
+  <link rel="stylesheet" href="css/carrito.css" />
+
+  <!-- Iconos -->
+  <script src="https://kit.fontawesome.com/f222217ad3.js" crossorigin="anonymous"></script>
+
+  <!-- Ajuste mínimo: contenedor del header -->
+  <style>
+    .header-inner{
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: .9rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      width: 100%;
+    }
+    /* Que el h1 no empuje todo */
+    header h1 { flex: 1; text-align: center; }
+  </style>
 </head>
 <body>
   <!-- HEADER -->
   <header>
-    <div class="logo">Logo</div>
-    <h1>Clases y Eventos de Baile</h1>
+    <div class="header-inner">
+      <div class="logo">
+        <a href="index.html">
+          <img src="img/logo.png" alt="Logo de la página">
+        </a>
+      </div>
+
+      <h1>Flow Dance</h1>
+
+      <!-- Menú principal -->
+      <nav class="menu-principal" aria-label="Menú principal">
+        <ul class="menu">
+          <li><a href="categories.html">Categorías</a></li>
+          <li><a href="encuesta.html">Encuesta</a></li>
+          <li>
+            <button class="btn-carrito" onclick="abrirCarrito()" title="Abrir carrito">
+              <i class="fa-solid fa-cart-shopping"></i>
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+    <!-- Carrito lateral -->
+    <aside class="carrito" id="carrito">
+      <header>
+        <h2>Tu carrito</h2>
+        <span class="cerrar" onclick="cerrarCarrito()">&times;</span>
+      </header>
+
+      <div class="item">
+        <p>Clase de Salsa Inicial</p>
+        <small>12/12/2025 - Estudio Centro</small>
+        <p>$1500</p>
+      </div>
+
+      <div class="item">
+        <p>Clase de Bachata Inicial</p>
+        <small>12/09/2025 - Club Social</small>
+        <p>$1200</p>
+      </div>
+
+      <div class="total">Total: $2700</div>
+      <button class="btn-checkout">Finalizar compra</button>
+    </aside>
   </header>
 
   <div class="container">
-    <!-- SIDEBAR -->
-    <aside>
-      <h2>Categorías</h2>
-      <ul>
-        <li><a href="#" class="filtro" data-cat="salsa">Salsa</a></li>
-        <li><a href="#" class="filtro" data-cat="bachata">Bachata</a></li>
-        <li><a href="#" class="filtro" data-cat="kizomba">Kizomba</a></li>
-        <li><a href="#" class="filtro" data-cat="zumba">Zumba</a></li>
-      </ul>
-      <hr style="border:0;border-top:1px solid #232a37;margin:1rem 0" />
-      <nav aria-label="Sitio">
-        <a class="btn" href="contacto.html">Contacto</a>
-      </nav>
-    </aside>
+    <main aria-label="Contenido principal">
+      <!-- Sección Promocional -->
+      <section class="promo-section">
+        <div class="promo-image">
+          <img src="https://i.ytimg.com/vi/il4xFqDeUro/maxresdefault.jpg" alt="Clases de Bachata - Flow Dance">
+          <div class="promo-overlay">BACHATA <br><span>Todos los niveles</span></div>
+        </div>
 
-    <!-- MAIN CONTENT -->
-    <main aria-live="polite">
-      <!-- Toolbar con 3 filtros -->
-      <div class="toolbar" role="search">
-        <input id="txtBuscar" type="search" placeholder="Buscar (ej: salsa, bachata)" />
-        <select id="selFecha" aria-label="Fecha">
-          <option value="">Todas las fechas</option>
-          <option value="today">Hoy</option>
-          <option value="this_week">Esta semana</option>
-          <option value="next_week">Próxima semana</option>
-        </select>
-        <select id="selUbicacion" aria-label="Ubicación">
-          <option value="">Argentina</option>
-          <option value="la plata">La Plata</option>
-          <option value="buenos aires">Buenos Aires</option>
-          <option value="cordoba">Córdoba</option>
-        </select>
-        <button id="btnBuscar" class="btn btn-primary">Buscar</button>
-      </div>
+        <div class="promo-content">
+          <h2>¿Buscás aprender a bailar desde cero?</h2>
+          <p>Llegaste al lugar indicado.</p>
+          <p>
+            En <strong>Flow Dance</strong> encontrás clases y prácticas de
+            <em>salsa</em> y <em>bachata</em> para principiantes y avanzados.
+            Descubrí eventos cerca tuyo y armá tu semana de baile.
+          </p>
 
-      <!-- Grid de resultados -->
-      <section id="resultados" aria-label="Resultados de búsqueda"></section>
+          <div class="promo-ctas">
+            <a href="categories.html" class="btn btn-primary btn-lg">Buscar clases y eventos</a>
+            <a href="categories.html#salsa-category" class="btn btn-ghost btn-lg">Ver lo que hay hoy</a>
+          </div>
 
-      <!-- Paginación -->
-      <nav id="paginacion" aria-label="Paginación"></nav>
+          <div class="promo-stats">
+            <div class="stat"><div class="stat-number">+100</div><div class="stat-label">eventos/mes</div></div>
+            <div class="stat"><div class="stat-number">10</div><div class="stat-label">ciudades</div></div>
+            <div class="stat"><div class="stat-number">Gratis</div><div class="stat-label">y pagos</div></div>
+          </div>
+        </div>
+      </section>
 
-      <!-- Guarda la query actual para paginar -->
-      <input type="hidden" id="qActual" value="salsa" />
+      <!-- INFO ACADEMIA -->
+      <section class="academia" id="academia-bailaBA" aria-label="Información de la academia">
+        <h2>Flow Dance! Academia de baile en Buenos Aires</h2>
+
+        <div class="academia-grid">
+          <article class="academia-bloque">
+            <figure class="academia-media">
+              <img src="https://lamartorellsalsera.com/wp-content/uploads/2024/03/bailar-bachata-sensual-1024x683.webp" alt="Clase grupal de baile en Flow dance">
+            </figure>
+            <div class="academia-texto">
+              <h3>¿Cómo son las clases en nuestra academia de baile?</h3>
+              <p>
+                Podés comenzar desde cero. Aprendés pasos sencillos con los profes y después practicás.
+                ¡Aprender a bailar en Flow Dance es fácil y divertido!
+              </p>
+            </div>
+          </article>
+
+          <article class="academia-bloque">
+            <div class="academia-texto">
+              <h3>¿Tu primer clase? ¡Bienvenido!</h3>
+              <p>Clases pensadas para empezar sin vergüenza y disfrutar desde el primer día.</p>
+
+              <h3>Te esperamos</h3>
+              <p>Inscripciones abiertas todo el año. Podés abonar por clase o por mes.</p>
+            </div>
+          </article>
+        </div>
+
+        <div class="academia-detalle">
+          <div class="academia-detalle__texto">
+            <h3>La Academia de baile</h3>
+            <p>Sobre Av. Scalabrini Ortiz al 1000: bar adelante y gran salón para clases y eventos.</p>
+            <ul>
+              <li>Clases todos los días</li>
+              <li>Clases sueltas y cursos intensivos</li>
+              <li>Instructorados con salida laboral</li>
+            </ul>
+          </div>
+          <figure class="academia-detalle__media">
+            <img src="https://denomades-blog.imgix.net/blog/wp-content/uploads/2016/01/05164527/catedral-tango-buenos-aires.jpg?auto=compress%2Cformat&ixlib=php-3.3.1" alt="Salón preparado para clases y eventos">
+          </figure>
+        </div>
+      </section>
+
+      <!-- Buscador -->
+      <section class="buscador">
+        <div class="search-bar">
+          <input id="txtBuscar" type="search" placeholder="Buscar (salsa, bachata, kizomba, zumba)" />
+          <select id="selFecha" aria-label="Fecha">
+            <option value="">Cualquier fecha</option>
+            <option value="today">Hoy</option>
+            <option value="this_week">Esta semana</option>
+            <option value="next_week">La semana que viene</option>
+          </select>
+          <select id="selUbicacion" aria-label="Ubicación">
+            <option value="Buenos Aires" selected>Buenos Aires</option>
+            <option value="La Plata">La Plata</option>
+            <option value="Córdoba">Córdoba</option>
+            <option value="Rosario">Rosario</option>
+          </select>
+          <button id="btnBuscar" class="btn btn-primary">Buscar</button>
+        </div>
+      </section>
+
+      <!-- Resultados -->
+      <section id="eventbrite-resultados" aria-label="Resultados de búsqueda">
+        <h2>Eventos</h2>
+        <div id="resultados" class="category-items"></div>
+        <div id="paginacion" class="pager"></div>
+      </section>
     </main>
-
-    <!-- Publicidad (solo desktop por CSS) -->
-    <section class="ad" aria-label="Publicidad">
-      <h3>Publicidad</h3>
-      <p>Este bloque solo aparece en Desktop...</p>
-    </section>
   </div>
 
   <!-- FOOTER -->
   <footer>
-    <p>&copy; 2025 Mi Startup - Todos los derechos reservados</p>
+    <p>&copy; 2025 Flow Dance - Todos los derechos reservados</p>
+    <p class="credit"><em>Desarrollado por Enzo Ferreyra y Fiorella Adami · Aplicaciones Móviles · Universidad Nacional Arturo Jauretche</em></p>
   </footer>
 
-  <!-- jQuery + Script -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="app.js" defer></script>
-  <noscript>Necesitas habilitar JavaScript para ver los eventos.</noscript>
+  <!-- SCRIPTS -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
+  <script>
+    const carrito = document.getElementById('carrito');
+    function abrirCarrito(){ carrito.classList.add('open'); }
+    function cerrarCarrito(){ carrito.classList.remove('open'); }
+  </script>
+  <script src="js/app.js"></script>
+  <script src="js/detalle.js"></script>
 </body>
 </html>
