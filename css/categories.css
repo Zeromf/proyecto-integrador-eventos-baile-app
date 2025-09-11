@@ -1,0 +1,177 @@
+/* Reset básico y variables */
+* { box-sizing: border-box; }
+:root{
+  --bg: #0f1115;
+  --panel: #161a22;
+  --panel-2: #1c2230;
+  --text: #e7eaf0;
+  --muted: #9aa3b2;
+  --primary: #F18B10;
+  --radius: 14px;
+  --shadow: 0 8px 24px rgba(0,0,0,.25);
+}
+
+.category-title {
+  margin-top: 0;
+}
+
+html,body{
+  margin:0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+  line-height: 1.4;
+}
+
+/* Header */
+header{
+  position: sticky;
+  top:0; z-index: 5;
+  background: linear-gradient(180deg, #191f2a 0%, #141923 100%);
+  border-bottom: 1px solid #232a37;
+  padding: 0;
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between; 
+  gap:1rem;
+}
+
+/* Logo contenedor */
+header .logo {
+  left: 16px;
+  background: #242b3a;
+  padding: 0.3rem;
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 4rem; 
+}
+
+/* Enlace dentro del logo */
+header .logo a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;   
+  text-decoration: none; 
+}
+
+/* Imagen del logo */
+header .logo img {
+  max-height: 100%;
+  width: auto;
+  display: block;
+}
+
+header h1{ margin:0; text-align:center; font-size: clamp(1.1rem, 2vw, 1.6rem); }
+
+/* Layout principal */
+.container{
+  display: grid;
+  grid-template-columns: 1fr;  
+  gap: 1rem;
+  max-width: 1280px;           
+  margin: 0 auto; padding: 1rem;
+}
+
+/* Sidebar */
+.vertical-menu{
+  background: var(--panel);
+  border: 1px solid #232a37;
+  border-radius: var(--radius);
+  padding: 1rem;
+}
+.vertical-menu h2{ margin: .2rem 0 1rem; font-size: 1.05rem; }
+.vertical-menu ul{ list-style: none; margin: 0; padding: 0; }
+.vertical-menu li{ margin: .25rem 0; }
+.vertical-menu a{
+  display: inline-block; padding:.4rem .55rem; margin:.15rem 0;
+  border-radius: 10px; text-decoration: none; color: var(--text);
+}
+.vertical-menu a:hover{ background: #212836; }
+
+/* Contenedor de resultados */
+main{ display: grid; grid-template-columns: 1fr; gap: 1rem; }
+
+/* ===== Grilla de cards ===== */
+.category-items{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);     
+  gap: 2rem;
+  align-items: stretch;             
+}
+
+/* Card de evento */
+.evento{
+  background: var(--panel);
+  border: 1px solid #232a37;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: transform .15s ease, box-shadow .15s ease;
+
+  display: flex;
+  flex-direction: column;
+}
+.evento:hover{ transform: translateY(-2px); box-shadow: 0 12px 28px rgba(0,0,0,.35); }
+
+/* Imagen protagonista */
+.evento img{
+  width: 100%;
+  aspect-ratio: 16/10;
+  object-fit: cover;
+  display:block;
+  border-bottom: 2px solid #232a37;
+}
+
+.evento .content{
+  padding: 1rem;
+  text-align: center;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.evento h3{
+  margin:.5rem 0 .7rem; font-size: 1.1rem; font-weight: 700; color: #fff;
+}
+.evento p{ margin:.3rem 0; color: var(--muted); font-size:.95rem; }
+.evento a.btn{
+  margin-top: auto; align-self: center;
+  display: inline-block;
+  padding:.6rem 1.1rem; text-decoration: none;
+  background: var(--primary); color:#fff; border-radius: 12px; font-weight:600;
+  transition: background .2s ease, transform .1s ease;
+}
+.evento a.btn:hover{ background:#D97A0A; border-color: #D97A0A; transform: translateY(-1px); }
+
+/* Estados */
+#category-items p{ 
+  margin:.25rem 0; 
+}
+
+/* Footer */
+footer{
+  margin-top: 2rem; color: var(--muted); text-align: center;
+  padding: 1.5rem .5rem; border-top: 1px solid #232a37;
+}
+
+/* ===== Breakpoints ===== */
+@media (min-width: 600px){
+  .container{ grid-template-columns: 220px 1fr; align-items: start; }
+  #category-items{ grid-template-columns: repeat(2, minmax(0, 1fr)); } 
+}
+
+@media (min-width: 1024px){
+  .container{ grid-template-columns: 220px 1fr 280px; }
+  /* 👇 Forzado a 3 columnas en desktop */
+  #category-items{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .ad{ display:block; }
+}
+
+/* Accesibilidad y scroll */
+::-webkit-scrollbar{ width:10px; height:10px; }
+::-webkit-scrollbar-thumb{ background:#2a3346; border-radius:10px; }
+::-webkit-scrollbar-track{ background:#11151d; }
