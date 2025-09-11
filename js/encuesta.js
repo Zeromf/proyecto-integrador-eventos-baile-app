@@ -1,4 +1,3 @@
-// === Utiles ===
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => document.querySelectorAll(sel);
 
@@ -13,7 +12,6 @@ function parseFechaDDMMYYYY(s){
   // s = dd-mm-aaaa -> Date válido
   const [dd,mm,yyyy] = s.split("-").map(Number);
   const d = new Date(yyyy, mm-1, dd);
-  // validar que coincida (evita 31-02-2020)
   const ok = d.getFullYear()===yyyy && (d.getMonth()+1)===mm && d.getDate()===dd;
   return ok ? d : null;
 }
@@ -23,7 +21,7 @@ function getRadioValue(name){
   return r ? r.value : "";
 }
 
-// === Validación principal (Ejercicio 2) ===
+// === Validación principal ===
 function validar(){
   clearErrors();
   let ok = true;
