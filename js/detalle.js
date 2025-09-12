@@ -23,7 +23,7 @@ function abrirDetalleEvento(eventoId) {
 
   detalleDiv.innerHTML = `
     <h3>${evento.name?.text || "Evento"}</h3>
-    <img src="${img}" alt="${evento.name?.text || "Evento"}" class="evento-imagen"/>
+    <div id="mapaEvento" style="width: 100%; height: 250px; border-radius: 8px; margin-top: 1rem;"></div>
     <p><strong>Fecha:</strong> ${fecha}</p>
     <p><strong>Ubicación:</strong> ${lugar}</p>
     <p><strong>Descripción:</strong> ${desc}</p>
@@ -32,25 +32,42 @@ function abrirDetalleEvento(eventoId) {
       ${estadoChip(evento.status)}
     </div>
     <div class="detalle-actions">
-    <div class="btn-comprar-container">
-        <button class="btn btn-comprar">Agregar al carrito</button>
+        <div class="btn-comprar-container">
+            <button class="btn btn-comprar">Agregar al carrito</button>
+        </div>
+        <div class="icon-btns">
+            <a href="https://www.google.com/calendar/render?..." class="icon-btn" target="_blank" title="Agregar al calendario">
+            <i class="fa-regular fa-calendar"></i>
+            </a>
+            <a href="https://wa.me/?text=..." class="icon-btn" target="_blank" title="Compartir con un amigo">
+            <i class="fa-brands fa-whatsapp"></i>
+            </a>
+        </div>
     </div>
-    <div class="icon-btns">
-        <a href="https://www.google.com/calendar/render?..." class="icon-btn" target="_blank" title="Agregar al calendario">
-        <i class="fa-regular fa-calendar"></i>
-        </a>
-        <a href="https://wa.me/?text=..." class="icon-btn" target="_blank" title="Compartir con un amigo">
-        <i class="fa-brands fa-whatsapp"></i>
-        </a>
-    </div>
-    </div>
+    
   `;
 
+
   document.getElementById("modalDetalle").style.display = "flex";
+
+  
+  // Inicializar mapa si hay coordenadas
+  if (evento.venue?.latitude && evento.venue?.longitude) {
+    const lat = parseFloat(evento.venue.latitude);
+    const lng = parseFloat(evento.venue.longitude);
+    const mapa = L.map('mapaEvento').setView([lat, lng], 15);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(mapa);
+
+    L.marker([lat, lng]).addTo(mapa)
+      .bindPopup(`<b>${evento.name?.text}</b><br>${lugar}`)
+      .openPopup();
+  } else {
+    document.getElementById("mapaEvento").innerHTML = "<p>No hay coordenadas disponibles para este evento.</p>";
+  }
 }
-
-// Abrir modal con detalles
-
 
 // Cerrar modal
 document.getElementById("btnCerrarModal").addEventListener("click", () => {
