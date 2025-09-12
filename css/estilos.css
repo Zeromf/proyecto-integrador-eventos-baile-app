@@ -305,6 +305,33 @@ main{ display: grid; grid-template-columns: 1fr; gap: 1rem; }
   border-radius:12px; padding:1rem; text-align:center;
 }
 
+.quick-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-left: auto;  /* opcional: empuja los íconos a la derecha */
+}
+
+/*Iconos redondos de card*/
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #1c2230;
+  color: #fff;
+  border: 1px solid #2c3446;
+  font-size: 1rem;
+  transition: all 0.15s ease;
+  text-decoration: none;
+}
+.icon-btn:hover {
+  background: #273046;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
 /* Paginación */
 #paginacion{ display:flex; gap:.6rem; align-items:center; justify-content:center; }
 #paginacion button{

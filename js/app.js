@@ -157,12 +157,23 @@ function renderEventos(arr, page=1, pageSize=PAGE_SIZE){
             <li>📍 ${lugar}</li>
           </ul>
           <div class="evento-actions">
-            <a class="btn" href="${evt.url || '#'}" target="_blank" rel="noopener">Ver más</a>
-            <a class="btn btn-calendar" href="${gcalUrl}" target="_blank" rel="noopener">Agregar a Google Calendar</a>
+            <a class="btn btn-detalle" data-id="${evt.id}">Ver más</a>
+             <div class="quick-actions">
+            <!-- Calendario -->
+            <a href="${gcalUrl}" class="icon-btn" target="_blank" rel="noopener" title="Agregar al calendario">
+              <i class="fa-regular fa-calendar"></i>
+            </a>
+            <!-- Compartir con amigo (WhatsApp / link) -->
+            <a href="https://wa.me/?text=${encodeURIComponent(evt.name?.text + ' ' + evt.url)}" 
+              class="icon-btn" target="_blank" rel="noopener" title="Compartir con un amigo">
+              <i class="fa-brands fa-whatsapp"></i>
+            </a>
+          </div>
           </div>
         </div>
       </article>
     `);
+    
   });
 
   renderPaginacion(totalPages, current);
@@ -251,6 +262,12 @@ $(document).on("click", "#paginacion .page-btn", function(){
   if (next === window._pagination.page) return;
   window._pagination.page = next;
   renderEventos(window._pagination.data, window._pagination.page, window._pagination.pageSize);
+});
+
+$(document).on("click", ".btn-detalle", function(e){
+  e.preventDefault();
+  const id = $(this).data("id");
+  abrirDetalleEvento(id);
 });
 
 /* Primera carga */
