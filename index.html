@@ -9,9 +9,10 @@
   <link rel="stylesheet" href="css/estilos.css" />
   <link rel="stylesheet" href="css/menu.css" />
   <link rel="stylesheet" href="css/carrito.css" />
-
+  <link rel="stylesheet" href="css/detalle.css" />
   <!-- Iconos -->
   <script src="https://kit.fontawesome.com/f222217ad3.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-SzlrxWriC3Tjz5b1+V6q7yB0iE5KjHbA3Kp6uP0kD+X1B1V4y5d7YxRxjK1aOjD+X5l4Jt6g6Fq4ZK3i2ZCw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <!-- Ajuste mínimo: contenedor del header -->
   <style>
@@ -80,6 +81,15 @@
   </header>
 
   <div class="container">
+    <!-- Modal Detalle Evento -->
+    <div id="modalDetalle" class="modal">
+      <div class="modal-content">
+        <button class="modal-close" id="btnCerrarModal">✕</button>
+        <div id="detalleEvento"></div>
+      </div>
+    </div>
+
+    <!-- CONTENIDO PRINCIPAL -->
     <main aria-label="Contenido principal">
       <!-- Sección Promocional -->
       <section class="promo-section">

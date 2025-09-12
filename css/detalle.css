@@ -34,9 +34,94 @@
   cursor: pointer;
 }
 
-.btn-comprar {
+/* ===== Modal ===== */
+.modal {
+  display: none; /* oculto por defecto */
+  position: fixed;
+  z-index: 20;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.65);
+  backdrop-filter: blur(4px);
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+.modal-content {
+  background: var(--panel);
+  border: 1px solid #232a37;
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  max-width: 600px;
+  width: 100%;
+  padding: 1.5rem;
+  position: relative;
+  animation: fadeIn .25s ease;
+}
+
+.modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+.detalle-actions {
   display: flex;
-  margin: auto;
+  align-items: center;
+  justify-content: space-between; /* distribuye botones */
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+/* Contenedor para centrar el botón principal */
+.detalle-actions .btn-comprar-container {
+  flex: 1;
+  display: flex;
+  justify-content: center; 
+}
+
+/* Botón principal */
+.detalle-actions .btn-comprar {
+  padding: 0.7rem 1.2rem;
+  margin-left: 2rem;
+  background: #f39c12;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.detalle-actions .btn-comprar:hover {
+  background: #f39c12;
+  transform: translateY(-2px);
+}
+
+/* Botones de icono */
+.detalle-actions .icon-btns {
+  display: flex;
+  gap: 0.6rem;
+}
+.detalle-actions .icon-btn {
+  width: 40px;
+  height: 40px;
+  font-size: 1.3rem;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background: #1c2230;
+  color: #fff;
+  border: 1px solid #2c3446;
+  transition: all 0.15s ease;
+}
+.detalle-actions .icon-btn:hover {
+  background: #273046;
+  transform: translateY(-2px);
 }
 
 .evento-imagen {
@@ -50,3 +135,4 @@
   from { opacity: 0; transform: scale(.95); }
   to { opacity: 1; transform: scale(1); }
 }
+
