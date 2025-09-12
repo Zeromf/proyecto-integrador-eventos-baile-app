@@ -159,7 +159,15 @@ function renderEventos(arr, page=1, pageSize=PAGE_SIZE){
           <div class="evento-actions">
             <a class="btn btn-detalle" data-id="${evt.id}">Ver más</a>
              <div class="quick-actions">
-            
+            <!-- Calendario -->
+            <a href="${gcalUrl}" class="icon-btn" target="_blank" rel="noopener" title="Agregar al calendario">
+              <i class="fa-regular fa-calendar"></i>
+            </a>
+            <!-- Compartir con amigo (WhatsApp / link) -->
+            <a href="https://wa.me/?text=${encodeURIComponent(evt.name?.text + ' ' + evt.url)}" 
+              class="icon-btn" target="_blank" rel="noopener" title="Compartir con un amigo">
+              <i class="fa-brands fa-whatsapp"></i>
+            </a>
           </div>
           </div>
         </div>

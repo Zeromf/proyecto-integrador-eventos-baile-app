@@ -35,6 +35,14 @@ function abrirDetalleEvento(eventoId) {
     <div class="btn-comprar-container">
         <button class="btn btn-comprar">Agregar al carrito</button>
     </div>
+    <div class="icon-btns">
+        <a href="https://www.google.com/calendar/render?..." class="icon-btn" target="_blank" title="Agregar al calendario">
+        <i class="fa-regular fa-calendar"></i>
+        </a>
+        <a href="https://wa.me/?text=..." class="icon-btn" target="_blank" title="Compartir con un amigo">
+        <i class="fa-brands fa-whatsapp"></i>
+        </a>
+    </div>
     </div>
   `;
 
