@@ -3,39 +3,46 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Flow Dance</title>
+  <title>Flow Dance – Categorías</title>
+
+  <!-- CSS -->
   <link rel="stylesheet" href="css/categories.css" />
+  <link rel="stylesheet" href="css/estilos.css" />
   <link rel="stylesheet" href="css/carrito.css" />
   <link rel="stylesheet" href="css/menu.css" />
+  <link rel="stylesheet" href="css/detalle.css" />
+
+  <!-- Iconos -->
   <script src="https://kit.fontawesome.com/f222217ad3.js" crossorigin="anonymous"></script>
+
+  <!-- Leaflet (mapas del modal) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </head>
 <body>
   <!-- HEADER -->
   <header>
     <div class="logo">
-      <a href="index.html">
-        <img src="img/logo.png" alt="Logo de la página">
-      </a>
+      <a href="index.html"><img src="img/logo.png" alt="Logo de la página"></a>
     </div>
 
     <h1>Flow Dance</h1>
 
-    <!-- Menú principal en línea -->
+    <!-- Menú principal -->
     <nav class="menu-principal" aria-label="Menú principal">
       <ul class="menu">
-        <li><a href="categories.html">Categorias</a></li>
+        <!-- El botón de la solapa -->
         <li><a href="encuesta.html">Encuesta</a></li>
+        <a class="btn" href="contacto.html">Contacto</a>
         <li>
-          <button class="btn-carrito" onclick="abrirCarrito()">
+          <button class="btn-carrito" onclick="abrirCarrito()" title="Abrir carrito">
             <i class="fa-solid fa-cart-shopping"></i>
           </button>
         </li>
       </ul>
     </nav>
 
-
-    <!-- 🔹 BOTÓN Y CARRITO LATERAL -->
-
+    <!-- Carrito lateral -->
     <aside class="carrito" id="carrito">
       <header>
         <h2>Tu carrito</h2>
@@ -55,188 +62,129 @@
       </div>
 
       <div class="total">Total: $2700</div>
-
       <button class="btn-checkout">Finalizar compra</button>
     </aside>
   </header>
 
-
   <div class="container">
-    <!-- menú-->
-    <nav class="vertical-menu">
-      <h2>Categorías</h2>
-      <ul>
-        <li><a href="#salsa-category" class="filtro" data-cat="salsa">Salsa</a></li>
-        <li><a href="#bachata-category" class="filtro" data-cat="bachata">Bachata</a></li>
-        <li><a href="#kizomba-category" class="filtro" data-cat="kizomba">Kizomba</a></li>
-        <li><a href="#zumba-category" class="filtro" data-cat="zumba">Zumba</a></li>
-      </ul>
-      <hr style="border:0;border-top:1px solid #232a37;margin:1rem 0" />
-      <nav aria-label="Sitio">
-        <a class="btn" href="#">Contacto</a>
+    <!-- ===== Drawer lateral de Categorías + overlay ===== -->
+    <aside id="catDrawer" class="cat-drawer" aria-hidden="true">
+      <nav class="vertical-menu" aria-label="Categorías">
+        <h2>Categorías</h2>
+        <ul>
+          <li><a href="#salsa-category"  class="filtro" data-cat="salsa">Salsa</a></li>
+          <li><a href="#bachata-category" class="filtro" data-cat="bachata">Bachata</a></li>
+          <li><a href="#kizomba-category" class="filtro" data-cat="kizomba">Kizomba</a></li>
+          <li><a href="#zumba-category"  class="filtro" data-cat="zumba">Zumba</a></li>
+        </ul>
+        <hr style="border:0;border-top:1px solid #232a37;margin:1rem 0" />
       </nav>
-    </nav>
+    </aside>
+    <div id="catOverlay" class="cat-overlay" hidden></div>
+    <!-- ================================================ -->
 
-      <!-- Grid de resultados -->
-    <main aria-label="Categorias">
-
-      <!-- salsa -->
-      <section id="salsa-category">
-        <h1 class="category-title">Salsa</h1>
-        <div class="category-items">
-          <article class="evento">
-            <img loading="lazy" src="https://www.chassedance.es/wp-content/uploads/2024/06/Como-bailar-bachata.jpg" alt="Clase de Salsa Inicial">
-            <div class="content">
-              <h3>Clase de Salsa Inicial</h3>
-              <p>🗓️ 12/12/2025</p>
-              <p>📍 "Estudio Centro, La Plata"</p>
-              <a class="btn" href="#">Ver más</a>
-            </div>
-          </article>
-          <article class="evento">
-            <img loading="lazy" src="https://www.chassedance.es/wp-content/uploads/2024/06/Como-bailar-bachata.jpg" alt="Clase de Salsa Inicial">
-            <div class="content">
-              <h3>Clase de Salsa Inicial</h3>
-              <p>🗓️ 12/12/2025</p>
-              <p>📍 "Estudio Centro, La Plata"</p>
-              <a class="btn" href="#">Ver más</a>
-            </div>
-          </article>
-          <article class="evento">
-            <img loading="lazy" src="https://www.chassedance.es/wp-content/uploads/2024/06/Como-bailar-bachata.jpg" alt="Clase de Salsa Inicial">
-            <div class="content">
-              <h3>Clase de Salsa Inicial</h3>
-              <p>🗓️ 12/12/2025</p>
-              <p>📍 "Estudio Centro, La Plata"</p>
-              <a class="btn" href="#">Ver más</a>
-            </div>
-          </article>
+    <!-- MAIN: filtros + resultados + modal -->
+    <main aria-label="Listado y filtros">
+      <!-- 🔎 Filtros -->
+      <section class="buscador">
+        <div class="search-bar">
+          <input id="txtBuscar" type="search" placeholder="Buscar (salsa, bachata, kizomba, zumba)" />
+          <select id="selFecha" aria-label="Fecha">
+            <option value="">Cualquier fecha</option>
+            <option value="today">Hoy</option>
+            <option value="this_week">Esta semana</option>
+            <option value="next_week">La semana que viene</option>
+          </select>
+          <select id="selUbicacion" aria-label="Ubicación">
+            <option value="Buenos Aires" selected>Buenos Aires</option>
+            <option value="La Plata">La Plata</option>
+            <option value="Córdoba">Córdoba</option>
+            <option value="Rosario">Rosario</option>
+          </select>
+          <button id="btnBuscar" class="btn btn-primary">Buscar</button>
         </div>
       </section>
 
-      <!-- bachata -->
-      <section id="bachata-category" >
-        <h1 class="category-title">Bachata</h1>
-        <div class="category-items">
-          <article class="evento">
-            <img loading="lazy" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_vD8WpIciJ8b9pCeDP4erfalp02n5oUiK1Q&s" alt="Clase de Bachata Inicial">
-            <div class="content">
-              <h3>Clase de Bachata Inicial</h3>
-              <p>🗓️ 12/09/2025</p>
-              <p>📍 "Club Social, Tolosa"</p>
-              <a class="btn" href="#">Ver más</a>
-            </div>
-          </article>
-          <article class="evento">
-            <img loading="lazy" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_vD8WpIciJ8b9pCeDP4erfalp02n5oUiK1Q&s" alt="Clase de Bachata Inicial">
-            <div class="content">
-              <h3>Clase de Bachata Inicial</h3>
-              <p>🗓️ 12/09/2025</p>
-              <p>📍 "Club Social, Tolosa"</p>
-              <a class="btn" href="#">Ver más</a>
-            </div>
-          </article>
-          <article class="evento">
-            <img loading="lazy" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_vD8WpIciJ8b9pCeDP4erfalp02n5oUiK1Q&s" alt="Clase de Bachata Inicial">
-            <div class="content">
-              <h3>Clase de Bachata Inicial</h3>
-              <p>🗓️ 12/09/2025</p>
-              <p>📍 "Club Social, Tolosa"</p>
-              <a class="btn" href="#">Ver más</a>
-            </div>
-          </article>
-        </div>
-      </section>
+      <!-- 🧩 Resultados dinámicos -->
+      <section id="eventbrite-resultados" aria-label="Resultados de búsqueda">
+<section id="eventbrite-resultados" aria-label="Resultados de búsqueda">
+  <div class="section-title">
+    <h2>Eventos</h2>
+    <button id="btnCategorias" class="btn btn-ghost btn-sm with-icon" type="button" title="Abrir categorías">
+      <i class="fa-solid fa-sliders"></i>
+      Categorías
+    </button>
+  </div>
 
-      <!-- kizomba -->
-      <section id="kizomba-category">
-        <h1 class="category-title">Kizomba</h1>
-        <div class="category-items">
-          <article class="evento">
-            <img loading="lazy" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYVKa1RCJsy_jFgZZ3QLo1ovAarhwXVN8p5Q&s" alt="Clase de Kizomba Inicial">
-            <div class="content">
-              <h3>Clase de Kizomba Inicial</h3>
-              <p>🗓️ 12/09/2025</p>
-              <p>📍 "Club Social, Tolosa"</p>
-              <a class="btn" href="#">Ver más</a>
-            </div>
-          </article>
-          <article class="evento">
-            <img loading="lazy" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYVKa1RCJsy_jFgZZ3QLo1ovAarhwXVN8p5Q&s" alt="Clase de Kizomba Inicial">
-            <div class="content">
-              <h3>Clase de Kizomba Inicial</h3>
-              <p>🗓️ 12/09/2025</p>
-              <p>📍 "Club Social, Tolosa"</p>
-              <a class="btn" href="#">Ver más</a>
-            </div>
-          </article>
-          <article class="evento">
-            <img loading="lazy" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYVKa1RCJsy_jFgZZ3QLo1ovAarhwXVN8p5Q&s" alt="Clase de Kizomba Inicial">
-            <div class="content">
-              <h3>Clase de Kizomba Inicial</h3>
-              <p>🗓️ 12/09/2025</p>
-              <p>📍 "Club Social, Tolosa"</p>
-              <a class="btn" href="#">Ver más</a>
-            </div>
-          </article>
-        </div>
-      </section>
+  <div id="resultados" class="category-items"></div>
+  <div id="paginacion" class="pager"></div>
+</section>
 
-      <!-- zumba -->
-      <section id="zumba-category">
-        <h1 class="category-title">Zumba</h1>
-        <div class="category-items">
-          <article class="evento">
-            <img loading="lazy" src="https://www.arthritis.org//getmedia/22ed138c-e58f-4647-92bd-009f174f5207/zumba_dance-based_fitness_600x400.jpg" alt="Clase de Zumba Inicial">
-            <div class="content">
-              <h3>Clase de Zumba Inicial</h3>
-              <p>🗓️ 12/09/2025</p>
-              <p>📍 "Club Social, Tolosa"</p>
-              <a class="btn" href="#">Ver más</a>
-            </div>
-          </article>
-          <article class="evento">
-            <img loading="lazy" src="https://www.arthritis.org//getmedia/22ed138c-e58f-4647-92bd-009f174f5207/zumba_dance-based_fitness_600x400.jpg" alt="Clase de Zumba Inicial">
-            <div class="content">
-              <h3>Clase de Zumba Inicial</h3>
-              <p>🗓️ 12/09/2025</p>
-              <p>📍 "Club Social, Tolosa"</p>
-              <a class="btn" href="#">Ver más</a>
-            </div>
-          </article>
-          <article class="evento">
-            <img loading="lazy" src="https://www.arthritis.org//getmedia/22ed138c-e58f-4647-92bd-009f174f5207/zumba_dance-based_fitness_600x400.jpg" alt="Clase de Zumba Inicial">
-            <div class="content">
-              <h3>Clase de Zumba Inicial</h3>
-              <p>🗓️ 12/09/2025</p>
-              <p>📍 "Club Social, Tolosa"</p>
-              <a class="btn" href="#">Ver más</a>
-            </div>
-          </article>
-        </div>
-      </section>
     </main>
+
+    <!-- 🪟 Modal de detalle -->
+    <div id="modalDetalle" class="modal" aria-hidden="true">
+      <div class="modal-content">
+        <button class="modal-close" id="btnCerrarModal" aria-label="Cerrar">✕</button>
+        <div id="detalleEvento"></div>
+      </div>
+    </div>
   </div>
 
   <!-- FOOTER -->
   <footer>
     <p>&copy; 2025 Flow Dance - Todos los derechos reservados</p>
-    <p class="credit">
-      <em>Desarrollado por Enzo Ferreyra y Fiorella Adami · Aplicaciones Móviles · Universidad Nacional Arturo Jauretche</em>
-    </p>
+    <p class="credit"><em>Desarrollado por Enzo Ferreyra y Fiorella Adami · Aplicaciones Móviles · Universidad Nacional Arturo Jauretche</em></p>
   </footer>
 
-    <!-- JS para abrir/cerrar carrito -->
+  <!-- JS mínimos de página -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
   <script>
+    // carrito
     const carrito = document.getElementById('carrito');
+    function abrirCarrito(){ carrito.classList.add('open'); }
+    function cerrarCarrito(){ carrito.classList.remove('open'); }
+  </script>
 
-    function abrirCarrito() {
-      carrito.classList.add('open');
-    }
+  <!-- App (Eventbrite, render, paginación, etc.) -->
+  <script src="js/app.js"></script>
+  <!-- Detalle (modal con mapa, chips, etc.) -->
+  <script src="js/detalle.js"></script>
 
-    function cerrarCarrito() {
-      carrito.classList.remove('open');
-    }
+  <!-- Lógica del drawer + atajos de filtrado -->
+  <script>
+    (function(){
+      const drawer  = document.getElementById('catDrawer');
+      const overlay = document.getElementById('catOverlay');
+      const btn     = document.getElementById('btnCategorias');
+
+      function openDrawer(){
+        drawer.classList.add('open');
+        overlay.hidden = false;
+        drawer.setAttribute('aria-hidden','false');
+        const first = drawer.querySelector('a, button');
+        if (first) first.focus();
+      }
+      function closeDrawer(){
+        drawer.classList.remove('open');
+        overlay.hidden = true;
+        drawer.setAttribute('aria-hidden','true');
+        btn?.focus();
+      }
+      btn?.addEventListener('click', e => { e.preventDefault(); openDrawer(); });
+      overlay?.addEventListener('click', closeDrawer);
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
+
+      // Filtro rápido por categoría
+      drawer.querySelectorAll('.filtro').forEach(a=>{
+        a.addEventListener('click', e=>{
+          const input = document.getElementById('txtBuscar');
+          if (input) input.value = a.dataset.cat;
+          document.getElementById('btnBuscar')?.click();
+          closeDrawer();
+        });
+      });
+    })();
   </script>
 </body>
 </html>
