@@ -1,4 +1,8 @@
-/* Reset básico y variables */
+/* ============================
+   CATEGORIES.CSS (centrado + drawer)
+   ============================ */
+
+/* Reset & variables */
 * { box-sizing: border-box; }
 :root{
   --bg: #0f1115;
@@ -11,10 +15,7 @@
   --shadow: 0 8px 24px rgba(0,0,0,.25);
 }
 
-.category-title {
-  margin-top: 0;
-}
-
+/* Base */
 html,body{
   margin:0;
   background: var(--bg);
@@ -23,155 +24,223 @@ html,body{
   line-height: 1.4;
 }
 
-/* Header */
+/* Header compacto (la página ya trae estilos globales, esto es mínimo por si hace falta) */
 header{
-  position: sticky;
-  top:0; z-index: 5;
+  position: sticky; top:0; z-index: 5;
   background: linear-gradient(180deg, #191f2a 0%, #141923 100%);
   border-bottom: 1px solid #232a37;
   padding: 0;
-  display: flex; 
-  align-items: center; 
-  justify-content: space-between; 
-  gap:1rem;
+  display: flex; align-items: center; justify-content: space-between; gap:1rem;
 }
-
-/* Logo contenedor */
-header .logo {
-  left: 16px;
-  background: #242b3a;
-  padding: 0.3rem;
-  border-radius: 10px;
-  box-shadow: var(--shadow);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 4rem; 
-}
-
-/* Enlace dentro del logo */
-header .logo a {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;   
-  text-decoration: none; 
-}
-
-/* Imagen del logo */
-header .logo img {
-  max-height: 100%;
-  width: auto;
-  display: block;
-}
-
+header .logo{ background:#242b3a; padding:.3rem; border-radius:10px; box-shadow: var(--shadow); height:4rem; display:flex; align-items:center; }
+header .logo img{ max-height:100%; display:block; }
 header h1{ margin:0; text-align:center; font-size: clamp(1.1rem, 2vw, 1.6rem); }
 
-/* Layout principal */
+/* =======================================
+   LAYOUT: centrado y sin columna reservada
+   ======================================= */
+
+/* IMPORTANTE: en tu HTML esta hoja se carga ANTES que estilos.css.
+   Para ganar la cascada contra estilos.css (que usa :has(> aside)),
+   usamos !important en las reglas críticas. */
 .container{
   display: grid;
-  grid-template-columns: 1fr;  
+  grid-template-columns: 1fr !important;  /* 1 sola columna siempre */
+  max-width: 1100px;                       /* ancho de contenido centrado */
+  margin: 0 auto;                          /* centrar */
   gap: 1rem;
-  max-width: 1280px;           
-  margin: 0 auto; padding: 1rem;
-}
-
-/* Sidebar */
-.vertical-menu{
-  background: var(--panel);
-  border: 1px solid #232a37;
-  border-radius: var(--radius);
   padding: 1rem;
 }
-.vertical-menu h2{ margin: .2rem 0 1rem; font-size: 1.05rem; }
-.vertical-menu ul{ list-style: none; margin: 0; padding: 0; }
-.vertical-menu li{ margin: .25rem 0; }
-.vertical-menu a{
-  display: inline-block; padding:.4rem .55rem; margin:.15rem 0;
-  border-radius: 10px; text-decoration: none; color: var(--text);
+/* Si estilos.css pone 220px 1fr cuando hay <aside>, lo anulamos igual */
+.container:has(> aside){
+  grid-template-columns: 1fr !important;
 }
-.vertical-menu a:hover{ background: #212836; }
 
-/* Contenedor de resultados */
-main{ display: grid; grid-template-columns: 1fr; gap: 1rem; }
+/* Contenido principal */
+main{ display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
 
-/* ===== Grilla de cards ===== */
+/* =======================================
+   Drawer (solapa) de Categorías + overlay
+   ======================================= */
+.cat-drawer{
+  position: fixed; top: 0; left: 0;
+  height: 100vh; width: 300px;
+  transform: translateX(-110%);
+  transition: transform .25s ease;
+  z-index: 40;
+}
+.cat-drawer.open{ transform: translateX(0); }
+
+.cat-drawer .vertical-menu{
+  height: 100%; overflow: auto;
+  background: var(--panel);
+  border-right: 1px solid #232a37;
+  border-radius: 0 14px 14px 0;
+  padding: 1rem;
+  box-shadow: var(--shadow);
+}
+.vertical-menu h2{ margin:.2rem 0 1rem; font-size: 1.05rem; }
+.vertical-menu ul{ list-style:none; margin:0; padding:0; }
+.vertical-menu li{ margin:.25rem 0; }
+.vertical-menu a{
+  display:inline-block; padding:.4rem .55rem; margin:.15rem 0;
+  border-radius:10px; text-decoration:none; color:var(--text);
+}
+.vertical-menu a:hover{ background:#212836; }
+
+.cat-overlay{
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.45);
+  z-index: 35;
+}
+
+/* ==================
+   Buscador centrado
+   ================== */
+.buscador { margin-top: .25rem; }
+.search-bar{
+  display: grid;
+  grid-template-columns: 1.3fr 0.8fr 0.9fr auto;
+  gap: .6rem; align-items: center;
+  background: var(--panel-2);
+  border: 1px solid #232a37;
+  border-radius: 14px;
+  padding: .75rem;
+  box-shadow: var(--shadow);
+
+  /* centrado y tope de ancho */
+  max-width: 900px;
+  margin: 0 auto 1.5rem auto;
+}
+.search-bar input[type="search"],
+.search-bar select,
+.search-bar button{
+  height: 42px; border-radius: 12px;
+}
+.search-bar input[type="search"]{
+  padding-left:.9rem; border:1px solid #273046; background:#10151e; color:var(--text);
+}
+.search-bar select{
+  border:1px solid #273046; background:#10151e; color:var(--text); padding:.55rem .65rem;
+}
+.search-bar #btnBuscar{ font-weight:700; padding:0 1rem; }
+.search-bar input[type="search"]:hover, .search-bar select:hover{ filter:brightness(1.05); }
+
+@media (max-width: 820px){
+  .search-bar{ grid-template-columns: 1fr; gap: .5rem; }
+  .search-bar #btnBuscar{ width:100%; }
+}
+
+/* ==========================
+   Grilla fluida y centrada
+   ========================== */
 .category-items{
   display: grid;
-  grid-template-columns: repeat(3, 1fr);     
-  gap: 2rem;
-  align-items: stretch;             
+  /* se adapta a 1, 2 o 3+ columnas según espacio */
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  justify-items: center;   /* centra las cards dentro de cada celda */
 }
 
-/* Card de evento */
+/* =================
+   Card de Evento
+   ================= */
 .evento{
   background: var(--panel);
   border: 1px solid #232a37;
-  border-radius: var(--radius);
+  border-radius: 18px;
   overflow: hidden;
   box-shadow: var(--shadow);
   transition: transform .15s ease, box-shadow .15s ease;
+  display: flex; flex-direction: column;
 
-  display: flex;
-  flex-direction: column;
+  /* ancho máximo para no “estirarse” demasiado */
+  width: 100%;
+  max-width: 360px;
 }
 .evento:hover{ transform: translateY(-2px); box-shadow: 0 12px 28px rgba(0,0,0,.35); }
-
-/* Imagen protagonista */
 .evento img{
-  width: 100%;
-  aspect-ratio: 16/10;
-  object-fit: cover;
-  display:block;
-  border-bottom: 2px solid #232a37;
+  width: 100%; aspect-ratio: 16/10; object-fit: cover; display:block;
+  border-bottom: 2px solid #232a37; border-bottom-left-radius: 0; border-bottom-right-radius: 0;
+}
+.evento .content{
+  padding: 1rem; text-align: left; flex: 1;
+  display:flex; flex-direction:column; justify-content:flex-start;
 }
 
-.evento .content{
-  padding: 1rem;
-  text-align: center;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+/* chips (si los usás) */
+.tags{ display:flex; gap:.4rem; flex-wrap:wrap; margin-bottom:.55rem; }
+.chip{
+  display:inline-flex; align-items:center; gap:.35rem;
+  padding:.28rem .56rem; border-radius:999px;
+  background:#10151e; border:1px solid #273046; color:#cfd6e3;
+  font-size:.82rem; line-height:1; font-weight:600;
 }
-.evento h3{
-  margin:.5rem 0 .7rem; font-size: 1.1rem; font-weight: 700; color: #fff;
-}
+.chip-free{ background:#11261c; border-color:#1f7a46; color:#b7ffd6; }
+
+/* Título + meta */
+.evento h3{ margin:.5rem 0 .7rem; font-size:1.1rem; font-weight:700; color:#fff; }
 .evento p{ margin:.3rem 0; color: var(--muted); font-size:.95rem; }
 .evento a.btn{
-  margin-top: auto; align-self: center;
-  display: inline-block;
-  padding:.6rem 1.1rem; text-decoration: none;
+  margin-top:auto; align-self:center; display:inline-block; padding:.6rem 1.1rem; text-decoration:none;
   background: var(--primary); color:#fff; border-radius: 12px; font-weight:600;
   transition: background .2s ease, transform .1s ease;
 }
-.evento a.btn:hover{ background:#D97A0A; border-color: #D97A0A; transform: translateY(-1px); }
+.evento a.btn:hover{ background:#D97A0A; transform: translateY(-1px); }
 
-/* Estados */
-#category-items p{ 
-  margin:.25rem 0; 
+/* Acciones secundarias (icons redondos) */
+.icon-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border-radius: 50%;
+  background: #1c2230; color: #fff; border: 1px solid #2c3446; font-size: 1rem;
+  transition: all .15s ease; text-decoration: none;
 }
+.icon-btn:hover { background:#273046; transform: translateY(-2px); }
 
-/* Footer */
+/* =================
+   Paginación
+   ================= */
+.pager{ display:flex; gap:.6rem; align-items:center; justify-content:center; margin-top: 1rem; }
+.page-btn{ padding:.4rem .7rem; border:1px solid #2c3446; background:#242b3a; color:#e7eaf0; cursor:pointer; border-radius:8px; }
+.page-btn.is-active{ font-weight:600; border-color: var(--primary); box-shadow:0 0 0 2px rgba(241,139,16,.15); }
+.page-btn[disabled]{ opacity:.5; cursor:not-allowed; }
+
+/* =================
+   Footer
+   ================= */
 footer{
   margin-top: 2rem; color: var(--muted); text-align: center;
   padding: 1.5rem .5rem; border-top: 1px solid #232a37;
 }
 
-/* ===== Breakpoints ===== */
-@media (min-width: 600px){
-  .container{ grid-template-columns: 220px 1fr; align-items: start; }
-  #category-items{ grid-template-columns: repeat(2, minmax(0, 1fr)); } 
-}
-
-@media (min-width: 1024px){
-  .container{ grid-template-columns: 220px 1fr 280px; }
-  /* 👇 Forzado a 3 columnas en desktop */
-  #category-items{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .ad{ display:block; }
-}
-
-/* Accesibilidad y scroll */
+/* =================
+   Accesibilidad & Scroll
+   ================= */
+a:focus, button:focus, input:focus, select:focus{ outline:2px solid var(--primary); outline-offset:2px; }
 ::-webkit-scrollbar{ width:10px; height:10px; }
 ::-webkit-scrollbar-thumb{ background:#2a3346; border-radius:10px; }
 ::-webkit-scrollbar-track{ background:#11151d; }
+
+/* Título de sección con botón “Categorías” a la izquierda */
+.section-title{
+  display:flex; align-items:center; justify-content:flex-start;
+  gap:.75rem; margin: 0 0 .75rem;
+}
+.section-title h2{ margin:0; font-size: clamp(1.2rem, 1.2rem + .6vw, 1.6rem); }
+
+/* Botón chico, estilo fantasma para quedar discreto */
+.btn.btn-sm{ padding:.45rem .75rem; border-radius:10px; font-size:.95rem; }
+.btn.with-icon i{ margin-right:.4rem; }
+
+/* En pantallas chicas, que el botón baje debajo del título si hace falta */
+@media (max-width: 560px){
+  .section-title{ flex-wrap: wrap; }
+}
+
+/* opcional: que el header de la sección quede sticky */
+#eventbrite-resultados .section-title{
+  position: sticky; top: 76px; /* ajusta según alto de tu header */
+  background: var(--bg);
+  z-index: 3;
+  padding-top:.25rem; padding-bottom:.25rem;
+}
