@@ -1,0 +1,175 @@
+:root{
+  --bg: #0e1217;
+  --panel: #151a23;
+  --panel-2: #1b2230;
+  --text: #e8ecf3;
+  --muted: #9aa3b2;
+  --primary: #18c2c0;
+  --primary-ink: #072c2b;
+  --accent: #134c74;
+  --radius: 14px;
+  --shadow: 0 10px 28px rgba(0,0,0,.35);
+}
+
+body{ background: var(--bg); color: var(--text); }
+
+/* Header consistente */
+.header-inner{
+  max-width: 1280px; margin: 0 auto; padding: .9rem 1rem;
+  display: flex; align-items: center; gap: 1rem; width: 100%;
+}
+header h1 { flex: 1; text-align: center; }
+
+/* Layout general */
+.wrap{max-width: 1280px; margin:0 auto; padding: 1.25rem;}
+.page-title{
+  background: linear-gradient(135deg, #0f2b44 0%, #113e61 60%, #0f2b44 100%);
+  color:#eaf6ff; padding:1rem 1.25rem; border-radius: 12px;
+  font-size: clamp(1.25rem, 2.6vw, 1.7rem); font-weight:800;
+  margin: 1rem 0 1.5rem; box-shadow: var(--shadow);
+}
+
+.contact-grid{
+  display:grid; gap:1.25rem; grid-template-columns: 1fr;
+}
+@media (min-width: 960px){
+  .contact-grid{ grid-template-columns: 1.6fr 1.1fr; }
+}
+
+.card{
+  background: var(--panel); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding:1.25rem 1.4rem;
+}
+.card h2{margin:.25rem 0 1rem; font-size: clamp(1.1rem, 2.2vw, 1.35rem);}
+
+/* Formulario */
+form .row{display:grid; gap:.9rem; grid-template-columns: 1fr; margin-top:.9rem;}
+form .row:first-child{ margin-top: 0; }
+@media (min-width: 720px){
+  form .row.two{grid-template-columns: 1fr 1fr;}
+}
+label{font-size:.95rem}
+input, textarea, select{
+  width:100%; padding:1rem 1rem; border-radius:12px; border:1px solid #2b3342;
+  background: var(--panel-2); color: var(--text); outline: none;
+}
+input:focus, textarea:focus{ border-color: var(--primary); box-shadow: 0 0 0 2px #18c2c022; }
+textarea{min-height: 170px; resize: vertical;}
+
+.form-actions{
+  margin-top:1.1rem; display:flex; gap:.7rem; flex-wrap:wrap;
+}
+.btn{
+  display:inline-block; border:none; padding:.95rem 1.15rem; border-radius:12px;
+  background: var(--primary); color: var(--primary-ink); font-weight:800; cursor:pointer;
+}
+.btn-ghost{
+  background: transparent; color: var(--primary); border:1px solid #2e394b;
+}
+.muted{color: var(--muted); font-size:.95rem}
+.note{ margin-top:.7rem; }
+
+/* Columna derecha */
+.whats-box{
+  display:flex; align-items:center; gap:.85rem;
+  background: #0b3a2a; border:1px solid #236b55;
+  padding: .9rem 1rem; border-radius: 12px; margin-bottom:1rem;
+}
+.whats-number a{ color:#b7ffef; text-decoration:none; font-weight:900; font-size: clamp(1.3rem, 2.6vw, 1.65rem); }
+.info-list{margin:.6rem 0 0 0; padding-left:1.1rem}
+.info-list li{margin:.3rem 0}
+.mt-6{ margin-top: .9rem; }
+.mt-8{ margin-top: 1.1rem; }
+
+/* Banner con imagen completa (sin recorte) */
+.banner{
+  display:grid; gap:1rem; align-items:stretch; margin-top:1.2rem;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 960px){ .banner{ grid-template-columns: 1.1fr 1fr; } }
+
+.banner-msg{
+  background: var(--accent); color:#fff; border-radius: 12px;
+  padding:1.4rem 1.6rem; font-size:1.2rem; font-weight:700; line-height:1.3;
+  display:flex; flex-direction:column; justify-content:center;
+}
+.banner-msg small{display:block; margin-top:.8rem; font-weight:400; opacity:.9}
+
+.banner-media{
+  border-radius: 12px; overflow: hidden; background:#0d1a26;
+  display:flex; align-items:center; justify-content:center;
+}
+.banner-media img{
+  width:100%; max-height:600px; object-fit: contain; display:block; background:#0d1a26;
+}
+
+/* Footer */
+.footer{ text-align:center; padding:1.25rem 1rem; }
+
+.banner-media img {
+  width:100%;
+  height:auto;
+  max-height:100vh;  /* hasta el 80% de la altura visible */
+  object-fit: contain;
+  display:block;
+  background:#0d1a26;
+}
+.banner {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.2rem;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 1960px) {
+  .banner {
+    grid-template-columns: 1fr 1fr; /* dos columnas iguales */
+    align-items: stretch;          /* que ambas se estiren */
+  }
+}
+
+/* Hacemos que ambos bloques ocupen la misma altura */
+.banner-msg,
+.banner-media {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 30px;
+}
+
+.banner-msg {
+  background: var(--accent);
+  color: #fff;
+  padding: 1.4rem 1.6rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.banner-msg small {
+  display: block;
+  margin-top: .8rem;
+  font-weight: 400;
+  opacity: .9;
+}
+
+.banner-media {
+  background: #0d1a26;
+  overflow: hidden;
+}
+
+.banner-media img {
+  width: 100%;
+  height: 150%;         /* ocupa toda la altura disponible */
+  object-fit: cover;    /* recorta un poco pero mantiene proporción */
+  border-radius: 22px;
+}
+
+.btn-cancel {
+  background: transparent;
+  color: #f05;
+  border: 1px solid #f05;
+}
+.btn-cancel:hover {
+  background: #f05;
+  color: #fff;
+}

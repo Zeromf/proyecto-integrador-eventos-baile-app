@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contacto · Flow Dance</title>
+  <link rel="stylesheet" href="css/estilos.css"/>
+  <link rel="stylesheet" href="css/menu.css"/>
+  <link rel="stylesheet" href="css/contacto.css"/>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="header-inner">
+      <div class="logo">
+        <a href="index.html"><img src="img/logo.png" alt="Flow Dance"></a>
+      </div>
+      <h1>Flow Dance</h1>
+      <nav class="menu-principal" aria-label="Menú principal">
+        <ul class="menu">
+          <li><a href="categories.html">Eventos</a></li>
+          <li><a href="encuesta.html">Encuesta</a></li>
+          <li><a href="contacto.html" aria-current="page">Contacto</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="page-title">Contáctenos, respondemos de inmediato</div>
+
+    <div class="contact-grid">
+      <section class="card" aria-label="Formulario de contacto">
+        <h2>Envíenos su consulta</h2>
+
+        <form id="form-contacto" novalidate>
+          <div class="row two">
+            <div>
+              <label for="nombre">Nombre</label>
+              <input id="nombre" name="nombre" type="text" placeholder="Tu nombre"/>
+            </div>
+            <div>
+              <label for="apellido">Apellido</label>
+              <input id="apellido" name="apellido" type="text" placeholder="Tu apellido"/>
+            </div>
+          </div>
+
+          <div class="row two">
+            <div>
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" placeholder="tu@correo.com"/>
+            </div>
+            <div>
+              <label for="telefono">Teléfono</label>
+              <input id="telefono" name="telefono" type="tel" placeholder="+54 11 ..."/>
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label for="mensaje">Mensaje</label>
+              <textarea id="mensaje" name="mensaje" placeholder="Contanos en qué te podemos ayudar..."></textarea>
+            </div>
+          </div>
+
+                <div class="form-actions">
+        <button class="btn" type="submit">Enviar consulta</button>
+<a class="btn btn-cancel" href="index.html">Cancelar</a>
+        </div>
+
+
+          <p class="muted note">Tus datos no se comparten con terceros. Respondemos en minutos.</p>
+        </form>
+      </section>
+
+      <!-- DERECHA: Info de contacto -->
+      <aside class="card" aria-label="Información de contacto">
+        <h2>Llamanos o escribinos por WhatsApp</h2>
+
+        <div class="whats-box" role="note">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="" width="28" height="28" loading="lazy">
+          <div>
+            <div class="whats-number">
+              <a href="https://wa.me/541126060776" target="_blank" rel="noopener noreferrer">11 2606-0776</a>
+            </div>
+            <div class="muted">(WhatsApp)</div>
+          </div>
+        </div>
+
+        <ul class="info-list">
+          <li>Llámanos desde tu celular al <strong>11-2606-0776</strong></li>
+          <li>Desde un teléfono fijo: <strong>15-2606-0776</strong></li>
+          <li>Desde afuera de Buenos Aires: <strong>011 15-2606-0776</strong></li>
+          <li>Desde el exterior: <strong>(+54 9 11) 2606-0776</strong></li>
+        </ul>
+
+        <p class="muted mt-6">
+          Mandanos un mensaje y respondemos de inmediato. ¡Podés venir directamente a la clase hoy mismo!
+        </p>
+
+        <h2 class="mt-8">Dirección</h2>
+        <p><strong>Sede Villa Crespo</strong><br>
+          Av. Scalabrini Ortíz 540, Capital Federal.</p>
+        <p class="muted">Ir a la sede únicamente en el horario de clases.</p>
+
+        <div class="banner">
+          <div class="banner-msg">
+            Feriados también hay clases
+            <small>Clases particulares: en la academia o en tu casa · Descuentos para grupos</small>
+          </div>
+          <figure class="banner-media">
+            <img src="https://www.bailaba.com.ar/wp-content/uploads/2017/11/instructorado-salsa-y-bachata-400x300.jpg" alt="Promo clases de salsa y bachata">
+          </figure>
+        </div>
+      </aside>
+    </div>
+  </main>
+  <footer class="footer">
+    <p>&copy; 2025 Flow Dance - Todos los derechos reservados</p>
+  </footer>
+  <script src="js/contacto.js" defer></script>
+</body>
+</html>
