@@ -164,8 +164,12 @@ main{ display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
   border-bottom: 2px solid #232a37; border-bottom-left-radius: 0; border-bottom-right-radius: 0;
 }
 .evento .content{
-  padding: 1rem; text-align: left; flex: 1;
-  display:flex; flex-direction:column; justify-content:flex-start;
+  padding: 1rem; 
+  text-align: left; 
+  flex: 1;
+  display:flex; 
+  flex-direction:column; 
+  justify-content:flex-start;
 }
 
 /* chips (si los usás) */
@@ -243,4 +247,11 @@ a:focus, button:focus, input:focus, select:focus{ outline:2px solid var(--primar
   background: var(--bg);
   z-index: 3;
   padding-top:.25rem; padding-bottom:.25rem;
+}
+
+.evento-precio {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #28a745; 
+  margin: 0.5rem 0 1rem;
 }
