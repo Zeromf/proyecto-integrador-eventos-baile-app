@@ -11,15 +11,11 @@
   <link rel="stylesheet" href="css/carrito.css" />
   <script src="https://kit.fontawesome.com/f222217ad3.js" crossorigin="anonymous"></script>
 
-  <!-- Ajuste del header -->
-  <style>
-    .header-inner{
-      max-width: 1280px; margin: 0 auto; padding: .9rem 1rem;
-      display: flex; align-items: center; justify-content: space-between; gap: 1rem; width: 100%;
-    }
-    header h1 { flex: 1; text-align: center; }
-  </style>
+
 </head>
+
+<div id="toast" class="toast"></div>
+
 <body>
   <!-- HEADER -->
   <header>
@@ -51,21 +47,6 @@
         <h2>Tu carrito</h2>
         <span class="cerrar" onclick="cerrarCarrito()">&times;</span>
       </header>
-
-      <div class="item">
-        <p>Clase de Salsa Inicial</p>
-        <small>12/12/2025 - Estudio Centro</small>
-        <p>$1500</p>
-      </div>
-
-      <div class="item">
-        <p>Clase de Bachata Inicial</p>
-        <small>12/09/2025 - Club Social</small>
-        <p>$1200</p>
-      </div>
-
-      <div class="total">Total: $2700</div>
-      <button class="btn-checkout">Finalizar compra</button>
     </aside>
   </header>
 
@@ -150,11 +131,10 @@
     <p class="credit"><em>Desarrollado por Enzo Ferreyra y Fiorella Adami · Aplicaciones Móviles · Universidad Nacional Arturo Jauretche</em></p>
   </footer>
 
-  <!-- SCRIPTS mínimos para carrito -->
-  <script>
-    const carrito = document.getElementById('carrito');
-    function abrirCarrito(){ carrito.classList.add('open'); }
-    function cerrarCarrito(){ carrito.classList.remove('open'); }
-  </script>
+  <!-- JS solo para la HOME -->
+  <script src="js/app.js"></script>
+  <script src="js/detalle.js"></script>
+  <script src="js/carrito.js"></script>
+  <script src="js/toast.js"></script>
 </body>
 </html>
