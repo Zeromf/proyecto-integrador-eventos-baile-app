@@ -1,9 +1,8 @@
-// js/slider.js
 (() => {
   const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
   const $  = (sel, root = document) => root.querySelector(sel);
 
-  const AUTO_MS = 6000;
+  const DEFAULT_AUTO_MS = 15000; // ← antes 9000 (9s). Ahora 15000 (15s)
 
   function initSlider(slider) {
     const track = $('.slides', slider);
@@ -16,7 +15,10 @@
     const next  = $('.slider-btn.next', slider);
     const dotsC = $('.slider-dots', slider);
 
-    // Overlay dinámico (solo para el héroe u otros con overlay)
+    // Permite ajustar por HTML: <div class="slider" data-auto-ms="20000">
+    const autoMsAttr = Number(slider.dataset.autoMs);
+    const AUTO_MS = Number.isFinite(autoMsAttr) && autoMsAttr > 0 ? autoMsAttr : DEFAULT_AUTO_MS;
+
     const container = slider.closest('.promo-image') || slider.parentElement;
     const ovTitle = container ? $('.promo-overlay .ov-title', container) : null;
     const ovSub   = container ? $('.promo-overlay .ov-sub', container)   : null;
@@ -43,27 +45,19 @@
     }
 
     function update() {
-        
       track.style.transform = `translateX(${-index * 100}%)`;
       dots.forEach((d, i) => d.setAttribute('aria-current', i === index ? 'true' : 'false'));
-      
       applyCaption();
     }
 
-    function goTo(i, user = false) {
-      index = (i + imgs.length) % imgs.length;
-      update();
-      if (user) restart();
-    }
-
+    function goTo(i, user = false) { index = (i + imgs.length) % imgs.length; update(); if (user) restart(); }
     function nextSlide(user = false) { goTo(index + 1, user); }
     function prevSlide(user = false) { goTo(index - 1, user); }
 
-    function start() { timer = setInterval(nextSlide, AUTO_MS); }
+    function start() { if (AUTO_MS && !timer) timer = setInterval(nextSlide, AUTO_MS); }
     function stop()  { if (timer) clearInterval(timer); timer = null; }
     function restart(){ stop(); start(); }
 
-    // Eventos
     if (next) next.addEventListener('click', () => nextSlide(true));
     if (prev) prev.addEventListener('click', () => prevSlide(true));
 
@@ -71,6 +65,11 @@
     slider.addEventListener('mouseleave', start);
     slider.addEventListener('focusin',  stop);
     slider.addEventListener('focusout', start);
+
+    // Detener cuando la pestaña no está visible (evita saltos rápidos al volver)
+    document.addEventListener('visibilitychange', () => {
+      document.hidden ? stop() : start();
+    });
 
     // Swipe
     let x0 = null;
@@ -84,15 +83,10 @@
       x0 = null;
     }, { passive: true });
 
-    // Init
     update();
     start();
-
-    // API mínima opcional
     slider._api = { next: nextSlide, prev: prevSlide, goTo, stop, start };
   }
 
-  // Iniciar TODOS los sliders de la página
   $$('.slider').forEach(initSlider);
 })();
-
