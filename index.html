@@ -5,23 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Flow Dance</title>
 
-  <!-- CSS solo para la HOME -->
+  <!-- CSS -->
   <link rel="stylesheet" href="css/estilos.css" />
   <link rel="stylesheet" href="css/menu.css" />
   <link rel="stylesheet" href="css/carrito.css" />
+  <link rel="stylesheet" href="css/video-template.css" />
+  <link rel="stylesheet" href="css/slider.css" />
+
   <script src="https://kit.fontawesome.com/f222217ad3.js" crossorigin="anonymous"></script>
-
-
 </head>
 
-<div id="toast" class="toast"></div>
-
 <body>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
   <!-- HEADER -->
   <header>
     <div class="header-inner">
       <div class="logo">
-        <a href="index.html"><img src="img/logo.png" alt="Logo de la página"></a>
+        <a href="index.html"><img src="img/logo.png" alt="Logo de Flow Dance"></a>
       </div>
 
       <h1>Flow Dance</h1>
@@ -34,8 +35,9 @@
           <li><a href="encuesta.html">Encuesta</a></li>
           <li><a href="contacto.html">Contacto</a></li>
           <li>
-            <button class="btn-carrito" onclick="abrirCarrito()" title="Abrir carrito">
-              <i class="fa-solid fa-cart-shopping"></i>
+            <button class="btn-carrito" onclick="abrirCarrito()" title="Abrir carrito" aria-controls="carrito" aria-expanded="false">
+              <i class="fa-solid fa-cart-shopping" aria-hidden="true"></i>
+              <span class="sr-only">Abrir carrito</span>
             </button>
           </li>
         </ul>
@@ -43,58 +45,110 @@
     </div>
 
     <!-- Carrito lateral -->
-    <aside class="carrito" id="carrito">
+    <aside class="carrito" id="carrito" aria-label="Carrito de compras" hidden>
       <header>
         <h2>Tu carrito</h2>
-        <span class="cerrar" onclick="cerrarCarrito()">&times;</span>
+        <button class="cerrar" onclick="cerrarCarrito()" aria-label="Cerrar carrito">&times;</button>
       </header>
+      <!-- contenido del carrito -->
     </aside>
   </header>
 
   <div class="container">
-    <!-- CONTENIDO PRINCIPAL - SOLO HOME -->
+    <!-- CONTENIDO PRINCIPAL - HOME -->
     <main aria-label="Contenido principal">
-     <!-- Sección Promocional -->
-<section class="promo-section">
-  <div class="promo-image">
-  <iframe
-  src="https://www.youtube.com/embed/JvMH0lWnf68?autoplay=1&mute=&loop=1&playlist=JvMH0lWnf68&controls=1&rel=0&modestbranding=1&playsinline=1"
-    title="Gero & Migle | Bachata Sensual | Manuel Turizo - La Bachata"
-    frameborder="1"
-    allow="autoplay; encrypted-media; picture-in-picture; web-share"
-    referrerpolicy="strict-origin-when-cross-origin"
-    allowfullscreen>
-  </iframe>
+      <!-- Sección Promocional -->
+      <section class="promo-section">
+        <div class="promo-image">
+          <!-- Slider héroe -->
+          <div class="slider" id="heroSlider" aria-label="Galería principal Flow Dance">
+            <div class="slides">
+           <img src="data:image/jpeg;base64,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"    alt="Salsa"    data-title="SALSA"    data-sub="Todos los niveles">
+          <img src="https://i.ytimg.com/vi/DAoMzrwEFSo/maxresdefault.jpg"  alt="Bachata"  data-title="BACHATA"  data-sub="Todos los niveles">
+          <img src="https://i.scdn.co/image/ab67616d0000b273c54f963bd71710abb9ead045"  alt="Kizomba"  data-title="KIZOMBA"  data-sub="Todos los niveles">
+          <img src="https://statics-cuidateplus.marca.com/cms/images/zumba.jpg"    alt="Zumba"    data-title="ZUMBA"    data-sub="Clases y prácticas">
+          <img src="https://ardea.unvm.edu.ar/wp-content/uploads/2021/12/01.jpg" alt="Cuarteto" data-title="CUARTETO" data-sub="Sociales y shows">
+          <img src="https://www.clarin.com/2021/05/10/9R6labTj__720x0__1.jpg"     alt="Rock"     data-title="ROCK"     data-sub="Clases y eventos">
 
-  <div class="promo-overlay">
-    BACHATA <br><span>Todos los niveles</span>
+              
+            </div>
+            <button class="slider-btn prev" aria-label="Anterior" data-dir="prev">❮</button>
+            <button class="slider-btn next" aria-label="Siguiente" data-dir="next">❯</button>
+            <div class="slider-dots" role="tablist" aria-label="Selector de imagen"></div>
+          </div>
+
+            <div class="promo-overlay">
+    <span class="ov-title"></span><br>
+    <span class="ov-sub"></span>
   </div>
 </div>
+        <div class="promo-content">
+          <h2>¿Buscás aprender a bailar desde cero?</h2>
+          <p>Llegaste al lugar indicado.</p>
+          <p>
+            En <strong>Flow Dance</strong> encontrás clases y prácticas de
+            <em>salsa</em> y <em>bachata</em> para principiantes y avanzados.
+            Descubrí eventos cerca tuyo y armá tu semana de baile.
+          </p>
 
+          <div class="promo-ctas">
+            <a href="categories.html" class="btn btn-primary btn-lg">Buscar clases y eventos</a>
+            <a href="categories.html#salsa-category" class="btn btn-ghost btn-lg">Ver lo que hay hoy</a>
+          </div>
 
-  <div class="promo-content">
-    <h2>¿Buscás aprender a bailar desde cero?</h2>
-    <p>Llegaste al lugar indicado.</p>
-    <p>
-      En <strong>Flow Dance</strong> encontrás clases y prácticas de
-      <em>salsa</em> y <em>bachata</em> para principiantes y avanzados.
-      Descubrí eventos cerca tuyo y armá tu semana de baile.
-    </p>
+          <div class="promo-stats" aria-label="Estadísticas del sitio">
+            <div class="stat"><div class="stat-number">+100</div><div class="stat-label">eventos/mes</div></div>
+            <div class="stat"><div class="stat-number">10</div><div class="stat-label">ciudades</div></div>
+            <div class="stat"><div class="stat-number">Gratis</div><div class="stat-label">y pagos</div></div>
+          </div>
+        </div>
+      </section>
 
-    <div class="promo-ctas">
-      <a href="categories.html" class="btn btn-primary btn-lg">Buscar clases y eventos</a>
-      <a href="categories.html#salsa-category" class="btn btn-ghost btn-lg">Ver lo que hay hoy</a>
-    </div>
+      <!-- HERO PARTIDO + FEATURES -->
+      <section class="split-hero">
+        <!-- 1) Título -->
+        <h2 class="headline headline--ribbon split-hero__title">
+          Animate hoy<br>mismo a bailar
+        </h2>
 
-    <div class="promo-stats">
-      <div class="stat"><div class="stat-number">+100</div><div class="stat-label">eventos/mes</div></div>
-      <div class="stat"><div class="stat-number">10</div><div class="stat-label">ciudades</div></div>
-      <div class="stat"><div class="stat-number">Gratis</div><div class="stat-label">y pagos</div></div>
-    </div>
-  </div>
-</section>
+        <!-- 2) Columna izquierda: video (si querés, luego lo cambiamos por otro slider) -->
+        <div class="split-hero__left">
+          <video class="hero-video" controls preload="metadata" poster="img/hero-poster.jpg">
+            <source src="http://lasalsera.com/wp-content/uploads/2024/12/PXL_20230130_004529224.mp4" type="video/mp4">
+            Tu navegador no soporta video HTML5.
+          </video>
+        </div>
 
+        <!-- 3) Columna derecha: imagen con el mismo alto del video -->
+        <div class="split-hero__right">
+          <div class="cover"
+               style="--img:url('https://lasalsera.com/wp-content/uploads/2023/01/PXL_20220617_061315359-1-1.jpg'); background-position:center 40%;">
+          </div>
+        </div>
+      </section>
 
+      <!-- FEATURES -->
+      <section class="features">
+        <div class="features__grid">
+          <article class="feature-card">
+            <div class="feature-icon"><i class="fa-regular fa-face-smile" aria-hidden="true"></i></div>
+            <h3>Clases</h3>
+            <p>Desde pasos básicos hasta figuras avanzadas para mejorar tu técnica y divertirte.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon"><i class="fa-regular fa-moon" aria-hidden="true"></i></div>
+            <h3>Noche · Social</h3>
+            <p>Ambiente divertido para disfrutar, practicar y conectar con otras personas.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon"><i class="fa-regular fa-star" aria-hidden="true"></i></div>
+            <h3>Eventos especiales</h3>
+            <p>Bandas en vivo, aniversarios y noches temáticas a puro baile.</p>
+          </article>
+        </div>
+      </section>
 
       <!-- INFO ACADEMIA -->
       <section class="academia" id="academia-bailaBA" aria-label="Información de la academia">
@@ -145,11 +199,12 @@
     <p class="credit"><em>Desarrollado por Enzo Ferreyra y Fiorella Adami · Aplicaciones Móviles · Universidad Nacional Arturo Jauretche</em></p>
   </footer>
 
-  <!-- JS solo para la HOME -->
+  <!-- JS -->
   <script src="js/app.js"></script>
   <script src="js/detalle.js"></script>
   <script src="js/carrito.js"></script>
   <script src="js/toast.js"></script>
-  <script src="js/video.js"></script>
+  <!-- Slider multi-instancia (asegurate de que inicialice todos los .slider) -->
+  <script src="js/slider.js"></script>
 </body>
 </html>
