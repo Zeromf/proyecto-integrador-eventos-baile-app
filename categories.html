@@ -23,6 +23,9 @@
 <div id="toast" class="toast"></div>
 
 <body>
+   <div id="loader" class="loader-overlay" hidden>
+    <div class="spinner"></div>
+  </div>
   <!-- HEADER -->
     <header>
     <div class="header-inner">
@@ -98,7 +101,6 @@
       </section>
 
       <!-- 🧩 Resultados dinámicos -->
-      <section id="eventbrite-resultados" aria-label="Resultados de búsqueda">
 <section id="eventbrite-resultados" aria-label="Resultados de búsqueda">
   <div class="section-title">
     <h2>Clases</h2>
@@ -134,6 +136,8 @@
    <script src="js/carrito.js"></script>
   <script src="js/toast.js"></script>
 
+  <!-- Spin de carga -->
+  <script src="js/loader.js"></script>
   <!-- App (Eventbrite, render, paginación, etc.) -->
   <script src="js/app.js"></script>
   <!-- Detalle (modal con mapa, chips, etc.) -->

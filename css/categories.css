@@ -255,3 +255,29 @@ a:focus, button:focus, input:focus, select:focus{ outline:2px solid var(--primar
   color: #28a745; 
   margin: 0.5rem 0 1rem;
 }
+
+/* Loader / Spinner */
+.loader-overlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100; /* mayor que header (5) y drawer (40) */
+}
+.spinner{
+  width: 60px;
+  height: 60px;
+  border: 6px solid #2c3446;
+  border-top: 6px solid var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Asegura que cualquier [hidden] NO se muestre */
+[hidden] { display: none !important; }
+
+/* Específico para el loader */
+.loader-overlay[hidden] { display: none !important; }
