@@ -6,7 +6,6 @@
 const TOKEN  = "4VNDIVBJAW6OUHOTOWVL";   // token personal (demo)
 const ORG_ID = "2892465566371";          // organización
 const API_BASE = `https://www.eventbriteapi.com/v3/organizations/${ORG_ID}/events/?expand=venue&status=all&order_by=start_asc&locale=es_AR`;
-// const API_BASE = `https://cors.isomorphic-git.org/https://www.eventbriteapi.com/v3/organizations/${ORG_ID}/events/?expand=venue&status=all&order_by=start_asc&locale=es_AR`; // pruebas sin CORS
 
 /* ========== Estado de paginación ========== */
 const PAGE_SIZE = 3;
@@ -140,8 +139,8 @@ function renderEventos(arr, page=1, pageSize=PAGE_SIZE){
     const gcalUrl  = `https://www.google.com/calendar/render?action=TEMPLATE&text=${
       encodeURIComponent(evt.name?.text || 'Evento')
     }&dates=${startUtc}/${endUtc}&details=${
-      encodeURIComponent((evt.summary || "") + (evt.url ? `\n\nMás info: ${evt.url}` : ""))
-    }&location=${encodeURIComponent(lugar)}&sf=true&output=xml`;
+      encodeURIComponent((evt.summary || "") + (evt.url ? `\n\nMás info: ${evt.url}` : ""))}
+    &location=${encodeURIComponent(lugar)}&sf=true&output=xml`;
 
     $res.append(`
       <article class="evento">
@@ -158,22 +157,19 @@ function renderEventos(arr, page=1, pageSize=PAGE_SIZE){
           </ul>
           <div class="evento-actions">
             <a class="btn btn-detalle" data-id="${evt.id}">Ver más</a>
-             <div class="quick-actions">
-            <!-- Calendario -->
-            <a href="${gcalUrl}" class="icon-btn" target="_blank" rel="noopener" title="Agregar al calendario">
-              <i class="fa-regular fa-calendar"></i>
-            </a>
-            <!-- Compartir con amigo (WhatsApp / link) -->
-            <a href="https://wa.me/?text=${encodeURIComponent(evt.name?.text + ' ' + evt.url)}" 
-              class="icon-btn" target="_blank" rel="noopener" title="Compartir con un amigo">
-              <i class="fa-brands fa-whatsapp"></i>
-            </a>
-          </div>
+            <div class="quick-actions">
+              <a href="${gcalUrl}" class="icon-btn" target="_blank" rel="noopener" title="Agregar al calendario">
+                <i class="fa-regular fa-calendar"></i>
+              </a>
+              <a href="https://wa.me/?text=${encodeURIComponent(evt.name?.text + ' ' + evt.url)}" 
+                 class="icon-btn" target="_blank" rel="noopener" title="Compartir con un amigo">
+                <i class="fa-brands fa-whatsapp"></i>
+              </a>
+            </div>
           </div>
         </div>
       </article>
     `);
-    
   });
 
   renderPaginacion(totalPages, current);
@@ -182,8 +178,6 @@ function renderEventos(arr, page=1, pageSize=PAGE_SIZE){
 /* ========== Render paginación ========== */
 function renderPaginacion(totalPages=1, current=1){
   const $p = $("#paginacion").empty();
-
-  // si querés ocultar los controles cuando hay 1 página, dejá esta línea:
   if (totalPages <= 1) return;
 
   const btn = (label, page, isActive=false, isDisabled=false) => `
@@ -202,60 +196,80 @@ function renderPaginacion(totalPages=1, current=1){
   $p.html(html);
 }
 
-
-
 /* ========== Flujo principal ========== */
-function buscarEventos(query="", _page=1, fecha="", ubic=""){
-  $.ajax({
+function buscarEventos(query = "", _page = 1, fecha = "", ubic = "") {
+  Loader.show();
+
+  const req = $.ajax({
     url: API_BASE,
     method: "GET",
     dataType: "json",
     timeout: 12000,
-    headers: { "Authorization": `Bearer ${TOKEN}` },
-    success: (data) => {
-      let filtrados = filtrarEventos(data?.events, { q: query, fecha, ubic });
+    headers: { Authorization: `Bearer ${TOKEN}` }
+  });
 
-      //  Bloquear eventos "social" o "sociales" SOLO en categories.html
-      if (window.location.pathname.includes("categories.html")) {
-        const regex = /\bsocial(es)?\b/i;
-        filtrados = filtrados.filter(e =>
-          !regex.test(e.name?.text || "") &&
-          !regex.test(e.summary || "")
-        );
-      }
+  req.done((data) => {
+    let filtrados = filtrarEventos(data?.events, { q: query, fecha, ubic });
 
-      window._pagination.data = filtrados;
-      window._pagination.page = 1;
+    // Bloquear "social(es)" SOLO en categories.html
+    if (window.location.pathname.includes("categories.html")) {
+      const regex = /\bsocial(es)?\b/i;
+      filtrados = filtrados.filter(e =>
+        !regex.test(e?.name?.text || "") &&
+        !regex.test(e?.summary || "")
+      );
+    }
+
+    window._pagination.data = filtrados;
+    window._pagination.page = 1;
+
+    try {
       renderEventos(window._pagination.data, window._pagination.page, window._pagination.pageSize);
-    },
-    error: (_xhr, _status, err) => {
-      console.warn("Fallo llamada directa a Eventbrite:", err);
-      const baseImg = query && FALLBACK_IMAGES[query] ? query : "default";
-      const hoy = new Date();
-      const addDays = (n) => new Date(hoy.getTime() + n*864e5);
-      const fmt = (d) => d.toISOString().slice(0,16);
-      let fake = Array.from({length:15}, (_,i)=>({
-        id:"fb"+i,
-        name:{text:`${capitalize(query||"Bachata")} demo ${i+1}`},
-        start:{local:fmt(setTime(addDays(i+1), 19+(i%3), 0))},
-        url:"#",
-        logo:{url:FALLBACK_IMAGES[baseImg]},
-        venue:{address:{localized_address_display:"Demo venue"}}
-      }));
-
-      if (window.location.pathname.includes("categories.html")) {
-        const regex = /\bsocial(es)?\b/i;
-        fake = fake.filter(e =>
-          !regex.test(e.name?.text || "") &&
-          !regex.test(e.summary || "")
-        );
-      }
-
-      window._pagination.data = fake;
-      window._pagination.page = 1;
-      renderEventos(window._pagination.data, window._pagination.page, window._pagination.pageSize);
+    } catch (err) {
+      console.error("Fallo renderEventos:", err);
+      $("#resultados").html("<p>No se pudieron mostrar los eventos.</p>");
+      $("#paginacion").empty();
     }
   });
+
+  req.fail((_xhr, _status, err) => {
+    console.warn("Fallo llamada a Eventbrite, usando fallback:", err);
+
+    const baseImg = query && FALLBACK_IMAGES[query] ? query : "default";
+    const hoy = new Date();
+    const addDays = (n) => new Date(hoy.getTime() + n * 864e5);
+    const fmt = (d) => d.toISOString().slice(0, 16);
+
+    let fake = Array.from({ length: 15 }, (_, i) => ({
+      id: "fb" + i,
+      name: { text: `${capitalize(query || "Bachata")} demo ${i + 1}` },
+      start: { local: fmt(setTime(addDays(i + 1), 19 + (i % 3), 0)) },
+      url: "#",
+      logo: { url: FALLBACK_IMAGES[baseImg] },
+      venue: { address: { localized_address_display: "Demo venue" } }
+    }));
+
+    if (window.location.pathname.includes("categories.html")) {
+      const regex = /\bsocial(es)?\b/i;
+      fake = fake.filter(e =>
+        !regex.test(e?.name?.text || "") &&
+        !regex.test(e?.summary || "")
+      );
+    }
+
+    window._pagination.data = fake;
+    window._pagination.page = 1;
+
+    try {
+      renderEventos(window._pagination.data, window._pagination.page, window._pagination.pageSize);
+    } catch (err2) {
+      console.error("Fallo renderEventos (fallback):", err2);
+      $("#resultados").html("<p>No se pudieron mostrar los eventos.</p>");
+      $("#paginacion").empty();
+    }
+  });
+
+  req.always(() => Loader.hide());
 }
 
 /* ========== Listeners ========== */
@@ -265,13 +279,17 @@ $(document).on("click", ".filtro", function(e){
   $("#txtBuscar").val(cat);
   buscarEventos(cat);
 });
-$("#btnBuscar").on("click", function(){
+
+$("#btnBuscar").on("click", function(e){
+  e.preventDefault();
   const q = $("#txtBuscar").val().trim();
   const fecha = $("#selFecha").val();
   const ubic  = $("#selUbicacion").val();
   buscarEventos(q, 1, fecha, ubic);
 });
+
 $("#txtBuscar").on("keydown", e => { if (e.key === "Enter") $("#btnBuscar").click(); });
+
 $(document).on("click", "#paginacion .page-btn", function(){
   const raw = $(this).data("page");
   const totalPages = Math.max(1, Math.ceil((window._pagination.data?.length || 0) / window._pagination.pageSize));
@@ -279,15 +297,21 @@ $(document).on("click", "#paginacion .page-btn", function(){
   if (isNaN(next)) return;
   next = clamp(next, 1, totalPages);
   if (next === window._pagination.page) return;
+
+  Loader.show();
   window._pagination.page = next;
-  renderEventos(window._pagination.data, window._pagination.page, window._pagination.pageSize);
+  requestAnimationFrame(() => {
+    renderEventos(window._pagination.data, window._pagination.page, window._pagination.pageSize);
+    Loader.hide();
+  });
 });
 
+/* Primera carga */
+$(function(){ buscarEventos(""); });
+
+/* Abrir detalle */
 $(document).on("click", ".btn-detalle", function(e){
   e.preventDefault();
   const id = $(this).data("id");
   abrirDetalleEvento(id);
 });
-
-/* Primera carga */
-$(function(){ buscarEventos(""); });
