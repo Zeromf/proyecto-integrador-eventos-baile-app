@@ -83,7 +83,7 @@ function filtrarEventos(events, { q, fecha, ubic }) {
 
 /* --------- estados en español --------- */
 const STATUS_ES = {
-  draft:     "Borrador",
+  draft:     "Programado",
   live:      "Publicado",
   started:   "En curso",
   ended:     "Finalizado",
@@ -213,7 +213,17 @@ function buscarEventos(query="", _page=1, fecha="", ubic=""){
     timeout: 12000,
     headers: { "Authorization": `Bearer ${TOKEN}` },
     success: (data) => {
-      const filtrados = filtrarEventos(data?.events, { q: query, fecha, ubic });
+      let filtrados = filtrarEventos(data?.events, { q: query, fecha, ubic });
+
+      //  Bloquear eventos "social" o "sociales" SOLO en categories.html
+      if (window.location.pathname.includes("categories.html")) {
+        const regex = /\bsocial(es)?\b/i;
+        filtrados = filtrados.filter(e =>
+          !regex.test(e.name?.text || "") &&
+          !regex.test(e.summary || "")
+        );
+      }
+
       window._pagination.data = filtrados;
       window._pagination.page = 1;
       renderEventos(window._pagination.data, window._pagination.page, window._pagination.pageSize);
@@ -224,7 +234,7 @@ function buscarEventos(query="", _page=1, fecha="", ubic=""){
       const hoy = new Date();
       const addDays = (n) => new Date(hoy.getTime() + n*864e5);
       const fmt = (d) => d.toISOString().slice(0,16);
-      const fake = Array.from({length:15}, (_,i)=>({
+      let fake = Array.from({length:15}, (_,i)=>({
         id:"fb"+i,
         name:{text:`${capitalize(query||"Bachata")} demo ${i+1}`},
         start:{local:fmt(setTime(addDays(i+1), 19+(i%3), 0))},
@@ -232,6 +242,15 @@ function buscarEventos(query="", _page=1, fecha="", ubic=""){
         logo:{url:FALLBACK_IMAGES[baseImg]},
         venue:{address:{localized_address_display:"Demo venue"}}
       }));
+
+      if (window.location.pathname.includes("categories.html")) {
+        const regex = /\bsocial(es)?\b/i;
+        fake = fake.filter(e =>
+          !regex.test(e.name?.text || "") &&
+          !regex.test(e.summary || "")
+        );
+      }
+
       window._pagination.data = fake;
       window._pagination.page = 1;
       renderEventos(window._pagination.data, window._pagination.page, window._pagination.pageSize);

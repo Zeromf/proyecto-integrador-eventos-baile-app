@@ -1,0 +1,104 @@
+/* ===== Slider héroe (16:9, overlay compatible) ===== */
+.promo-image{
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.slider{
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;  /* asegura altura consistente como el video */
+  background: #000;
+}
+
+.slides{
+  display: flex;
+  width: 100%;
+  height: 100%;
+  translate: 0 0;
+  transition: transform .45s ease;
+}
+
+.slides img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  flex: 0 0 100%;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Flechas */
+.slider-btn{
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,.45);
+  border: 1px solid rgba(255,255,255,.25);
+  color: #fff;
+  width: 42px; height: 42px;
+  border-radius: 999px;
+  display: grid; place-items: center;
+  font-size: 1.1rem;
+  cursor: pointer;
+  z-index: 2;
+}
+.slider-btn:hover{ background: rgba(0,0,0,.6); }
+.slider-btn.prev{ left: .5rem; }
+.slider-btn.next{ right: .5rem; }
+
+/* Bullets */
+.slider-dots{
+  position: absolute;
+  left: 50%; bottom: .65rem;
+  transform: translateX(-50%);
+  display: flex; gap: .4rem;
+  z-index: 2;
+}
+.slider-dots button{
+  width: 9px; height: 9px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.45);
+  border: 1px solid rgba(255,255,255,.6);
+  cursor: pointer;
+}
+.slider-dots button[aria-current="true"]{
+  background: #fff;
+}
+
+/* Overlay existente por encima del slider */
+.promo-overlay{
+  position: absolute; inset: 0;
+  display: grid; place-items: center;
+  text-align: center;
+  font-weight: 800;
+  letter-spacing: .02em;
+  color: #fff;
+  text-shadow: 0 2px 18px rgba(0,0,0,.65);
+  pointer-events: none;       /* no bloquea clicks en flechas/bullets */
+}
+
+/* Mejoras responsive opcionales */
+@media (max-width: 640px){
+  .slider-btn{ width: 36px; height: 36px; font-size: 1rem; }
+}
+
+
+.promo-overlay {
+  position: absolute; inset: 0;
+  display: grid; place-items: center;
+  text-align: center;
+  color: #fff;
+  font-weight: 800;
+  text-shadow: 0 2px 18px rgba(0,0,0,.65);
+  pointer-events: none;
+}
+.promo-overlay .ov-title {
+  font-size: clamp(1.6rem, 1.2rem + 2vw, 2.6rem);
+}
+.promo-overlay .ov-sub {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
