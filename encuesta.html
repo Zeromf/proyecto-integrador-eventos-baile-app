@@ -4,17 +4,21 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Encuesta · Flow Dance</title>
+  
+  <!-- CSS -->
   <link rel="stylesheet" href="css/estilos.css" />
   <link rel="stylesheet" href="css/carrito.css" />
   <link rel="stylesheet" href="css/menu.css" />
+  <link rel="stylesheet" href="css/encuesta.css" />
+  <link rel="stylesheet" href="css/modal-alerts.css" />
   <script src="https://kit.fontawesome.com/f222217ad3.js" crossorigin="anonymous"></script>
 </head>
 
-<div id="toast" class="toast"></div>
-
 <body>
+  <div id="toast" class="toast"></div>
 
-    <header>
+  <!-- HEADER -->
+  <header>
     <div class="header-inner">
       <div class="logo">
         <a href="index.html"><img src="img/logo.png" alt="Logo de la página"></a>
@@ -22,12 +26,11 @@
 
       <h1>Flow Dance</h1>
 
-      <!-- Menú principal -->
       <nav class="menu-principal" aria-label="Menú principal">
         <ul class="menu">
           <li><a href="categories.html">Clases</a></li>
-           <li><a href="sociales.html">Sociales</a></li>
-          <li><a href="encuesta.html">Encuesta</a></li>
+          <li><a href="sociales.html">Sociales</a></li>
+          <li><a href="encuesta.html" aria-current="page">Encuesta</a></li>
           <li><a href="contacto.html">Contacto</a></li>
           <li>
             <button class="btn-carrito" onclick="abrirCarrito()" title="Abrir carrito">
@@ -39,15 +42,15 @@
     </div>
 
     <!-- Carrito lateral -->
-    <aside class="carrito" id="carrito">
+    <aside class="carrito" id="carrito" aria-label="Carrito">
       <header>
         <h2>Tu carrito</h2>
-        <span class="cerrar" onclick="cerrarCarrito()">&times;</span>
+        <span class="cerrar" onclick="cerrarCarrito()" role="button" tabindex="0" aria-label="Cerrar carrito">&times;</span>
       </header>
     </aside>
   </header>
 
-
+  <!-- MAIN -->
   <main>
     <section class="form-card">
       <h2>Encuesta</h2>
@@ -87,7 +90,7 @@
 
           <div class="full">
             <fieldset class="fieldset">
-              <legend>Valoración de los cursos</legend>
+              <legend>Valoración de los cursos *</legend>
               <div class="inline">
                 <label><input type="radio" name="valoracion" value="Inolvidable"> 💃 Inolvidable, me encantó</label>
                 <label><input type="radio" name="valoracion" value="Muy divertido"> 😍 Muy divertido</label>
@@ -126,12 +129,62 @@
     <p class="credit"><em>Desarrollado por Enzo Ferreyra y Fiorella Adami · Aplicaciones Móviles · Universidad Nacional Arturo Jauretche</em></p>
   </footer>
 
-  <!-- JS -->
-  <script src="js/encuesta.js"></script>
-  <script src="js/app.js"></script>
-  <script src="js/carrito.js"></script>
-  <script src="js/toast.js"></script>
-  <script src="js/detalle.js"></script>
+  <!-- ============ Modales ============ -->
+  <div class="modal-backdrop" id="backdrop" hidden></div>
 
+  <!-- Modal: Resumen -->
+  <div class="modal" id="modalResumen" role="dialog" aria-modal="true" aria-labelledby="ttlResumen" hidden>
+    <div class="modal__card">
+      <header class="modal__header">
+        <h3 id="ttlResumen">Revisá tu información</h3>
+        <button class="modal__close" data-close="modalResumen">&times;</button>
+      </header>
+      <div class="modal__body">
+        <pre class="modal__pre" id="resumenContenido"></pre>
+      </div>
+      <footer class="modal__footer">
+        <button class="btn btn-primary" id="btnConfirmarEnvio">Confirmar envío</button>
+        <button class="btn" data-close="modalResumen">Editar</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Modal: Cancelar -->
+  <div class="modal" id="modalCancelar" role="dialog" aria-modal="true" aria-labelledby="ttlCancelar" hidden>
+    <div class="modal__card">
+      <header class="modal__header">
+        <h3 id="ttlCancelar">¿Volver a la página anterior?</h3>
+        <button class="modal__close" data-close="modalCancelar">&times;</button>
+      </header>
+      <div class="modal__body">
+        <p>Perderás lo que completaste en el formulario.</p>
+      </div>
+      <footer class="modal__footer">
+        <button class="btn btn-danger" id="btnSiCancelar">Sí, volver</button>
+        <button class="btn" data-close="modalCancelar">No, quedarme aquí</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Modal: Envío exitoso -->
+<div class="modal" id="modalExito" role="dialog" aria-modal="true" aria-labelledby="ttlExito" hidden>
+  <div class="modal__card modal__card--success">
+    <header class="modal__header">
+      <h3 id="ttlExito">¡Enviado con éxito!</h3>
+    </header>
+    <div class="modal__body modal__body--center">
+      <div class="checkmark">✔</div>
+      <p>Tu respuesta fue registrada correctamente.</p>
+    </div>
+  </div>
+</div>
+
+
+  <!-- JS -->
+  <script src="js/encuesta.js" defer></script>
+  <script src="js/app.js" defer></script>
+  <script src="js/carrito.js" defer></script>
+  <script src="js/toast.js" defer></script>
+  <script src="js/detalle.js" defer></script>
 </body>
 </html>
