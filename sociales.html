@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flow Dance – Sociales</title>
+
+  <!-- CSS (mismos estilos que categorías) -->
+  <link rel="stylesheet" href="css/categories.css" />
+  <link rel="stylesheet" href="css/estilos.css" />
+  <link rel="stylesheet" href="css/carrito.css" />
+  <link rel="stylesheet" href="css/menu.css" />
+  <link rel="stylesheet" href="css/detalle.css" />
+
+  <script src="https://kit.fontawesome.com/f222217ad3.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+</head>
+
+<body>
+  <div id="toast" class="toast"></div>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-inner">
+      <div class="logo">
+        <a href="index.html"><img src="img/logo.png" alt="Logo de la página"></a>
+      </div>
+      <h1>Flow Dance</h1>
+      <nav class="menu-principal" aria-label="Menú principal">
+        <ul class="menu">
+          <li><a href="categories.html">Clases</a></li>
+          <li><a href="sociales.html" class="is-active">Sociales</a></li>
+          <li><a href="encuesta.html">Encuesta</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+          <li>
+            <button class="btn-carrito" onclick="abrirCarrito()" title="Abrir carrito">
+              <i class="fa-solid fa-cart-shopping"></i>
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+    <aside class="carrito" id="carrito">
+      <header>
+        <h2>Tu carrito</h2>
+        <span class="cerrar" onclick="cerrarCarrito()">&times;</span>
+      </header>
+    </aside>
+  </header>
+
+  <div class="container">
+    <main aria-label="Listado sociales">
+      <section id="eventbrite-resultados" aria-label="Resultados de búsqueda">
+        <div class="section-title">
+          <h2>Eventos Sociales</h2>
+        </div>
+        <div id="resultados" class="category-items"></div>
+        <div id="paginacion" class="pager"></div>
+      </section>
+    </main>
+
+    <!-- Modal detalle -->
+    <div id="modalDetalle" class="modal" aria-hidden="true">
+      <div class="modal-content">
+        <button class="modal-close" id="btnCerrarModal" aria-label="Cerrar">✕</button>
+        <div id="detalleEvento"></div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Flow Dance - Todos los derechos reservados</p>
+    <p class="credit"><em>Desarrollado por Enzo Ferreyra y Fiorella Adami · Aplicaciones Móviles · Universidad Nacional Arturo Jauretche</em></p>
+  </footer>
+
+  <!-- JS base -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
+  <script src="js/carrito.js"></script>
+  <script src="js/toast.js"></script>
+
+  <!-- Tu app y detalle -->
+  <script src="js/app.js"></script>
+  <script src="js/detalle.js"></script>
+
+  <!-- Prefiltro fijo “social” -->
+<script>
+  (function(){
+    if (typeof buscarEventos === 'function') {
+      buscarEventos("social");
+
+      // cuando termine de cargar, aplicamos el filtro exacto solo en esta página
+      $(document).ajaxSuccess((_e, _xhr, _settings) => {
+        const regex = /\bsocial(es)?\b/i; // social o sociales, palabra completa
+        const filtrados = (window._pagination.data || []).filter(e =>
+          regex.test(e.name?.text || "") || regex.test(e.summary || "")
+        );
+        window._pagination.data = filtrados;
+        window._pagination.page = 1;
+        renderEventos(filtrados, 1, window._pagination.pageSize);
+      });
+    }
+  })();
+</script>
+
+</body>
+</html>
