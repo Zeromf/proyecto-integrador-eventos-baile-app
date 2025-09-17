@@ -12,3 +12,28 @@
   border: 1px solid #2c3446;
 }
 .menu a:hover { filter: brightness(1.08); transform: translateY(-1px); }
+
+/* Botones de texto con icono en el menú */
+.menu .btn-link.with-icon{
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  background: transparent;
+  border: 0;
+  padding: .5rem .75rem;
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+  border-radius: 999px;            /* look de píldora como los demás */
+}
+.menu .btn-link.with-icon i{
+  font-size: .95em;                /* icono alineado al texto */
+  line-height: 1;
+}
+.menu .btn-link.with-icon:hover{
+  background: rgba(255,255,255,.06);
+}
+.menu .btn-link.with-icon:focus{
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
