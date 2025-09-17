@@ -103,7 +103,14 @@ async function abrirDetalleEvento(eventoId) {
   }&location=${encodeURIComponent(lugar)}&sf=true&output=xml`;
 
   // --- WhatsApp ---
-  const waUrl = `https://wa.me/?text=${encodeURIComponent(evento.name?.text + " " + (evento.url || ""))}`;
+  // Mensaje personalizado
+  const waMsg = 
+  `Hola! Te comparto este evento:\n\n` +
+  `*Nombre:* ${evento.name?.text || "Evento"}\n` +
+  `*Fecha:* ${fecha}\n` +
+  `*Lugar:* ${lugar}`;
+
+  const waUrl = `https://wa.me/?text=${encodeURIComponent(waMsg)}`;
 
   detalleDiv.innerHTML = `
     <h3>${evento.name?.text || "Evento"}</h3>

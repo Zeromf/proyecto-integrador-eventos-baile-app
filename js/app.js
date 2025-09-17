@@ -151,6 +151,14 @@ function renderEventos(arr, page=1, pageSize=PAGE_SIZE){
 
     const isFav = false; // visual neutra; fav-hist.js ajusta estado al hacer click
 
+    // --- WhatsApp personalizado ---
+  const waMsg =
+    `Hola! Te comparto este evento:\n\n` +
+    `*Nombre:* ${evt.name?.text || "Evento"}\n` +
+    `*Fecha:* ${fecha}\n` +
+    `*Lugar:* ${lugar}`;
+  const waUrl = `https://wa.me/?text=${encodeURIComponent(waMsg)}`;
+
     $res.append(`
       <article class="evento">
         <img loading="lazy" src="${img}" alt="${evt.name?.text || 'Evento'}">
@@ -174,8 +182,7 @@ function renderEventos(arr, page=1, pageSize=PAGE_SIZE){
               <a href="${gcalUrl}" class="icon-btn" target="_blank" rel="noopener" title="Agregar al calendario">
                 <i class="fa-regular fa-calendar"></i>
               </a>
-              <a href="https://wa.me/?text=${encodeURIComponent(evt.name?.text + ' ' + evt.url)}" 
-                 class="icon-btn" target="_blank" rel="noopener" title="Compartir con un amigo">
+              <a href="${waUrl}" class="icon-btn" target="_blank" title="Compartir con un amigo">
                 <i class="fa-brands fa-whatsapp"></i>
               </a>
               <a href="encuesta.html?evento=${encodeURIComponent(evt.name?.text || 'Evento')}&fecha=${encodeURIComponent(fecha)}&lugar=${encodeURIComponent(lugar)}" 
