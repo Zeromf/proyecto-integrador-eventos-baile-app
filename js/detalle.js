@@ -1,10 +1,17 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // Cerrar modal
   document.getElementById("btnCerrarModal").addEventListener("click", () => {
     document.getElementById("modalDetalle").style.display = "none";
   });
 
-  document.querySelectorAll(".evento").forEach((card, index) => {
-    card.addEventListener("click", () => abrirDetalleEvento(1));
+  // Abrir detalle con el id correcto
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest(".btn-detalle");
+    if (btn) {
+      const eventoId = btn.getAttribute("data-id");
+      abrirDetalleEvento(eventoId);
+      document.getElementById("modalDetalle").style.display = "flex";
+    }
   });
 });
 
@@ -65,6 +72,17 @@ function formatPrecioARS(valor, moneda = "ARS") {
   }).format(valor);
 }
 
+/* Google Calendar */
+function toUTCStamp(iso){
+  const d = new Date(iso);
+  return d.toISOString().replace(/[-:]/g,"").split(".")[0]+"Z";
+}
+function addHours(iso, h=2){
+  const d = new Date(iso || Date.now());
+  d.setHours(d.getHours()+h);
+  return d.toISOString();
+}
+
 async function abrirDetalleEvento(eventoId) {
   const evento = window._pagination.data.find(e => String(e.id) === String(eventoId));
   if (!evento) return alert("No se encontró el evento");
@@ -74,6 +92,18 @@ async function abrirDetalleEvento(eventoId) {
   const fecha = formatDateTime(evento.start?.local || evento.start?.utc);
   const lugar = evento.venue?.address?.localized_address_display || "Online / Sin dirección";
   const desc  = evento.description?.text || evento.summary || "Sin descripción";
+
+  // --- Construcción Google Calendar ---
+  const startUtc = toUTCStamp(evento.start?.utc || evento.start?.local);
+  const endUtc   = toUTCStamp(evento.end?.utc || addHours(evento.start?.utc || evento.start?.local, 2));
+  const gcalUrl  = `https://www.google.com/calendar/render?action=TEMPLATE&text=${
+    encodeURIComponent(evento.name?.text || 'Evento')
+  }&dates=${startUtc}/${endUtc}&details=${
+    encodeURIComponent((desc || "") + (evento.url ? `\n\nMás info: ${evento.url}` : ""))
+  }&location=${encodeURIComponent(lugar)}&sf=true&output=xml`;
+
+  // --- WhatsApp ---
+  const waUrl = `https://wa.me/?text=${encodeURIComponent(evento.name?.text + " " + (evento.url || ""))}`;
 
   detalleDiv.innerHTML = `
     <h3>${evento.name?.text || "Evento"}</h3>
@@ -87,26 +117,26 @@ async function abrirDetalleEvento(eventoId) {
       ${estadoChip(evento.status)}
     </div>
     <div class="detalle-actions">
-        <div class="btn-comprar-container">
-            <button class="btn btn-comprar" data-id="${evento.id}">
-              <i class="fa-solid fa-cart-plus"></i> Agregar al carrito
-            </button>
-        </div>
-        <div class="icon-btns">
-            <a href="https://www.google.com/calendar/render?..." class="icon-btn" target="_blank" title="Agregar al calendario">
-            <i class="fa-regular fa-calendar"></i>
-            </a>
-            <a href="https://wa.me/?text=..." class="icon-btn" target="_blank" title="Compartir con un amigo">
-            <i class="fa-brands fa-whatsapp"></i>
-            </a>
-        </div>
+      <div class="btn-comprar-container">
+        <button class="btn btn-comprar" data-id="${evento.id}">
+          <i class="fa-solid fa-cart-plus"></i> Agregar al carrito
+        </button>
+      </div>
+      <div class="icon-btns">
+        <a href="${gcalUrl}" class="icon-btn" target="_blank" title="Agregar al calendario">
+          <i class="fa-regular fa-calendar"></i>
+        </a>
+        <a href="${waUrl}" class="icon-btn" target="_blank" title="Compartir con un amigo">
+          <i class="fa-brands fa-whatsapp"></i>
+        </a>
+      </div>
     </div>
   `;
 
-    const precioContainer = detalleDiv.querySelector("#precioContainer");
-    await renderPrecio(evento.id, precioContainer, evento);
+  const precioContainer = detalleDiv.querySelector("#precioContainer");
+  await renderPrecio(evento.id, precioContainer, evento);
 
-   detalleDiv.querySelector(".btn-comprar").addEventListener("click", () => {
+  detalleDiv.querySelector(".btn-comprar").addEventListener("click", () => {
     agregarAlCarrito(evento);
     mostrarToast(`✅ "${evento.name?.text}" se agregó al carrito`);
   });

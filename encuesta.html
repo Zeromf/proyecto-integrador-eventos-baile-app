@@ -54,8 +54,19 @@
   <!-- MAIN -->
   <main>
     <section class="form-card">
-      <h2>Encuesta</h2>
+      <h2 class="section-title">Encuesta de satisfacción</h2>
+      <hr>
+      <h3 id="eventoTitulo"></h3>
       <p class="muted">¡Tu opinión nos ayuda a mejorar!</p>
+      <p><strong>Fecha:</strong> <span id="eventoFecha"></span></p>
+      <p><strong>Lugar:</strong> <span id="eventoLugar"></span></p>
+
+      <!-- inputs ocultos para enviar con el form -->
+      <input type="hidden" id="eventoInput" name="evento">
+      <input type="hidden" id="fechaInput" name="eventoFecha">
+      <input type="hidden" id="lugarInput" name="eventoLugar">
+      
+      
 
       <form id="frmEncuesta" novalidate>
         <div class="form-grid">

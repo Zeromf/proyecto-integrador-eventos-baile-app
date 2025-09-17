@@ -178,6 +178,10 @@ function renderEventos(arr, page=1, pageSize=PAGE_SIZE){
                  class="icon-btn" target="_blank" rel="noopener" title="Compartir con un amigo">
                 <i class="fa-brands fa-whatsapp"></i>
               </a>
+              <a href="encuesta.html?evento=${encodeURIComponent(evt.name?.text || 'Evento')}&fecha=${encodeURIComponent(fecha)}&lugar=${encodeURIComponent(lugar)}" 
+                class="icon-btn" title="Completar encuesta">
+                <i class="fa-solid fa-clipboard-list"></i>
+              </a>
             </div>
           </div>
         </div>
