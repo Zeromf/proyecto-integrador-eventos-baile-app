@@ -1,3 +1,23 @@
+// === Datos del evento pasados por query string ===
+const params = new URLSearchParams(window.location.search);
+const evento = params.get("evento");
+const fecha  = params.get("fecha");
+const lugar  = params.get("lugar");
+
+// Si existen, los mostramos en el formulario
+if (evento) {
+  document.getElementById("eventoTitulo").textContent = evento;
+  document.getElementById("eventoInput").value = evento;
+}
+if (fecha) {
+  document.getElementById("eventoFecha").textContent = fecha;
+  document.getElementById("fechaInput").value = fecha;
+}
+if (lugar) {
+  document.getElementById("eventoLugar").textContent = lugar;
+  document.getElementById("lugarInput").value = lugar;
+}
+
 const $  = (sel) => document.querySelector(sel);
 const $$ = (sel) => document.querySelectorAll(sel);
 
