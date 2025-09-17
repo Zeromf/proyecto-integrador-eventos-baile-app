@@ -37,3 +37,14 @@
   outline: 2px solid var(--primary);
   outline-offset: 2px;
 }
+
+
+/* Estado activo para los botones de texto con ícono del header */
+.menu .btn-link.with-icon.active{
+  background: rgba(241,139,16,.15);   /* leve highlight */
+  border-radius: 999px;
+}
+.menu .btn-link.with-icon.active:focus{
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}

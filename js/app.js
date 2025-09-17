@@ -307,14 +307,22 @@ $(document).on("click", ".fav-btn", function(e){
   e.preventDefault();
   const id = String($(this).attr("data-id") ?? $(this).data("id"));
   if (!id) return;
+
   const nowFavs = Store.toggleId(LS_KEYS.FAVS, id);
   const isFav = nowFavs.includes(id);
+
   $(this)
     .attr("aria-pressed", isFav)
     .toggleClass("is-fav", isFav)
     .attr("title", isFav ? "Quitar de favoritos" : "Agregar a favoritos")
     .find("i").toggleClass("fa-solid", isFav).toggleClass("fa-regular", !isFav);
+
   if ($("#drawerFavoritos[aria-hidden='false']").length) renderFavoritos();
+
+  // ➜ Mostrar modal éxito (auto-cierre)
+showSnack(isFav ? "Se añadió a favoritos" : "Se quitó de favoritos",
+          isFav ? "success" : "error");
+  setTimeout(closeFavModal, 1600); // autocierra a los ~1.6s
 });
 
 /* Unificado: guarda historial y abre modal */
@@ -327,8 +335,6 @@ $(document).on("click", ".btn-detalle", function(e){
 });
 
 /* ===== Drawers accesibles ===== */
-let __lastDrawerTrigger = null;
-
 const Drawer = {
   open(sel, trigger){
     const $d = $(sel), $o = $d.next(".drawer-overlay");
@@ -336,21 +342,64 @@ const Drawer = {
     $d.attr("aria-hidden","false");
     $o.removeAttr("hidden");
     document.body.classList.add("no-scroll");
+
+    // --- marcar header activo ---
+    if (sel === "#drawerFavoritos") setFavHeaderActive(true);
+    if (sel === "#drawerHistorial") setHistHeaderActive(true);
+
     const $close = $d.find("[data-close]")[0] || $d.find("button,a,input,select,textarea")[0];
     if ($close) $close.focus();
   },
   close(sel){
     const $d = $(sel), $o = $d.next(".drawer-overlay");
+
+    // devolver foco al trigger
     if (__lastDrawerTrigger && document.contains(__lastDrawerTrigger)) {
       __lastDrawerTrigger.focus();
     }
     $d.attr("aria-hidden","true");
     $o.attr("hidden", true);
     document.body.classList.remove("no-scroll");
+
+    // --- desmarcar header activo ---
+    if (sel === "#drawerFavoritos") setFavHeaderActive(false);
+    if (sel === "#drawerHistorial") setHistHeaderActive(false);
   }
 };
 
-// Cerrar por botón/overlay (requiere data-close="#drawerId")
+
+/* Helpers para marcar iconos del header como activos */
+function setFavHeaderActive(active){
+  const $b = $("#btnFavoritos");
+  const $i = $b.find("i");
+  $b.toggleClass("active", !!active).attr("aria-pressed", active ? "true" : "false");
+  $i.toggleClass("fa-solid", !!active).toggleClass("fa-regular", !active); // rellena / contorno
+}
+function setHistHeaderActive(active){
+  const $b = $("#btnHistorial");
+  $b.toggleClass("active", !!active).attr("aria-pressed", active ? "true" : "false");
+}
+
+
+/* ===== Snackbar compacto ===== */
+function showSnack(msg, type = "success", timeout = 2300){
+  const $sn = $("#snackbar");
+  if (!$sn.length) return; // por si el HTML aún no está
+  $sn.toggleClass("error", type === "error");
+  const icon = type === "success" ? "✔" : "✖";
+  $sn.html(`<span class="icon">${icon}</span>${msg}`);
+
+  // Reiniciar animación si ya estaba visible
+  $sn.removeClass("show");
+  void $sn[0].offsetWidth; // reflow
+  $sn.addClass("show");
+
+  if (showSnack._t) clearTimeout(showSnack._t);
+  showSnack._t = setTimeout(() => $sn.removeClass("show"), timeout + 300);
+}
+
+
+// Cerrar por botón/overlay
 $(document).on("click", "[data-close]", function(){
   const sel = $(this).data("close");
   if (sel) Drawer.close(sel);

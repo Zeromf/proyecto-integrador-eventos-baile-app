@@ -1,23 +1,30 @@
-
-
-
-
-
-/* ====== Modales ====== */
-.modal-backdrop{
-  position: fixed; inset: 0; background: rgba(0,0,0,.55);
-  opacity: 0; pointer-events: none; transition: opacity .18s ease; z-index: 50;
+/* ====== Backdrop del modal de Favoritos ====== */
+#favModalBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.55);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .18s ease;
+  z-index: 9998;
 }
-.modal-backdrop.is-open{ opacity: 1; pointer-events: auto; }
+#favModalBackdrop.is-open { opacity: 1; pointer-events: auto; }
 
-.modal{
-  position: fixed; inset: 0; display: grid; place-items: center;
-  padding: 1rem; z-index: 51; pointer-events: none;
+/* ====== Contenedor del modal de Favoritos ====== */
+#favModal {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  z-index: 9999;
+  pointer-events: none;
 }
-.modal.is-open{ pointer-events: auto; }
-.modal[hidden]{ display: none; }
+#favModal.is-open { pointer-events: auto; }
+#favModal[hidden] { display: none; }
 
-.modal__card{
+/* Tarjeta */
+#favModal .modal__card{
   width: min(680px, 92vw);
   background: var(--panel, #161a22);
   border: 1px solid #232a37;
@@ -27,39 +34,87 @@
   opacity: 0;
   transition: transform .18s ease, opacity .18s ease;
 }
-.is-open .modal__card{
-  transform: translateY(0) scale(1); opacity: 1;
+#favModal.is-open .modal__card{
+  transform: translateY(0) scale(1);
+  opacity: 1;
 }
 
-.modal__header, .modal__footer{ padding: .9rem 1rem; }
-.modal__header{
-  display:flex; align-items:center; justify-content:space-between;
+/* Header / body / footer */
+#favModal .modal__header,
+#favModal .modal__footer { padding: .9rem 1rem; }
+
+#favModal .modal__header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
   border-bottom:1px solid #232a37;
 }
-.modal__body{ padding: 1rem; max-height: 60vh; overflow:auto; }
-.modal__close{
-  background:#1c2230; border:1px solid #2c3446; color:#fff;
-  width: 36px; height:36px; border-radius: 8px; cursor:pointer;
-}
-.modal__pre{
-  white-space: pre-wrap; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  background:#10151e; border:1px solid #273046; border-radius:10px; padding:.75rem;
-}
-.modal__footer{ display:flex; gap:.6rem; justify-content:flex-end; }
 
-
-/* ===== Modal de éxito ===== */
-.modal__card--success{
-  border: 2px solid #16a34a;
+#favModal .modal__body{
+  padding: 1rem;
+  max-height: 60vh;
+  overflow:auto;
 }
 
-.modal__body--center{
-  text-align: center;
+#favModal .modal__close{
+  background:#1c2230;
+  border:1px solid #2c3446;
+  color:#fff;
+  width: 36px;
+  height:36px;
+  border-radius: 8px;
+  cursor:pointer;
 }
 
-.checkmark{
+#favModal .modal__pre{
+  white-space: pre-wrap;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  background:#10151e;
+  border:1px solid #273046;
+  border-radius:10px;
+  padding:.75rem;
+}
+
+#favModal .modal__footer{
+  display:flex;
+  gap:.6rem;
+  justify-content:flex-end;
+}
+
+/* Éxito */
+#favModal .modal__card--success{ border: 2px solid #16a34a; }
+#favModal .modal__body--center{ text-align: center; }
+#favModal .checkmark{
   font-size: 3rem;
   color: #16a34a;
   font-weight: bold;
   margin-bottom: .8rem;
 }
+
+/* Snackbar compacto */
+.snackbar{
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  background: var(--panel, #161a22);
+  color: var(--text, #e7eaf0);
+  border: 1px solid #273046;
+  border-left: 4px solid #16a34a;      /* verde éxito */
+  padding: .6rem .9rem;
+  border-radius: 10px;
+  box-shadow: var(--shadow, 0 8px 24px rgba(0,0,0,.25));
+  font-size: .95rem;
+  display: none;
+  z-index: 10000;
+}
+.snackbar.show{
+  display: block;
+  animation: snack-in .18s ease, snack-out .20s ease 2.3s forwards;
+}
+.snackbar .icon{ margin-right:.5rem; }
+.snackbar.error{ border-left-color: #ef4444; }
+
+@keyframes snack-in { from { opacity: 0; transform: translate(-50%, 8px); }
+                      to   { opacity: 1; transform: translate(-50%, 0); } }
+@keyframes snack-out{ to   { opacity: 0; transform: translate(-50%, 8px); } }
