@@ -1,0 +1,32 @@
+/* Corazón de favoritos */
+.icon-btn.fav-btn.is-fav i { color: #ff6b8a; }
+.icon-btn.fav-btn:hover i { transform: scale(1.05); }
+
+/* Drawers reutilizando tu estética */
+.drawer{
+  position: fixed; top: 0; right: 0; height: 100vh; width: min(480px, 100%);
+  background: var(--panel); border-left: 1px solid #232a37; box-shadow: var(--shadow);
+  transform: translateX(110%); transition: transform .25s ease; z-index: 60;
+  display:flex; flex-direction:column;
+}
+.drawer[aria-hidden="false"]{ transform: translateX(0); }
+.drawer header{ display:flex; align-items:center; justify-content:space-between; padding: .9rem 1rem; border-bottom:1px solid #232a37; }
+.drawer header h2{ margin:0; font-size:1.1rem; }
+.drawer .cerrar{ background:#242b3a; border:1px solid #2c3446; color:#e7eaf0; border-radius:10px; padding:.35rem .6rem; cursor:pointer; }
+.drawer-body{ padding: .9rem; overflow:auto; display:grid; gap:.75rem; }
+
+/* Tarjeta compacta para listas de favoritos/historial */
+.mini-card{
+  display:grid; grid-template-columns: 96px 1fr auto; gap:.75rem; align-items:center;
+  background: var(--panel-2); border:1px solid #232a37; border-radius:12px; padding:.6rem;
+}
+.mini-card img{ width:96px; height:64px; object-fit:cover; border-radius:8px; border:1px solid #2c3446; }
+.mini-card h4{ margin:.1rem 0; font-size:1rem; }
+.mini-card .meta{ color:var(--muted); font-size:.9rem; }
+.mini-card .actions{ display:flex; gap:.4rem; }
+
+/* Overlays para cada drawer */
+.drawer-overlay{
+  position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:55;
+}
+.drawer[aria-hidden="true"] + .drawer-overlay { display:none; }

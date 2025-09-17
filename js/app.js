@@ -1,5 +1,5 @@
 /* ===========================
-   Eventbrite + Calendario (Google) + Paginación
+   Eventbrite + Calendario (Google) + Paginación + Favoritos/Historial
    =========================== */
 
 /* ========== Config ========== */
@@ -15,7 +15,7 @@ window._pagination = {
   pageSize: PAGE_SIZE
 };
 
-/* ========== Fallback imágenes si la API falla ========== */
+/* ========== Fallback imágenes ========== */
 const FALLBACK_IMAGES = {
   salsa:  "https://www.chassedance.es/wp-content/uploads/2024/06/Como-bailar-bachata.jpg",
   bachata:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_vD8WpIciJ8b9pCeDP4erfalp02n5oUiK1Q&s",
@@ -24,12 +24,14 @@ const FALLBACK_IMAGES = {
   default:"https://via.placeholder.com/1200x675?text=Evento"
 };
 
-/* ========== Helpers generales ========== */
+/* =======================
+   Helpers generales
+   ======================= */
 function setTime(date, hh, mm=0){ const d=new Date(date); d.setHours(hh,mm,0,0); return d; }
 function capitalize(s){ return s? s.charAt(0).toUpperCase()+s.slice(1): s; }
 function clamp(n,min,max){ return Math.max(min, Math.min(max, n)); }
 
-/* --------- fechas legibles en español --------- */
+/* Fechas legibles */
 function formatDateTime(iso){
   if(!iso) return "Fecha a confirmar";
   const d = new Date(iso);
@@ -38,7 +40,7 @@ function formatDateTime(iso){
   return `${f} • ${h}`;
 }
 
-/* --------- filtro en memoria --------- */
+/* Filtro en memoria */
 function filtrarEventos(events, { q, fecha, ubic }) {
   let out = Array.isArray(events) ? events : [];
 
@@ -80,7 +82,7 @@ function filtrarEventos(events, { q, fecha, ubic }) {
   return out;
 }
 
-/* --------- estados en español --------- */
+/* Estados */
 const STATUS_ES = {
   draft:     "Programado",
   live:      "Publicado",
@@ -95,13 +97,13 @@ function estadoChip(status){
   return `<span class="chip chip-${status}">${label}</span>`;
 }
 
-/* --------- chip de precio (Gratis / Pago) --------- */
+/* Precio */
 function precioChip(evt){
   if (evt?.is_free === true) return `<span class="chip chip-free">Gratis</span>`;
   return `<span class="chip chip-paid">Pago</span>`;
 }
 
-/* ========== Helpers Calendario (Google) ========== */
+/* Google Calendar */
 function toUTCStamp(iso){
   const d = new Date(iso);
   return d.toISOString().replace(/[-:]/g,"").split(".")[0]+"Z";
@@ -112,7 +114,101 @@ function addHours(iso, h=2){
   return d.toISOString();
 }
 
-/* ========== Render tarjetas de una página ========== */
+/* =======================
+   Favoritos + Historial (LocalStorage) — IDs SIEMPRE como string
+   ======================= */
+const LS_KEYS = {
+  FAVS: 'flowdance:favoritos',
+  HIST: 'flowdance:historial'
+};
+
+const Store = {
+  get(key, fb = []) { try { return JSON.parse(localStorage.getItem(key)) ?? fb; } catch { return fb; } },
+  set(key, val)     { localStorage.setItem(key, JSON.stringify(val)); },
+
+  hasId(key, id) {
+    const s = String(id);
+    const arr = Store.get(key, []).map(String);
+    return arr.includes(s);
+  },
+
+  toggleId(key, id) {
+    const s = String(id);
+    let arr = Store.get(key, []).map(String);
+    if (arr.includes(s)) arr = arr.filter(x => x !== s); else arr.unshift(s);
+    Store.set(key, arr);
+    return arr; // strings
+  },
+
+  upsertArr(key, item, by = 'id', max = 50) {
+    const arr = Store.get(key, []);
+    const sItem = { ...item, [by]: String(item[by]) };
+    const i = arr.findIndex(x => String(x[by]) === String(sItem[by]));
+    if (i >= 0) arr[i] = sItem; else arr.unshift(sItem);
+    if (max && arr.length > max) arr.length = max;
+    Store.set(key, arr);
+    return arr;
+  }
+};
+
+function mapEvt(evt){
+  const lugar = evt?.venue?.address?.localized_address_display || "Online / Sin dirección";
+  const fecha = formatDateTime(evt?.start?.local || evt?.start?.utc);
+  return {
+    id: String(evt?.id),
+    title: evt?.name?.text || 'Evento',
+    date: fecha,
+    place: lugar,
+    url: evt?.url || '#',
+    img: (evt?.logo?.url || FALLBACK_IMAGES.default),
+    savedAt: Date.now()
+  };
+}
+
+function addToHistorialById(id){
+  const s = String(id);
+  const arr = (window._pagination?.data || []);
+  const evt = arr.find(e => String(e.id) === s);
+  if (!evt) return;
+  Store.upsertArr(LS_KEYS.HIST, mapEvt(evt), 'id', 50);
+}
+
+function renderList($container, items){
+  if (!items?.length) return $container.html('<p class="empty">Nada por aquí…</p>');
+  const html = items.map(it => `
+    <div class="mini-card">
+      <img src="${it.img}" alt="${it.title}">
+      <div>
+        <h4>${it.title}</h4>
+        <div class="meta">🗓️ ${it.date} · 📍 ${it.place}</div>
+      </div>
+      <div class="actions">
+        <a class="icon-btn" href="${it.url}" target="_blank" rel="noopener" title="Ver en Eventbrite">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </a>
+        <button class="icon-btn fav-btn ${Store.hasId(LS_KEYS.FAVS, it.id) ? 'is-fav' : ''}" data-id="${it.id}" title="Alternar favorito">
+          <i class="${Store.hasId(LS_KEYS.FAVS, it.id) ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
+        </button>
+      </div>
+    </div>
+  `).join('');
+  $container.html(html);
+}
+function renderFavoritos(){
+  const favIds = Store.get(LS_KEYS.FAVS, []).map(String);
+  const items = favIds.map(id => {
+    const evt = (window._pagination?.data || []).find(e => String(e.id) === id);
+    return evt ? mapEvt(evt) : { id, title:`Evento ${id}`, date:'—', place:'—', url:'#', img:FALLBACK_IMAGES.default };
+  });
+  renderList($("#favoritosList"), items);
+}
+function renderHistorial(){
+  renderList($("#historialList"), Store.get(LS_KEYS.HIST, []));
+}
+
+/* =======================
+   Render de eventos
+   ======================= */
 function renderEventos(arr, page=1, pageSize=PAGE_SIZE){
   const $res = $("#resultados").empty();
   if (!arr || !arr.length) {
@@ -128,19 +224,21 @@ function renderEventos(arr, page=1, pageSize=PAGE_SIZE){
   const pageItems = arr.slice(start, end);
 
   pageItems.forEach(evt => {
+    const id     = String(evt.id);
     const img    = evt.logo?.url || FALLBACK_IMAGES.default;
     const fecha  = formatDateTime(evt.start?.local || evt.start?.utc);
     const lugar  = evt.venue?.address?.localized_address_display || "Online / Sin dirección";
     const estado = evt.status;
 
-    // Google Calendar
     const startUtc = toUTCStamp(evt.start?.utc || evt.start?.local);
     const endUtc   = toUTCStamp(evt.end?.utc   || addHours(evt.start?.utc || evt.start?.local, 2));
     const gcalUrl  = `https://www.google.com/calendar/render?action=TEMPLATE&text=${
       encodeURIComponent(evt.name?.text || 'Evento')
     }&dates=${startUtc}/${endUtc}&details=${
-      encodeURIComponent((evt.summary || "") + (evt.url ? `\n\nMás info: ${evt.url}` : ""))}
-    &location=${encodeURIComponent(lugar)}&sf=true&output=xml`;
+      encodeURIComponent((evt.summary || "") + (evt.url ? `\n\nMás info: ${evt.url}` : ""))}&location=${
+      encodeURIComponent(lugar)}&sf=true&output=xml`;
+
+    const isFav = Store.hasId(LS_KEYS.FAVS, id);
 
     $res.append(`
       <article class="evento">
@@ -156,8 +254,12 @@ function renderEventos(arr, page=1, pageSize=PAGE_SIZE){
             <li>📍 ${lugar}</li>
           </ul>
           <div class="evento-actions">
-            <a class="btn btn-detalle" data-id="${evt.id}">Ver más</a>
+            <a class="btn btn-detalle" data-id="${id}">Ver más</a>
             <div class="quick-actions">
+              <button class="icon-btn fav-btn ${isFav ? 'is-fav' : ''}" aria-pressed="${isFav}" data-id="${id}"
+                title="${isFav ? 'Quitar de favoritos' : 'Agregar a favoritos'}">
+                <i class="${isFav ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
+              </button>
               <a href="${gcalUrl}" class="icon-btn" target="_blank" rel="noopener" title="Agregar al calendario">
                 <i class="fa-regular fa-calendar"></i>
               </a>
@@ -175,7 +277,9 @@ function renderEventos(arr, page=1, pageSize=PAGE_SIZE){
   renderPaginacion(totalPages, current);
 }
 
-/* ========== Render paginación ========== */
+/* =======================
+   Paginación
+   ======================= */
 function renderPaginacion(totalPages=1, current=1){
   const $p = $("#paginacion").empty();
   if (totalPages <= 1) return;
@@ -196,7 +300,84 @@ function renderPaginacion(totalPages=1, current=1){
   $p.html(html);
 }
 
-/* ========== Flujo principal ========== */
+/* =======================
+   Listeners favoritos / historial / drawers
+   ======================= */
+$(document).on("click", ".fav-btn", function(e){
+  e.preventDefault();
+  const id = String($(this).attr("data-id") ?? $(this).data("id"));
+  if (!id) return;
+  const nowFavs = Store.toggleId(LS_KEYS.FAVS, id);
+  const isFav = nowFavs.includes(id);
+  $(this)
+    .attr("aria-pressed", isFav)
+    .toggleClass("is-fav", isFav)
+    .attr("title", isFav ? "Quitar de favoritos" : "Agregar a favoritos")
+    .find("i").toggleClass("fa-solid", isFav).toggleClass("fa-regular", !isFav);
+  if ($("#drawerFavoritos[aria-hidden='false']").length) renderFavoritos();
+});
+
+/* Unificado: guarda historial y abre modal */
+$(document).on("click", ".btn-detalle", function(e){
+  e.preventDefault();
+  const id = String($(this).attr("data-id") ?? $(this).data("id"));
+  if (!id) return;
+  addToHistorialById(id); // guardar historial
+  if (typeof abrirDetalleEvento === "function") abrirDetalleEvento(id); // abrir modal
+});
+
+/* ===== Drawers accesibles ===== */
+let __lastDrawerTrigger = null;
+
+const Drawer = {
+  open(sel, trigger){
+    const $d = $(sel), $o = $d.next(".drawer-overlay");
+    __lastDrawerTrigger = trigger || __lastDrawerTrigger || document.activeElement;
+    $d.attr("aria-hidden","false");
+    $o.removeAttr("hidden");
+    document.body.classList.add("no-scroll");
+    const $close = $d.find("[data-close]")[0] || $d.find("button,a,input,select,textarea")[0];
+    if ($close) $close.focus();
+  },
+  close(sel){
+    const $d = $(sel), $o = $d.next(".drawer-overlay");
+    if (__lastDrawerTrigger && document.contains(__lastDrawerTrigger)) {
+      __lastDrawerTrigger.focus();
+    }
+    $d.attr("aria-hidden","true");
+    $o.attr("hidden", true);
+    document.body.classList.remove("no-scroll");
+  }
+};
+
+// Cerrar por botón/overlay (requiere data-close="#drawerId")
+$(document).on("click", "[data-close]", function(){
+  const sel = $(this).data("close");
+  if (sel) Drawer.close(sel);
+});
+
+// Cerrar con ESC
+$(document).on("keydown", function(e){
+  if (e.key === "Escape") {
+    $(".drawer[aria-hidden='false']").each(function(){
+      Drawer.close("#" + this.id);
+    });
+  }
+});
+
+// Abrir asociados a sus triggers (guardamos el trigger)
+$("#btnFavoritos").off("click").on("click", function(){
+  renderFavoritos();
+  Drawer.open("#drawerFavoritos", this);
+});
+$("#btnHistorial").off("click").on("click", function(){
+  renderHistorial();
+  Drawer.open("#drawerHistorial", this);
+});
+
+/* =======================
+   Flujo principal
+   ======================= */
 function buscarEventos(query = "", _page = 1, fecha = "", ubic = "") {
   Loader.show();
 
@@ -211,7 +392,7 @@ function buscarEventos(query = "", _page = 1, fecha = "", ubic = "") {
   req.done((data) => {
     let filtrados = filtrarEventos(data?.events, { q: query, fecha, ubic });
 
-    // Bloquear "social(es)" SOLO en categories.html
+    // Si estamos en categories.html, excluir "social(es)"
     if (window.location.pathname.includes("categories.html")) {
       const regex = /\bsocial(es)?\b/i;
       filtrados = filtrados.filter(e =>
@@ -222,19 +403,11 @@ function buscarEventos(query = "", _page = 1, fecha = "", ubic = "") {
 
     window._pagination.data = filtrados;
     window._pagination.page = 1;
-
-    try {
-      renderEventos(window._pagination.data, window._pagination.page, window._pagination.pageSize);
-    } catch (err) {
-      console.error("Fallo renderEventos:", err);
-      $("#resultados").html("<p>No se pudieron mostrar los eventos.</p>");
-      $("#paginacion").empty();
-    }
+    renderEventos(window._pagination.data, window._pagination.page, window._pagination.pageSize);
   });
 
   req.fail((_xhr, _status, err) => {
     console.warn("Fallo llamada a Eventbrite, usando fallback:", err);
-
     const baseImg = query && FALLBACK_IMAGES[query] ? query : "default";
     const hoy = new Date();
     const addDays = (n) => new Date(hoy.getTime() + n * 864e5);
@@ -259,20 +432,15 @@ function buscarEventos(query = "", _page = 1, fecha = "", ubic = "") {
 
     window._pagination.data = fake;
     window._pagination.page = 1;
-
-    try {
-      renderEventos(window._pagination.data, window._pagination.page, window._pagination.pageSize);
-    } catch (err2) {
-      console.error("Fallo renderEventos (fallback):", err2);
-      $("#resultados").html("<p>No se pudieron mostrar los eventos.</p>");
-      $("#paginacion").empty();
-    }
+    renderEventos(window._pagination.data, window._pagination.page, window._pagination.pageSize);
   });
 
   req.always(() => Loader.hide());
 }
 
-/* ========== Listeners ========== */
+/* =======================
+   Listeners de UI
+   ======================= */
 $(document).on("click", ".filtro", function(e){
   e.preventDefault();
   const cat = $(this).data("cat");
@@ -308,10 +476,3 @@ $(document).on("click", "#paginacion .page-btn", function(){
 
 /* Primera carga */
 $(function(){ buscarEventos(""); });
-
-/* Abrir detalle */
-$(document).on("click", ".btn-detalle", function(e){
-  e.preventDefault();
-  const id = $(this).data("id");
-  abrirDetalleEvento(id);
-});

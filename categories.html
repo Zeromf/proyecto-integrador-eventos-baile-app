@@ -11,6 +11,8 @@
   <link rel="stylesheet" href="css/carrito.css" />
   <link rel="stylesheet" href="css/menu.css" />
   <link rel="stylesheet" href="css/detalle.css" />
+  <!-- (opcional) estilos del drawer/listas de fav/hist -->
+  <link rel="stylesheet" href="css/favorito-historial.css" />
 
   <!-- Iconos -->
   <script src="https://kit.fontawesome.com/f222217ad3.js" crossorigin="anonymous"></script>
@@ -23,11 +25,12 @@
 <div id="toast" class="toast"></div>
 
 <body>
-   <div id="loader" class="loader-overlay" hidden>
+  <div id="loader" class="loader-overlay" hidden>
     <div class="spinner"></div>
   </div>
+
   <!-- HEADER -->
-    <header>
+  <header>
     <div class="header-inner">
       <div class="logo">
         <a href="index.html"><img src="img/logo.png" alt="Logo de la página"></a>
@@ -38,8 +41,21 @@
       <!-- Menú principal -->
       <nav class="menu-principal" aria-label="Menú principal">
         <ul class="menu">
+        <!-- Botones texto: Historial y Favoritos -->
+      <li>
+        <button id="btnHistorial" class="btn-link with-icon" title="Ver historial">
+          <i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i>
+          <span>Historial</span>
+        </button>
+      </li>
+      <li>
+        <button id="btnFavoritos" class="btn-link with-icon" title="Ver favoritos">
+          <i class="fa-regular fa-heart" aria-hidden="true"></i>
+          <span>Favoritos</span>
+        </button>
+      </li>
           <li><a href="categories.html">Clases</a></li>
-           <li><a href="sociales.html">Sociales</a></li>
+          <li><a href="sociales.html">Sociales</a></li>
           <li><a href="encuesta.html">Encuesta</a></li>
           <li><a href="contacto.html">Contacto</a></li>
           <li>
@@ -60,7 +76,6 @@
     </aside>
   </header>
 
-
   <div class="container">
     <!-- ===== Drawer lateral de Categorías + overlay ===== -->
     <aside id="catDrawer" class="cat-drawer" aria-hidden="true">
@@ -71,12 +86,13 @@
           <li><a href="#bachata-category" class="filtro" data-cat="bachata">Bachata</a></li>
           <li><a href="#kizomba-category" class="filtro" data-cat="kizomba">Kizomba</a></li>
           <li><a href="#zumba-category"  class="filtro" data-cat="zumba">Zumba</a></li>
+          <li><a href="#cuarteto-category" class="filtro" data-cat="cuarteto">Cuarteto</a></li>
+          <li><a href="#Rock-category"   class="filtro" data-cat="Rock">Rock</a></li>
         </ul>
         <hr style="border:0;border-top:1px solid #232a37;margin:1rem 0" />
       </nav>
     </aside>
     <div id="catOverlay" class="cat-overlay" hidden></div>
-    <!-- ================================================ -->
 
     <!-- MAIN: filtros + resultados + modal -->
     <main aria-label="Listado y filtros">
@@ -92,28 +108,67 @@
           </select>
           <select id="selUbicacion" aria-label="Ubicación">
             <option value="Buenos Aires" selected>Buenos Aires</option>
-            <option value="La Plata">La Plata</option>
+            <option value="CABA">Ciudad Autónoma de Buenos Aires</option>
+            <option value="Catamarca">Catamarca</option>
+            <option value="Chaco">Chaco</option>
+            <option value="Chubut">Chubut</option>
             <option value="Córdoba">Córdoba</option>
-            <option value="Rosario">Rosario</option>
+            <option value="Corrientes">Corrientes</option>
+            <option value="Entre Ríos">Entre Ríos</option>
+            <option value="Formosa">Formosa</option>
+            <option value="Jujuy">Jujuy</option>
+            <option value="La Pampa">La Pampa</option>
+            <option value="La Rioja">La Rioja</option>
+            <option value="Mendoza">Mendoza</option>
+            <option value="Misiones">Misiones</option>
+            <option value="Neuquén">Neuquén</option>
+            <option value="Río Negro">Río Negro</option>
+            <option value="Salta">Salta</option>
+            <option value="San Juan">San Juan</option>
+            <option value="San Luis">San Luis</option>
+            <option value="Santa Cruz">Santa Cruz</option>
+            <option value="Santa Fe">Santa Fe</option>
+            <option value="Santiago del Estero">Santiago del Estero</option>
+            <option value="Tierra del Fuego">Tierra del Fuego</option>
+            <option value="Tucumán">Tucumán</option>
           </select>
           <button id="btnBuscar" class="btn btn-primary">Buscar</button>
         </div>
       </section>
 
       <!-- 🧩 Resultados dinámicos -->
-<section id="eventbrite-resultados" aria-label="Resultados de búsqueda">
-  <div class="section-title">
-    <h2>Clases</h2>
-    <button id="btnCategorias" class="btn btn-ghost btn-sm with-icon" type="button" title="Abrir categorías">
-      <i class="fa-solid fa-sliders"></i>
-      Categorías
-    </button>
-  </div>
+      <section id="eventbrite-resultados" aria-label="Resultados de búsqueda">
+        <div class="section-title">
+          <h2>Clases</h2>
+          <button id="btnCategorias" class="btn btn-ghost btn-sm with-icon" type="button" title="Abrir categorías">
+            <i class="fa-solid fa-sliders"></i>
+            Categorías
+          </button>
+        </div>
 
-  <div id="resultados" class="category-items"></div>
-  <div id="paginacion" class="pager"></div>
-</section>
+        <div id="resultados" class="category-items"></div>
+        <div id="paginacion" class="pager"></div>
+      </section>
 
+      <!-- Drawer Favoritos -->
+      <aside class="drawer" id="drawerFavoritos" aria-hidden="true">
+        <header>
+          <h2>Favoritos</h2>
+          <button class="cerrar" data-close="#drawerFavoritos">✕</button>
+        </header>
+        <div class="drawer-body" id="favoritosList"></div>
+      </aside>
+      <div class="drawer-overlay" data-close="#drawerFavoritos" hidden></div>
+
+      <!-- Drawer Historial -->
+     <aside id="drawerHistorial" class="drawer" aria-hidden="true">
+  <header>
+    <h3>Historial</h3>
+    <button class="cerrar" data-close="#drawerHistorial" aria-label="Cerrar">✕</button>
+  </header>
+  <div id="historialList" class="historial-list"></div>
+</aside>
+<div class="drawer-overlay" hidden data-close="#drawerHistorial"></div>
     </main>
 
     <!-- 🪟 Modal de detalle -->
@@ -124,7 +179,6 @@
       </div>
     </div>
   </div>
-
   <!-- FOOTER -->
   <footer>
     <p>&copy; 2025 Flow Dance - Todos los derechos reservados</p>
@@ -133,7 +187,7 @@
 
   <!-- JS mínimos de página -->
   <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
-   <script src="js/carrito.js"></script>
+  <script src="js/carrito.js"></script>
   <script src="js/toast.js"></script>
 
   <!-- Spin de carga -->
