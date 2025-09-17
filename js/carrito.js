@@ -25,7 +25,7 @@ function renderCarrito() {
     return; 
   }
 
-  // caarrito con items 
+  // carrito con items 
  const itemsHTML = carrito.map((item, index) => `
   <div class="item">
     <div class="item-info">
@@ -45,7 +45,7 @@ function renderCarrito() {
   carritoDiv.innerHTML = `
   <div class="carrito-content">
     <header>
-      <h2>🛒 Tu carrito</h2>
+      <h2><i class="fa-solid fa-cart-shopping" aria-hidden="true"></i> Tu carrito</h2>
       <span class="cerrar" onclick="cerrarCarrito()">&times;</span>
     </header>
 
@@ -57,7 +57,7 @@ function renderCarrito() {
       <div class="total">Total: ${formatPrecioARS(total)}</div>
       <div class="carrito-actions">
         <button class="btn-vaciar" onclick="vaciarCarrito()">Vaciar</button>
-        <button class="btn-checkout">Finalizar</button>
+        <button class="btn-checkout" data-total="${total}">Finalizar Compra</button>
       </div>
     </footer>
   </div>
@@ -102,6 +102,59 @@ function abrirCarrito() {
 function cerrarCarrito() {
   carritoAside.classList.remove("open");
 }
+
+//finaizar compra
+
+// Abrir modal de confirmación
+document.addEventListener("click", e => {
+  if (e.target.classList.contains("btn-checkout")) {
+    const total = e.target.getAttribute("data-total");
+
+    document.getElementById("precioFinal").innerHTML = `
+      <strong>Total:</strong> ${formatPrecioARS(total)}
+    `;
+
+    // Mostrar modal con la parte de confirmar
+    document.getElementById("modalConfirmar").style.display = "flex";
+    document.getElementById("confirmar").style.display = "block";
+    document.getElementById("gracias").style.display = "none";
+  }
+});
+
+let cerrarTimeout; // variable global para guardar el timeout
+
+// Confirmar compra
+document.getElementById("btnConfirmar").addEventListener("click", () => {
+  // Oculto el bloque confirmar y muestro gracias
+  document.getElementById("confirmar").style.display = "none";
+  document.getElementById("gracias").style.display = "flex";
+
+  vaciarCarrito();
+
+  cerrarTimeout = setTimeout(cerrarYRestaurarModal, 5000000000);
+});
+
+// Botón de la cruz
+document.getElementById("modalCerrarconfirmar").addEventListener("click", () => {
+  clearTimeout(cerrarTimeout); // cancelar el cierre automático si estaba corriendo
+  cerrarYRestaurarModal();
+});
+
+// Función para cerrar y restaurar modal
+function cerrarYRestaurarModal() {
+  document.getElementById("modalConfirmar").style.display = "none";
+
+  // Restaurar estado inicial (confirmar visible, gracias oculto)
+  document.getElementById("confirmar").style.display = "block";
+  document.getElementById("gracias").style.display = "none";
+
+  renderCarrito();
+}
+
+// Cancelar compra
+document.getElementById("btnCancelar").addEventListener("click", () => {
+  document.getElementById("modalConfirmar").style.display = "none";
+});
 
 // Render inicial al cargar
 document.addEventListener("DOMContentLoaded", renderCarrito);

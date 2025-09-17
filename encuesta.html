@@ -15,6 +15,7 @@
 </head>
 
 <body>
+  <!-- Toast -->
   <div id="toast" class="toast"></div>
 
   <!-- HEADER -->
@@ -179,6 +180,30 @@
   </div>
 </div>
 
+<!-- Modal Confirmación -->
+<div id="modalConfirmar" class="modal-confirmar">
+  <div class="modal-content" id="modalContent">
+
+    <div id="confirmar">
+      <i class="fa-solid fa-cart-shopping"></i>
+      <h3>¿Deseás finalizar la compra?</h3>
+      <!-- Precio total -->
+      <div id="precioFinal" class="precio-final"></div>
+      <div class="modal-actions">
+        <button id="btnCancelar" class="btn btn-cancelar"> Volver</button>
+        <button id="btnConfirmar" class="btn btn-confirmar"> Confirmar</button>
+      </div>
+    </div>
+     <div id="gracias" style="display: none;">
+      <span id="modalCerrarconfirmar" class="cerrar-confirmar">&times;</span>
+       <div class="success-message">
+          🎉 
+          <h3>¡Compra finalizada con éxito!</h3>
+          <p>Gracias por confiar en nosotros.</p>
+      </div>
+    </div>
+  </div>
+</div>
 
   <!-- JS -->
   <script src="js/encuesta.js" defer></script>

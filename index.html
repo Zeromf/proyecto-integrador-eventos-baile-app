@@ -16,6 +16,7 @@
 </head>
 
 <body>
+  <!-- Toast -->
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
   <!-- HEADER -->
@@ -198,6 +199,32 @@
     <p>&copy; 2025 Flow Dance - Todos los derechos reservados</p>
     <p class="credit"><em>Desarrollado por Enzo Ferreyra y Fiorella Adami · Aplicaciones Móviles · Universidad Nacional Arturo Jauretche</em></p>
   </footer>
+
+<!-- Modal Confirmación -->
+<div id="modalConfirmar" class="modal-confirmar">
+  <div class="modal-content" id="modalContent">
+
+    <div id="confirmar">
+      <i class="fa-solid fa-cart-shopping"></i>
+      <h3>¿Deseás finalizar la compra?</h3>
+      <!-- Precio total -->
+      <div id="precioFinal" class="precio-final"></div>
+      <div class="modal-actions">
+        <button id="btnCancelar" class="btn btn-cancelar"> Volver</button>
+        <button id="btnConfirmar" class="btn btn-confirmar"> Confirmar</button>
+      </div>
+    </div>
+     <div id="gracias" style="display: none;">
+      <span id="modalCerrarconfirmar" class="cerrar-confirmar">&times;</span>
+       <div class="success-message">
+          🎉 
+          <h3>¡Compra finalizada con éxito!</h3>
+          <p>Gracias por confiar en nosotros.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 
   <!-- JS -->
   <script src="js/app.js"></script>
