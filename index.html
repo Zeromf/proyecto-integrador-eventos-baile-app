@@ -7,10 +7,12 @@
 
   <!-- CSS -->
   <link rel="stylesheet" href="css/estilos.css" />
+      <link rel="stylesheet" href="css/modal-alerts.css" />
   <link rel="stylesheet" href="css/menu.css" />
   <link rel="stylesheet" href="css/carrito.css" />
   <link rel="stylesheet" href="css/video-template.css" />
   <link rel="stylesheet" href="css/slider.css" />
+  <link rel="stylesheet" href="css/fav-hist.css" />
 
   <script src="https://kit.fontawesome.com/f222217ad3.js" crossorigin="anonymous"></script>
 </head>
@@ -31,9 +33,21 @@
       <!-- Menú principal -->
       <nav class="menu-principal" aria-label="Menú principal">
         <ul class="menu">
+        <!-- Botones texto: Historial y Favoritos -->
+          <li>
+            <button id="btnHistorial" class="btn-link with-icon" title="Ver historial">
+              <i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i>
+              <span>Historial</span>
+            </button>
+          </li>
+          <li>
+            <button id="btnFavoritos" class="btn-link with-icon" title="Ver favoritos">
+              <i class="fa-regular fa-heart" aria-hidden="true"></i>
+              <span>Favoritos</span>
+            </button>
+          </li>
           <li><a href="categories.html">Clases</a></li>
           <li><a href="sociales.html">Sociales</a></li>
-          <li><a href="encuesta.html">Encuesta</a></li>
           <li><a href="contacto.html">Contacto</a></li>
           <li>
             <button class="btn-carrito" onclick="abrirCarrito()" title="Abrir carrito" aria-controls="carrito" aria-expanded="false">
@@ -194,6 +208,33 @@
     </main>
   </div>
 
+  <!-- Drawer Favoritos -->
+      <aside class="drawer" id="drawerFavoritos" aria-hidden="true">
+        <header>
+          <h2>Favoritos</h2>
+          <button class="cerrar" data-close="#drawerFavoritos" aria-label="Cerrar">✕</button>
+        </header>
+        <div class="drawer-body" id="favoritosList"></div>
+      </aside>
+      <div class="drawer-overlay" data-close="#drawerFavoritos" hidden></div>
+
+      <!-- Drawer Historial -->
+     <aside id="drawerHistorial" class="drawer" aria-hidden="true">
+    <header>
+    <h2>Historial</h2>
+    <div class="header-actions">
+      <button id="clearHistorial" class="icon-btn" title="Vaciar historial" aria-label="Vaciar historial">
+        <i class="fa-solid fa-trash"></i>
+      </button>
+      <button class="cerrar" data-close="#drawerHistorial" aria-label="Cerrar">✕</button>
+    </div>
+  </header>
+  <div id="historialList" class="drawer-body"></div>
+</aside>
+      <div class="drawer-overlay" hidden data-close="#drawerHistorial"></div>
+    </main>
+
+
   <!-- FOOTER -->
   <footer>
     <p>&copy; 2025 Flow Dance - Todos los derechos reservados</p>
@@ -227,11 +268,19 @@
 
 
   <!-- JS -->
-  <script src="js/app.js"></script>
-  <script src="js/detalle.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
   <script src="js/carrito.js"></script>
   <script src="js/toast.js"></script>
-  <!-- Slider multi-instancia (asegurate de que inicialice todos los .slider) -->
+
+  <!-- App y detalle -->
+  <script src="js/app.js"></script>
+  <script src="js/detalle.js"></script>
+  <script src="js/loader.js"></script>
   <script src="js/slider.js"></script>
+
+  <!-- Favoritos/Historial (mismo que en categorías) -->
+  <script src="js/fav-hist.js"></script>
+  <script src="js/filter-fav.js"></script>
+
 </body>
 </html>
