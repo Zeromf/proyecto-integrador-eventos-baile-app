@@ -80,6 +80,7 @@ function addToHistorialById(id){
 function renderList($container, items){
   if (!$container?.length) return;
   if (!items?.length) return $container.html('<p class="empty">Nada por aquí…</p>');
+
   const html = items.map(it => `
     <div class="mini-card">
       <img src="${it.img}" alt="${it.title}">
@@ -100,6 +101,7 @@ function renderList($container, items){
   $container.html(html);
 }
 
+
 /* ===== Favoritos (lee del store de objetos, no del paginador) ===== */
 function renderFavoritos(){
   const favIds = Store.get(LS_KEYS.FAVS, []).map(String);
@@ -116,6 +118,7 @@ function renderFavoritos(){
     const evt = (window._pagination?.data || []).find(e => String(e.id) === id);
     if (evt) {
       const m = mapEvt(evt);
+
       Store.upsertArr(LS_KEYS.FAV_ITEMS, m, 'id', 200);
       return m;
     }
@@ -126,10 +129,22 @@ function renderFavoritos(){
   renderList($("#favoritosList"), items);
 }
 
-function renderHistorial(){
-  renderList($("#historialList"), Store.get(LS_KEYS.HIST, []));
 
-  // refrescar estado de favoritos en historial
+// Vaciar todo el historial
+$(document).on("click", "#clearHistorial", function(e){
+  e.preventDefault();
+  Store.set(LS_KEYS.HIST, []);     // limpia el localStorage
+  renderHistorial();               // refresca la vista
+  showSnack("Historial eliminado", "success");
+});
+
+
+
+function renderHistorial(){
+  const items = Store.get(LS_KEYS.HIST, []);
+  renderList($("#historialList"), items, "hist"); // 👈 ahora con "hist"
+
+  // refrescar estado de favoritos en historial (se mantiene igual)
   $("#historialList .fav-btn").each(function(){
     const id = String($(this).data("id"));
     const isFav = Store.hasId(LS_KEYS.FAVS, id);
@@ -139,7 +154,6 @@ function renderHistorial(){
       .find("i").toggleClass("fa-solid", isFav).toggleClass("fa-regular", !isFav);
   });
 
-  // si el drawer ya está abierto, recalcular la barrita por si cambió la altura
   const dr = document.querySelector("#drawerHistorial");
   if (dr && typeof dr._refreshScrollbar === "function") dr._refreshScrollbar();
 }
