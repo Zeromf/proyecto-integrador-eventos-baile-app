@@ -128,6 +128,20 @@ function renderFavoritos(){
 
 function renderHistorial(){
   renderList($("#historialList"), Store.get(LS_KEYS.HIST, []));
+
+  // refrescar estado de favoritos en historial
+  $("#historialList .fav-btn").each(function(){
+    const id = String($(this).data("id"));
+    const isFav = Store.hasId(LS_KEYS.FAVS, id);
+    $(this)
+      .toggleClass("is-fav", isFav)
+      .attr("aria-pressed", isFav)
+      .find("i").toggleClass("fa-solid", isFav).toggleClass("fa-regular", !isFav);
+  });
+
+  // si el drawer ya está abierto, recalcular la barrita por si cambió la altura
+  const dr = document.querySelector("#drawerHistorial");
+  if (dr && typeof dr._refreshScrollbar === "function") dr._refreshScrollbar();
 }
 
 /* =======================
@@ -148,6 +162,11 @@ const Drawer = {
 
     const $close = $d.find("[data-close]")[0] || $d.find("button,a,input,select,textarea")[0];
     if ($close) $close.focus();
+
+    // 👉 Barrita de scroll SOLO para Historial
+    if (sel === "#drawerHistorial") {
+      initDrawerScrollbar($d[0]);
+    }
   },
   close(sel){
     const $d = $(sel), $o = $d.next(".drawer-overlay");
@@ -226,6 +245,7 @@ $(document).on("click", ".fav-btn", function(e){
     .find("i").toggleClass("fa-solid", isFav).toggleClass("fa-regular", !isFav);
 
   if ($("#drawerFavoritos[aria-hidden='false']").length) renderFavoritos();
+  if ($("#drawerHistorial[aria-hidden='false']").length) renderHistorial();
 
   showSnack(isFav ? "Se añadió a favoritos" : "Se quitó de favoritos", isFav ? "success" : "error");
 });
@@ -264,77 +284,55 @@ $(document).on("keydown", function(e){
   }
 });
 
+/* ======================================================
+   Barra de scroll flotante SOLO para #drawerHistorial
+   (necesita CSS: .drawer-scrollbar y .drawer-scrollbar__thumb)
+   ====================================================== */
+function initDrawerScrollbar(drawerEl){
+  if (!drawerEl) return;
+  const body = drawerEl.querySelector('.drawer-body');
+  if (!body) return;
 
-
-
-// js/sociales-filter.js
-(function () {
-  // Activá solo en la página de "sociales"
-  var IS_SOCIALES =
-    /sociales\.html(\?|$)/i.test(location.pathname) ||
-    (document.body && document.body.dataset && document.body.dataset.page === 'sociales');
-
-  if (!IS_SOCIALES) return;
-
-  // Filtro: social / sociales (en título o summary)
-  var socialRegex = /\bsocial(es)?\b/i;
-  function viewFilter(arr) {
-    arr = Array.isArray(arr) ? arr : [];
-    return arr.filter(function (e) {
-      var title = (e && e.name && e.name.text) || '';
-      var summary = (e && e.summary) || '';
-      return socialRegex.test(title) || socialRegex.test(summary);
-    });
+  // crear contenedor si no existe
+  let track = drawerEl.querySelector('.drawer-scrollbar');
+  if (!track){
+    track = document.createElement('div');
+    track.className = 'drawer-scrollbar';
+    track.innerHTML = '<div class="drawer-scrollbar__thumb"></div>';
+    drawerEl.appendChild(track);
   }
+  const thumb = track.querySelector('.drawer-scrollbar__thumb');
 
-  // 1) Render inicial filtrado, apenas haya datos cargados
-  if (window.jQuery) {
-    jQuery(document).one('ajaxSuccess.sociales', function () {
-      var all = (window._pagination && window._pagination.data) || [];
-      var pageSize = (window._pagination && window._pagination.pageSize) || 6;
-      if (window._pagination) window._pagination.page = 1;
-      if (typeof window.renderEventos === 'function') {
-        window.renderEventos(viewFilter(all), 1, pageSize);
-      }
-    });
-  }
+  // función para actualizar tamaño/posición
+  const refresh = () => {
+    const h  = body.scrollHeight;
+    const vh = body.clientHeight;
+    const st = body.scrollTop;
 
-  // 2) Envolvemos renderEventos para que SIEMPRE aplique el filtro en esta pestaña
-  var _origRender = window.renderEventos;
-  if (typeof _origRender === 'function') {
-    window.renderEventos = function (data, page, pageSize) {
-      return _origRender.call(this, viewFilter(data), page, pageSize);
-    };
-  } else {
-    // Si aún no existe, lo envolvemos cuando aparezca
-    Object.defineProperty(window, 'renderEventos', {
-      configurable: true,
-      set: function (fn) {
-        delete window.renderEventos;
-        window.renderEventos = function (data, page, pageSize) {
-          return fn.call(this, viewFilter(data), page, pageSize);
-        };
-      }
-    });
-  }
+    // altura del pulgar (mínimo 24px)
+    const ratio  = vh / (h || 1);
+    const tH     = Math.max(24, Math.round(vh * ratio));
+    const maxTop = Math.max(0, vh - tH);
+    const top    = (h > vh) ? Math.round((st / (h - vh)) * maxTop) : 0;
 
-  // 3) (Opcional) Si tu flujo llama a buscarEventos y él mismo renderiza,
-  // nuestro wrap de renderEventos ya mantiene el filtro. Igual dejamos el hook listo.
-  var _origBuscar = window.buscarEventos;
-  if (typeof _origBuscar === 'function') {
-    window.buscarEventos = function () {
-      return _origBuscar.apply(this, arguments);
-    };
-  } else {
-    // Si aún no existe, lo enganchamos cuando aparezca (por compatibilidad)
-    Object.defineProperty(window, 'buscarEventos', {
-      configurable: true,
-      set: function (fn) {
-        delete window.buscarEventos;
-        window.buscarEventos = function () {
-          return fn.apply(this, arguments);
-        };
-      }
-    });
-  }
-})();
+    thumb.style.height = tH + 'px';
+    thumb.style.transform = `translateY(${top}px)`;
+  };
+
+  refresh();
+
+  // listeners (scroll / resize)
+  const onScroll = () => {
+    drawerEl.classList.add('show-scroll');
+    refresh();
+    clearTimeout(body._scrollT);
+    body._scrollT = setTimeout(() => drawerEl.classList.remove('show-scroll'), 300);
+  };
+
+  body.removeEventListener('scroll', onScroll);
+  body.addEventListener('scroll', onScroll);
+  window.addEventListener('resize', refresh);
+
+  // exponer para recalcular cuando se renderiza la lista
+  drawerEl._refreshScrollbar = refresh;
+}
