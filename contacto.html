@@ -103,7 +103,16 @@
             </div>
             <div>
               <label for="telefono">Teléfono</label>
-              <input id="telefono" name="telefono" type="tel" placeholder="+54 11 ..." pattern="^[0-9+()\-.\s]{6,}$" autocomplete="tel"/>
+              <input 
+                id="telefono" 
+                name="telefono" 
+                type="tel" 
+                placeholder="+54 11 ..." 
+                pattern="[0-9+()\-.\s]{6,}" 
+                title="Teléfono en formato incorrecto. Ingrese solo números y símbolos válidos (+ - ( ) . espacios)" 
+                autocomplete="tel"
+              />
+
             </div>
           </div>
 
