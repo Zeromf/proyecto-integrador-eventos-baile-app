@@ -98,8 +98,11 @@
       <aside id="drawerHistorial" class="drawer" aria-hidden="true">
         <header>
           <h2>Historial</h2>
-          <button class="cerrar" data-close="#drawerHistorial" aria-label="Cerrar">✕</button>
-        </header>
+   <div class="header-actions">
+      <button id="clearHistorial" class="icon-btn" title="Vaciar historial" aria-label="Vaciar historial">
+        <i class="fa-solid fa-trash"></i>
+      </button>
+      <button class="cerrar" data-close="#drawerHistorial" aria-label="Cerrar">✕</button>        </header>
     <div id="historialList" class="drawer-body"></div>
       </aside>
       <div class="drawer-overlay" hidden data-close="#drawerHistorial"></div>

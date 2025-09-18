@@ -1,58 +1,66 @@
-// js/contacto.js
+// js/contacto.js (versión simplificada)
 (function () {
   const form = document.getElementById('form-contacto');
   if (!form) return;
-
-  // Helpers
+  // ===== Refs cache =====
   const $ = (sel, root = document) => root.querySelector(sel);
-  const getVal = id => (document.getElementById(id)?.value || '').trim();
+  const $nombre   = $('#nombre');
+  const $apellido = $('#apellido');
+  const $email    = $('#email');
+  const $tel      = $('#telefono');
+  const $mensaje  = $('#mensaje');
 
-  // ====== Validación adicional ======
-  function validarCampos() {
-    const nombre = getVal('nombre');
-    const email  = getVal('email');
-    const tel    = getVal('telefono');
-    const msg    = getVal('mensaje');
+  const $mcNombre = $('#mc_nombre');
+  const $mcTel    = $('#mc_tel');
+  const $mcMail   = $('#mc_mail');
+  const $mcMsg    = $('#mc_msg');
 
-    // Validaciones básicas
-    const faltan = [];
-    if (nombre.length < 2) faltan.push('nombre');
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) faltan.push('email válido');
-    if (msg.length < 5) faltan.push('mensaje');
+  const modalContacto = document.getElementById('modalContacto');
+  const modalExito    = document.getElementById('modalExito');
 
-    // Tel opcional, pero si viene, debe ser "razonable"
-    if (tel && !/^[0-9+()\-.\s]{6,}$/.test(tel)) {
-      faltan.push('teléfono válido (opcional)');
+  // === Validador nativo con mensaje en el campo Teléfono ===
+const telInput = document.getElementById('telefono');
+if (telInput) {
+  const telMsg = 'Teléfono en formato incorrecto. Ingrese solo números y símbolos válidos (+ - ( ) . espacios)';
+  const re = /^[0-9+()\-. \t\r\n]{6,}$/; // mismo patrón que el HTML (pattern)
+
+  // Cada vez que escribe, limpiamos o seteamos el mensaje
+  telInput.addEventListener('input', () => {
+    if (telInput.value === '' || re.test(telInput.value)) {
+      telInput.setCustomValidity('');
+    } else {
+      telInput.setCustomValidity(telMsg);
     }
+  });
 
-    return { ok: faltan.length === 0, faltan };
+  // Por si llega inválido al submit, aseguramos el mensaje
+  telInput.addEventListener('invalid', () => {
+    if (telInput.value !== '' && !re.test(telInput.value)) {
+      telInput.setCustomValidity(telMsg);
+    } else {
+      telInput.setCustomValidity('');
+    }
+  });
+}
+  // ===== Toast (solo lo usamos para success/info, no errores de validación) =====
+  let toastT = null;
+  function showFormToast(msg, type = 'success', ms = 2200) {
+    const el = document.getElementById('toast');
+    if (!el) return;
+    el.classList.remove('show', 'error', 'success');
+    // reinicia animación
+    // eslint-disable-next-line no-unused-expressions
+    el.offsetWidth;
+    el.textContent = msg;
+    el.classList.add(type === 'error' ? 'error' : 'success', 'show');
+    clearTimeout(toastT);
+    toastT = setTimeout(() => el.classList.remove('show', 'error', 'success'), ms);
   }
 
-  // ====== Armar mensaje de WhatsApp ======
-  function buildWhatsAppHref() {
-    const nombre = getVal('nombre');
-    const apellido = getVal('apellido');
-    const email = getVal('email');
-    const tel = getVal('telefono');
-    const mensaje = getVal('mensaje');
-
-    const base = 'https://wa.me/541126060776';
-    const texto = [
-      `Hola Flow Dance! Soy ${nombre || '—'} ${apellido || ''}`.trim(),
-      tel ? `Tel: ${tel}` : '',
-      `Email: ${email || '—'}`,
-      '',
-      mensaje || 'Quiero info de clases y horarios.'
-    ].join('\n');
-
-    return `${base}?text=${encodeURIComponent(texto)}`;
-  }
-
-  // ====== Modal utilitario ======
+  // ===== Helpers: abrir/cerrar modal =====
   function openModal(modal) {
     if (!modal) return;
     modal.setAttribute('aria-hidden', 'false');
-    // Evitar scroll del body
     document.documentElement.style.overflow = 'hidden';
   }
   function closeModal(modal) {
@@ -61,55 +69,54 @@
     document.documentElement.style.overflow = '';
   }
 
-  // ====== Refs a modales ======
-  const modalContacto = document.getElementById('modalContacto');
-  const modalExito    = document.getElementById('modalExito');
-
-  // Cerrar por backdrop / botones con data-close
+  // Cerrar modal por backdrop o data-close (delegado)
   document.addEventListener('click', (e) => {
-    const target = e.target;
-    if (!(target instanceof Element)) return;
-    if (target.matches('[data-close], .modalc__backdrop')) {
-      const m = target.closest('.modalc') || document.querySelector('.modalc[aria-hidden="false"]');
+    const t = e.target;
+    if (!(t instanceof Element)) return;
+    if (t.matches('[data-close], .modalc__backdrop')) {
+      const m = t.closest('.modalc') || document.querySelector('.modalc[aria-hidden="false"]');
       m && closeModal(m);
     }
   });
 
-  // ====== Submit: validación + modal confirmación ======
+  // ===== WhatsApp URL =====
+  function buildWhatsAppHref() {
+    const base = 'https://wa.me/541126060776';
+    const texto = [
+      `Hola Flow Dance! Soy ${($nombre.value || '—').trim()} ${($apellido.value || '').trim()}`.trim(),
+      $tel.value ? `Tel: ${$tel.value.trim()}` : '',
+      `Email: ${($email.value || '—').trim()}`,
+      '',
+      ($mensaje.value || 'Quiero info de clases y horarios.').trim()
+    ].join('\n');
+    return `${base}?text=${encodeURIComponent(texto)}`;
+  }
+
+  // ===== Submit: SOLO validación nativa + modal confirmación =====
   form.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    // Dejá que el HTML5 marque errores primero
+    // HTML5 validation (required, minlength, type=email, pattern=tel, title del tel)
     if (!form.checkValidity()) {
-      form.reportValidity();
+      form.reportValidity(); // muestra globitos en el campo
       return;
     }
 
-    const { ok, faltan } = validarCampos();
-    if (!ok) {
-      alert('Revisá: ' + faltan.join(', '));
-      return;
-    }
-
-    // Completar resumen del modal
-    $('#mc_nombre').textContent = [getVal('nombre'), getVal('apellido')].filter(Boolean).join(' ') || '—';
-    $('#mc_tel').textContent    = getVal('telefono') || '—';
-    $('#mc_mail').textContent   = getVal('email') || '—';
-    $('#mc_msg').textContent    = getVal('mensaje') || '—';
+    // Completar resumen en modal
+    $mcNombre.textContent = [($nombre.value || '').trim(), ($apellido.value || '').trim()].filter(Boolean).join(' ') || '—';
+    $mcTel.textContent    = ($tel.value || '').trim() || '—';
+    $mcMail.textContent   = ($email.value || '').trim() || '—';
+    $mcMsg.textContent    = ($mensaje.value || '').trim() || '—';
 
     openModal(modalContacto);
   });
 
-  // ====== Confirmar envío (abre WhatsApp) ======
+  // ===== Confirmar envío (abre WhatsApp) =====
   $('#mc_enviar')?.addEventListener('click', () => {
-    const url = buildWhatsAppHref();
-    // Abrimos WhatsApp en nueva pestaña
-    window.open(url, '_blank', 'noopener,noreferrer');
-
-    // Cerramos confirmación, mostramos éxito y reseteamos
+    window.open(buildWhatsAppHref(), '_blank', 'noopener,noreferrer');
     closeModal(modalContacto);
     form.reset();
     openModal(modalExito);
+    showFormToast('Abrimos WhatsApp con tu consulta 👌', 'success', 2200);
   });
-
 })();
