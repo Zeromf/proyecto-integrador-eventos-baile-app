@@ -15,7 +15,7 @@ body{ background: var(--bg); color: var(--text); }
 
 /* Header consistente */
 .header-inner{
-  max-width: 1280px; margin: 0 auto; padding: .9rem 1rem;
+  max-width: 1280px; margin: 0 auto; padding: .1rem 1rem;
   display: flex; align-items: center; gap: 1rem; width: 100%;
 }
 header h1 { flex: 1; text-align: center; }
