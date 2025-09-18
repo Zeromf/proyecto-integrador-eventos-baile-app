@@ -1,8 +1,9 @@
 /* =======================
-   Favoritos + Historial (LocalStorage)
+   Favoritos + Historial (LocalStorage) – FIX cross-tab
    ======================= */
 const LS_KEYS = {
-  FAVS: 'flowdance:favoritos',
+  FAVS: 'flowdance:favoritos',           // [ "123", "456", ... ]
+  FAV_ITEMS: 'flowdance:favoritos_items',// [ {id,title,date,place,url,img,savedAt}, ... ]
   HIST: 'flowdance:historial'
 };
 
@@ -32,13 +33,29 @@ const Store = {
     if (max && arr.length > max) arr.length = max;
     Store.set(key, arr);
     return arr;
+  },
+
+  removeById(key, id, by = 'id') {
+    const arr = Store.get(key, []);
+    const out = arr.filter(x => String(x[by]) !== String(id));
+    Store.set(key, out);
+    return out;
   }
 };
 
-/* ===== Mapeo compacto de evento para listas ===== */
+/* ===== Helpers ===== */
+function formatDateTimeSafe(dt) {
+  try {
+    const d = new Date(dt);
+    if (isNaN(d)) return '—';
+    return d.toLocaleString('es-AR', { dateStyle: 'medium', timeStyle: 'short' });
+  } catch { return '—'; }
+}
+
+/* ===== Mapeo compacto de evento ===== */
 function mapEvt(evt){
   const lugar = evt?.venue?.address?.localized_address_display || "Online / Sin dirección";
-  const fecha = formatDateTime(evt?.start?.local || evt?.start?.utc);
+  const fecha = formatDateTimeSafe(evt?.start?.local || evt?.start?.utc);
   return {
     id: String(evt?.id),
     title: evt?.name?.text || 'Evento',
@@ -74,7 +91,7 @@ function renderList($container, items){
         <a class="icon-btn" href="${it.url}" target="_blank" rel="noopener" title="Ver en Eventbrite">
           <i class="fa-solid fa-arrow-up-right-from-square"></i>
         </a>
-        <button class="icon-btn fav-btn ${Store.hasId(LS_KEYS.FAVS, it.id) ? 'is-fav' : ''}" data-id="${it.id}" title="Alternar favorito">
+        <button class="icon-btn fav-btn ${Store.hasId(LS_KEYS.FAVS, it.id) ? 'is-fav' : ''}" data-id="${it.id}" title="Alternar favorito" aria-pressed="${Store.hasId(LS_KEYS.FAVS, it.id)}">
           <i class="${Store.hasId(LS_KEYS.FAVS, it.id) ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
         </button>
       </div>
@@ -83,12 +100,29 @@ function renderList($container, items){
   $container.html(html);
 }
 
+/* ===== Favoritos (lee del store de objetos, no del paginador) ===== */
 function renderFavoritos(){
   const favIds = Store.get(LS_KEYS.FAVS, []).map(String);
+  const favObjs = Store.get(LS_KEYS.FAV_ITEMS, []);
+
+  // Indexar objetos por id para acceso rápido
+  const byId = Object.fromEntries(favObjs.map(o => [String(o.id), o]));
+
+  // Armar lista en el orden de favIds, con fallback si falta el objeto
   const items = favIds.map(id => {
+    if (byId[id]) return byId[id];
+
+    // Fallback: intentar reconstruir desde _pagination.data
     const evt = (window._pagination?.data || []).find(e => String(e.id) === id);
-    return evt ? mapEvt(evt) : { id, title:`Evento ${id}`, date:'—', place:'—', url:'#', img:FALLBACK_IMAGES?.default };
+    if (evt) {
+      const m = mapEvt(evt);
+      Store.upsertArr(LS_KEYS.FAV_ITEMS, m, 'id', 200);
+      return m;
+    }
+    // Placeholder si no hay data
+    return { id, title:`Evento ${id}`, date:'—', place:'—', url:'#', img:FALLBACK_IMAGES?.default || '' };
   });
+
   renderList($("#favoritosList"), items);
 }
 
@@ -170,6 +204,21 @@ $(document).on("click", ".fav-btn", function(e){
   const nowFavs = Store.toggleId(LS_KEYS.FAVS, id);
   const isFav = nowFavs.includes(id);
 
+  // Si se añadió, persistir objeto compacto del evento;
+  // si se quitó, borrar el objeto.
+  if (isFav) {
+    // buscar en data viva (si existe) para guardar snapshot
+    const evt = (window._pagination?.data || []).find(e => String(e.id) === id);
+    if (evt) {
+      Store.upsertArr(LS_KEYS.FAV_ITEMS, mapEvt(evt), 'id', 200);
+    } else {
+      // si no está en el paginador, mantenemos al menos un registro mínimo
+      Store.upsertArr(LS_KEYS.FAV_ITEMS, { id, title:`Evento ${id}`, date:'—', place:'—', url:'#', img:FALLBACK_IMAGES?.default || '', savedAt: Date.now() }, 'id', 200);
+    }
+  } else {
+    Store.removeById(LS_KEYS.FAV_ITEMS, id, 'id');
+  }
+
   $(this)
     .attr("aria-pressed", isFav)
     .toggleClass("is-fav", isFav)
@@ -179,10 +228,6 @@ $(document).on("click", ".fav-btn", function(e){
   if ($("#drawerFavoritos[aria-hidden='false']").length) renderFavoritos();
 
   showSnack(isFav ? "Se añadió a favoritos" : "Se quitó de favoritos", isFav ? "success" : "error");
-  setTimeout(() => {
-    // Si tenías un modal de favoritos abierto, podrías cerrarlo aquí:
-    // closeFavModal?.();
-  }, 1600);
 });
 
 // Guardar en historial y abrir modal de detalle (si existe esa función global)
@@ -218,3 +263,78 @@ $(document).on("keydown", function(e){
     });
   }
 });
+
+
+
+
+// js/sociales-filter.js
+(function () {
+  // Activá solo en la página de "sociales"
+  var IS_SOCIALES =
+    /sociales\.html(\?|$)/i.test(location.pathname) ||
+    (document.body && document.body.dataset && document.body.dataset.page === 'sociales');
+
+  if (!IS_SOCIALES) return;
+
+  // Filtro: social / sociales (en título o summary)
+  var socialRegex = /\bsocial(es)?\b/i;
+  function viewFilter(arr) {
+    arr = Array.isArray(arr) ? arr : [];
+    return arr.filter(function (e) {
+      var title = (e && e.name && e.name.text) || '';
+      var summary = (e && e.summary) || '';
+      return socialRegex.test(title) || socialRegex.test(summary);
+    });
+  }
+
+  // 1) Render inicial filtrado, apenas haya datos cargados
+  if (window.jQuery) {
+    jQuery(document).one('ajaxSuccess.sociales', function () {
+      var all = (window._pagination && window._pagination.data) || [];
+      var pageSize = (window._pagination && window._pagination.pageSize) || 6;
+      if (window._pagination) window._pagination.page = 1;
+      if (typeof window.renderEventos === 'function') {
+        window.renderEventos(viewFilter(all), 1, pageSize);
+      }
+    });
+  }
+
+  // 2) Envolvemos renderEventos para que SIEMPRE aplique el filtro en esta pestaña
+  var _origRender = window.renderEventos;
+  if (typeof _origRender === 'function') {
+    window.renderEventos = function (data, page, pageSize) {
+      return _origRender.call(this, viewFilter(data), page, pageSize);
+    };
+  } else {
+    // Si aún no existe, lo envolvemos cuando aparezca
+    Object.defineProperty(window, 'renderEventos', {
+      configurable: true,
+      set: function (fn) {
+        delete window.renderEventos;
+        window.renderEventos = function (data, page, pageSize) {
+          return fn.call(this, viewFilter(data), page, pageSize);
+        };
+      }
+    });
+  }
+
+  // 3) (Opcional) Si tu flujo llama a buscarEventos y él mismo renderiza,
+  // nuestro wrap de renderEventos ya mantiene el filtro. Igual dejamos el hook listo.
+  var _origBuscar = window.buscarEventos;
+  if (typeof _origBuscar === 'function') {
+    window.buscarEventos = function () {
+      return _origBuscar.apply(this, arguments);
+    };
+  } else {
+    // Si aún no existe, lo enganchamos cuando aparezca (por compatibilidad)
+    Object.defineProperty(window, 'buscarEventos', {
+      configurable: true,
+      set: function (fn) {
+        delete window.buscarEventos;
+        window.buscarEventos = function () {
+          return fn.apply(this, arguments);
+        };
+      }
+    });
+  }
+})();
