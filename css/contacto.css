@@ -173,3 +173,31 @@ textarea{min-height: 170px; resize: vertical;}
   background: #f05;
   color: #fff;
 }
+
+
+/* ===== Modal genérico (contacto) ===== */
+.modalc{position:fixed;inset:0;display:grid;place-items:center;opacity:0;pointer-events:none;transition:opacity .18s ease;z-index:1100}
+.modalc[aria-hidden="false"]{opacity:1;pointer-events:auto}
+.modalc__backdrop{position:absolute;inset:0;background:rgba(0,0,0,.55)}
+.modalc__card{
+  position:relative;background:#161a22;border:1px solid #232a37;border-radius:14px;
+  width:min(680px,92vw);max-height:86vh;overflow:auto;padding:1.25rem 1.25rem 1rem;
+  box-shadow:0 10px 40px rgba(0,0,0,.45)
+}
+.modalc__close{
+  position:absolute;right:.5rem;top:.35rem;border:0;background:transparent;
+  color:#9aa4b2;font-size:1.75rem;line-height:1;cursor:pointer
+}
+.modalc__actions{display:flex;gap:.6rem;justify-content:flex-end;margin-top:1rem}
+.mc__resumen{background:#0f131a;border:1px solid #1d2532;border-radius:10px;padding:.9rem;margin-top:.5rem}
+.mc__resumen pre{white-space:pre-wrap;margin:.4rem 0 0}
+.mx__ok{
+  width:58px;height:58px;border-radius:50%;display:grid;place-items:center;margin:.5rem auto 0;
+  border:2px solid #2ecc71;color:#2ecc71;font-weight:800;font-size:1.6rem
+}
+
+/* Botones (usa tu paleta si ya la tenés) */
+.btn{background:#f39c12;border:none;color:#111;padding:.6rem 1rem;border-radius:10px;font-weight:700;cursor:pointer}
+.btn:hover{filter:brightness(1.05)}
+.btn-cancel{background:#2d3748;color:#e2e8f0}
+

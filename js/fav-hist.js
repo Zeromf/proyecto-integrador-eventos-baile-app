@@ -1,8 +1,9 @@
 /* =======================
-   Favoritos + Historial (LocalStorage)
+   Favoritos + Historial (LocalStorage) – FIX cross-tab
    ======================= */
 const LS_KEYS = {
-  FAVS: 'flowdance:favoritos',
+  FAVS: 'flowdance:favoritos',           // [ "123", "456", ... ]
+  FAV_ITEMS: 'flowdance:favoritos_items',// [ {id,title,date,place,url,img,savedAt}, ... ]
   HIST: 'flowdance:historial'
 };
 
@@ -32,13 +33,29 @@ const Store = {
     if (max && arr.length > max) arr.length = max;
     Store.set(key, arr);
     return arr;
+  },
+
+  removeById(key, id, by = 'id') {
+    const arr = Store.get(key, []);
+    const out = arr.filter(x => String(x[by]) !== String(id));
+    Store.set(key, out);
+    return out;
   }
 };
 
-/* ===== Mapeo compacto de evento para listas ===== */
+/* ===== Helpers ===== */
+function formatDateTimeSafe(dt) {
+  try {
+    const d = new Date(dt);
+    if (isNaN(d)) return '—';
+    return d.toLocaleString('es-AR', { dateStyle: 'medium', timeStyle: 'short' });
+  } catch { return '—'; }
+}
+
+/* ===== Mapeo compacto de evento ===== */
 function mapEvt(evt){
   const lugar = evt?.venue?.address?.localized_address_display || "Online / Sin dirección";
-  const fecha = formatDateTime(evt?.start?.local || evt?.start?.utc);
+  const fecha = formatDateTimeSafe(evt?.start?.local || evt?.start?.utc);
   return {
     id: String(evt?.id),
     title: evt?.name?.text || 'Evento',
@@ -63,6 +80,7 @@ function addToHistorialById(id){
 function renderList($container, items){
   if (!$container?.length) return;
   if (!items?.length) return $container.html('<p class="empty">Nada por aquí…</p>');
+
   const html = items.map(it => `
     <div class="mini-card">
       <img src="${it.img}" alt="${it.title}">
@@ -74,7 +92,8 @@ function renderList($container, items){
         <a class="icon-btn" href="${it.url}" target="_blank" rel="noopener" title="Ver en Eventbrite">
           <i class="fa-solid fa-arrow-up-right-from-square"></i>
         </a>
-        <button class="icon-btn fav-btn ${Store.hasId(LS_KEYS.FAVS, it.id) ? 'is-fav' : ''}" data-id="${it.id}" title="Alternar favorito">
+        <button class="icon-btn fav-btn ${Store.hasId(LS_KEYS.FAVS, it.id) ? 'is-fav' : ''}"
+                data-id="${it.id}" title="Alternar favorito" aria-pressed="${Store.hasId(LS_KEYS.FAVS, it.id)}">
           <i class="${Store.hasId(LS_KEYS.FAVS, it.id) ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
         </button>
       </div>
@@ -83,17 +102,52 @@ function renderList($container, items){
   $container.html(html);
 }
 
+/* ===== Favoritos (lee del store de objetos, no del paginador) ===== */
 function renderFavoritos(){
   const favIds = Store.get(LS_KEYS.FAVS, []).map(String);
+  const favObjs = Store.get(LS_KEYS.FAV_ITEMS, []);
+
+  const byId = Object.fromEntries(favObjs.map(o => [String(o.id), o]));
+
   const items = favIds.map(id => {
+    if (byId[id]) return byId[id];
+
     const evt = (window._pagination?.data || []).find(e => String(e.id) === id);
-    return evt ? mapEvt(evt) : { id, title:`Evento ${id}`, date:'—', place:'—', url:'#', img:FALLBACK_IMAGES?.default };
+    if (evt) {
+      const m = mapEvt(evt);
+      Store.upsertArr(LS_KEYS.FAV_ITEMS, m, 'id', 200);
+      return m;
+    }
+    return { id, title:`Evento ${id}`, date:'—', place:'—', url:'#', img:FALLBACK_IMAGES?.default || '' };
   });
+
   renderList($("#favoritosList"), items);
 }
 
+/* ===== Historial (render + limpiar) ===== */
+$(document).on("click", "#clearHistorial", function(e){
+  e.preventDefault();
+  Store.set(LS_KEYS.HIST, []);
+  renderHistorial();
+  showSnack("Historial eliminado", "success");
+});
+
 function renderHistorial(){
-  renderList($("#historialList"), Store.get(LS_KEYS.HIST, []));
+  const items = Store.get(LS_KEYS.HIST, []);
+  renderList($("#historialList"), items);
+
+  // refrescar estado de favoritos en historial
+  $("#historialList .fav-btn").each(function(){
+    const id = String($(this).data("id"));
+    const isFav = Store.hasId(LS_KEYS.FAVS, id);
+    $(this)
+      .toggleClass("is-fav", isFav)
+      .attr("aria-pressed", isFav)
+      .find("i").toggleClass("fa-solid", isFav).toggleClass("fa-regular", !isFav);
+  });
+
+  const dr = document.querySelector("#drawerHistorial");
+  if (dr && typeof dr._refreshScrollbar === "function") dr._refreshScrollbar();
 }
 
 /* =======================
@@ -114,6 +168,11 @@ const Drawer = {
 
     const $close = $d.find("[data-close]")[0] || $d.find("button,a,input,select,textarea")[0];
     if ($close) $close.focus();
+
+    // 👉 Barrita de scroll SOLO para Historial
+    if (sel === "#drawerHistorial") {
+      initDrawerScrollbar($d[0]);
+    }
   },
   close(sel){
     const $d = $(sel), $o = $d.next(".drawer-overlay");
@@ -161,7 +220,7 @@ function showSnack(msg, type = "success", timeout = 2300){
 /* =======================
    Listeners: favoritos / historial / drawers
    ======================= */
-// Alternar favorito (desde tarjetas y mini-listas)
+// Alternar favorito (desde tarjetas y mini-listas, incluso historial)
 $(document).on("click", ".fav-btn", function(e){
   e.preventDefault();
   const id = String($(this).attr("data-id") ?? $(this).data("id"));
@@ -170,19 +229,32 @@ $(document).on("click", ".fav-btn", function(e){
   const nowFavs = Store.toggleId(LS_KEYS.FAVS, id);
   const isFav = nowFavs.includes(id);
 
+  // Si se añadió, persistir objeto compacto del evento;
+  // si se quitó, borrar el objeto.
+  if (isFav) {
+    const evt = (window._pagination?.data || []).find(e => String(e.id) === id);
+    if (evt) {
+      Store.upsertArr(LS_KEYS.FAV_ITEMS, mapEvt(evt), 'id', 200);
+    } else {
+      Store.upsertArr(LS_KEYS.FAV_ITEMS, { id, title:`Evento ${id}`, date:'—', place:'—', url:'#', img:FALLBACK_IMAGES?.default || '', savedAt: Date.now() }, 'id', 200);
+    }
+  } else {
+    Store.removeById(LS_KEYS.FAV_ITEMS, id, 'id');
+  }
+
   $(this)
     .attr("aria-pressed", isFav)
     .toggleClass("is-fav", isFav)
     .attr("title", isFav ? "Quitar de favoritos" : "Agregar a favoritos")
     .find("i").toggleClass("fa-solid", isFav).toggleClass("fa-regular", !isFav);
 
-  if ($("#drawerFavoritos[aria-hidden='false']").length) renderFavoritos();
+  // Siempre refrescar Favoritos aunque el drawer esté cerrado
+  renderFavoritos();
+
+  // Si está abierto el Historial, también refrescarlo
+  if ($("#drawerHistorial[aria-hidden='false']").length) renderHistorial();
 
   showSnack(isFav ? "Se añadió a favoritos" : "Se quitó de favoritos", isFav ? "success" : "error");
-  setTimeout(() => {
-    // Si tenías un modal de favoritos abierto, podrías cerrarlo aquí:
-    // closeFavModal?.();
-  }, 1600);
 });
 
 // Guardar en historial y abrir modal de detalle (si existe esa función global)
@@ -218,3 +290,53 @@ $(document).on("keydown", function(e){
     });
   }
 });
+
+/* ======================================================
+   Barra de scroll flotante SOLO para #drawerHistorial
+   (necesita CSS: .drawer-scrollbar y .drawer-scrollbar__thumb)
+   ====================================================== */
+function initDrawerScrollbar(drawerEl){
+  if (!drawerEl) return;
+  const body = drawerEl.querySelector('.drawer-body');
+  if (!body) return;
+
+  // crear contenedor si no existe
+  let track = drawerEl.querySelector('.drawer-scrollbar');
+  if (!track){
+    track = document.createElement('div');
+    track.className = 'drawer-scrollbar';
+    track.innerHTML = '<div class="drawer-scrollbar__thumb"></div>';
+    drawerEl.appendChild(track);
+  }
+  const thumb = track.querySelector('.drawer-scrollbar__thumb');
+
+  // función para actualizar tamaño/posición
+  const refresh = () => {
+    const h  = body.scrollHeight;
+    const vh = body.clientHeight;
+    const st = body.scrollTop;
+
+    const ratio  = vh / (h || 1);
+    const tH     = Math.max(24, Math.round(vh * ratio));
+    const maxTop = Math.max(0, vh - tH);
+    const top    = (h > vh) ? Math.round((st / (h - vh)) * maxTop) : 0;
+
+    thumb.style.height = tH + 'px';
+    thumb.style.transform = `translateY(${top}px)`;
+  };
+
+  refresh();
+
+  const onScroll = () => {
+    drawerEl.classList.add('show-scroll');
+    refresh();
+    clearTimeout(body._scrollT);
+    body._scrollT = setTimeout(() => drawerEl.classList.remove('show-scroll'), 300);
+  };
+
+  body.removeEventListener('scroll', onScroll);
+  body.addEventListener('scroll', onScroll);
+  window.addEventListener('resize', refresh);
+
+  drawerEl._refreshScrollbar = refresh;
+}

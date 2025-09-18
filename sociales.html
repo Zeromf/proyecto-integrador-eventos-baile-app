@@ -7,10 +7,14 @@
 
   <!-- CSS (mismos estilos que categorías) -->
   <link rel="stylesheet" href="css/categories.css" />
+    <link rel="stylesheet" href="css/modal-alerts.css" />
+
   <link rel="stylesheet" href="css/estilos.css" />
   <link rel="stylesheet" href="css/carrito.css" />
   <link rel="stylesheet" href="css/menu.css" />
   <link rel="stylesheet" href="css/detalle.css" />
+  <!-- estilos del drawer/listas de fav/hist -->
+  <link rel="stylesheet" href="css/fav-hist.css" />
 
   <script src="https://kit.fontawesome.com/f222217ad3.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
@@ -18,11 +22,13 @@
 </head>
 
 <body>
-     <div id="loader" class="loader-overlay" hidden>
+  <div id="loader" class="loader-overlay" hidden>
     <div class="spinner"></div>
   </div>
-  <!-- Toast -->
+
+  <!-- Toast & Snackbar -->
   <div id="toast" class="toast"></div>
+  <div id="snackbar" class="snackbar" role="status" aria-live="polite"></div>
 
   <!-- HEADER -->
   <header>
@@ -33,9 +39,22 @@
       <h1>Flow Dance</h1>
       <nav class="menu-principal" aria-label="Menú principal">
         <ul class="menu">
+          <!-- Botones texto: Historial y Favoritos -->
+          <li>
+            <button id="btnHistorial" class="btn-link with-icon" title="Ver historial">
+              <i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i>
+              <span>Historial</span>
+            </button>
+          </li>
+          <li>
+            <button id="btnFavoritos" class="btn-link with-icon" title="Ver favoritos">
+              <i class="fa-regular fa-heart" aria-hidden="true"></i>
+              <span>Favoritos</span>
+            </button>
+          </li>
+
           <li><a href="categories.html">Clases</a></li>
           <li><a href="sociales.html" class="is-active">Sociales</a></li>
-          <li><a href="encuesta.html">Encuesta</a></li>
           <li><a href="contacto.html">Contacto</a></li>
           <li>
             <button class="btn-carrito" onclick="abrirCarrito()" title="Abrir carrito">
@@ -46,6 +65,7 @@
       </nav>
     </div>
 
+    <!-- Carrito -->
     <aside class="carrito" id="carrito">
       <header>
         <h2>Tu carrito</h2>
@@ -63,6 +83,26 @@
         <div id="resultados" class="category-items"></div>
         <div id="paginacion" class="pager"></div>
       </section>
+
+      <!-- Drawer Favoritos -->
+      <aside class="drawer" id="drawerFavoritos" aria-hidden="true">
+        <header>
+          <h2>Favoritos</h2>
+          <button class="cerrar" data-close="#drawerFavoritos" aria-label="Cerrar">✕</button>
+        </header>
+        <div class="drawer-body" id="favoritosList"></div>
+      </aside>
+      <div class="drawer-overlay" data-close="#drawerFavoritos" hidden></div>
+
+      <!-- Drawer Historial -->
+      <aside id="drawerHistorial" class="drawer" aria-hidden="true">
+        <header>
+          <h2>Historial</h2>
+          <button class="cerrar" data-close="#drawerHistorial" aria-label="Cerrar">✕</button>
+        </header>
+    <div id="historialList" class="drawer-body"></div>
+      </aside>
+      <div class="drawer-overlay" hidden data-close="#drawerHistorial"></div>
     </main>
 
     <!-- Modal de detalle -->
@@ -80,59 +120,42 @@
   </footer>
 
   <!-- Modal Confirmación -->
-<div id="modalConfirmar" class="modal-confirmar">
-  <div class="modal-content" id="modalContent">
-
-    <div id="confirmar">
-      <i class="fa-solid fa-cart-shopping"></i>
-      <h3>¿Deseás finalizar la compra?</h3>
-      <!-- Precio total -->
-      <div id="precioFinal" class="precio-final"></div>
-      <div class="modal-actions">
-        <button id="btnCancelar" class="btn btn-cancelar"> Volver</button>
-        <button id="btnConfirmar" class="btn btn-confirmar"> Confirmar</button>
+  <div id="modalConfirmar" class="modal-confirmar">
+    <div class="modal-content" id="modalContent">
+      <div id="confirmar">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <h3>¿Deseás finalizar la compra?</h3>
+        <div id="precioFinal" class="precio-final"></div>
+        <div class="modal-actions">
+          <button id="btnCancelar" class="btn btn-cancelar">Volver</button>
+          <button id="btnConfirmar" class="btn btn-confirmar">Confirmar</button>
+        </div>
       </div>
-    </div>
-     <div id="gracias" style="display: none;">
-      <span id="modalCerrarconfirmar" class="cerrar-confirmar">&times;</span>
-       <div class="success-message">
-          🎉 
+      <div id="gracias" style="display: none;">
+        <span id="modalCerrarconfirmar" class="cerrar-confirmar">&times;</span>
+        <div class="success-message">
+          🎉
           <h3>¡Compra finalizada con éxito!</h3>
           <p>Gracias por confiar en nosotros.</p>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
   <!-- JS base -->
   <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
   <script src="js/carrito.js"></script>
   <script src="js/toast.js"></script>
 
-  <!-- Tu app y detalle -->
+  <!-- App y detalle -->
   <script src="js/app.js"></script>
   <script src="js/detalle.js"></script>
   <script src="js/loader.js"></script>
 
-  <!-- Prefiltro fijo “social” -->
-<script>
-  (function(){
-    if (typeof buscarEventos === 'function') {
-      buscarEventos("social");
+  <!-- Favoritos/Historial (mismo que en categorías) -->
+  <script src="js/fav-hist.js"></script>
+  <script src="js/filter-fav.js"></script>
 
-      // cuando termine de cargar, aplicamos el filtro exacto solo en esta página
-      $(document).ajaxSuccess((_e, _xhr, _settings) => {
-        const regex = /\bsocial(es)?\b/i; // social o sociales, palabra completa
-        const filtrados = (window._pagination.data || []).filter(e =>
-          regex.test(e.name?.text || "") || regex.test(e.summary || "")
-        );
-        window._pagination.data = filtrados;
-        window._pagination.page = 1;
-        renderEventos(filtrados, 1, window._pagination.pageSize);
-      });
-    }
-  })();
-</script>
 
 </body>
 </html>

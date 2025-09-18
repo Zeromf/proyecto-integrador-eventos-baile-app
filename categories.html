@@ -60,7 +60,6 @@
       </li>
           <li><a href="categories.html">Clases</a></li>
           <li><a href="sociales.html">Sociales</a></li>
-          <li><a href="encuesta.html">Encuesta</a></li>
           <li><a href="contacto.html">Contacto</a></li>
           <li>
             <button class="btn-carrito" onclick="abrirCarrito()" title="Abrir carrito">
@@ -168,9 +167,13 @@
      <aside id="drawerHistorial" class="drawer" aria-hidden="true">
   <header>
     <h3>Historial</h3>
-    <button class="cerrar" data-close="#drawerHistorial" aria-label="Cerrar">✕</button>
-  </header>
-  <div id="historialList" class="historial-list"></div>
+  <div class="header-actions">
+      <button id="clearHistorial" class="icon-btn" title="Vaciar historial">
+        <i class="fa-solid fa-trash"></i>
+      </button>
+      <button data-close="#drawerHistorial" class="cerrar">×</button>
+    </div>  </header>
+<div id="historialList" class="drawer-body"></div>
 </aside>
 <div class="drawer-overlay" hidden data-close="#drawerHistorial"></div>
     </main>
