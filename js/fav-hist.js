@@ -5,12 +5,12 @@
    - Drawer accesible con barrita de scroll flotante historial y favoritos
    ======================================================================= */
 
-(() => {
+(function ($) {
   /* =======================
      Claves de LocalStorage
      ======================= */
   const LS_KEYS = {
-    FAVS: 'flowdance:favoritos',           
+    FAVS: 'flowdance:favoritos',
     FAV_ITEMS: 'flowdance:favoritos_items', // [ {id,title,date,place,url,img,savedAt}, ... ]
     HIST: 'flowdance:historial'
   };
@@ -122,7 +122,7 @@
     $container.html(html);
   }
 
-  /* ===== Favoritos (lee del store de objetos, no del paginador) ===== */
+  /* ===== Favoritos ===== */
   function renderFavoritos(){
     const favIds = Store.get(LS_KEYS.FAVS, []).map(String);
     const favObjs = Store.get(LS_KEYS.FAV_ITEMS, []);
@@ -241,7 +241,6 @@
 
   /* ======================================================
      Barra de scroll flotante SOLO para #drawerHistorial
-     (necesita CSS: .drawer-scrollbar y .drawer-scrollbar__thumb)
      ====================================================== */
   function initDrawerScrollbar(drawerEl){
     if (!drawerEl) return;
@@ -291,9 +290,7 @@
   window.initDrawerScrollbar = initDrawerScrollbar;
 
   /* ======================================================
-     Sincronización visual de favoritos en tarjetas
-     - Mantiene el corazón activo tras paginar o recargar
-     - Intenta engancharse al renderEventos global si existe
+     Sincronización visual de favoritos en tarjetas (♥)
      ====================================================== */
   function syncFavIcons(root = document) {
     const $scope = root === document ? $(document) : $(root);
@@ -328,10 +325,8 @@
     syncFavIcons();
   });
 
-  // Si tenés botones de paginación, sincroniza después de usarlos (ajustá selectores si hace falta)
+  // Si tenés botones de paginación, sincroniza después de usarlos
   $(document).on('click', '.btn-next, .btn-prev, [data-page]', function () {
-    // Tu lógica de paginación debe llamar a renderEventos(...)
-    // Luego de que el DOM se pinte:
     requestAnimationFrame(() => syncFavIcons());
   });
 
@@ -347,8 +342,6 @@
     const nowFavs = Store.toggleId(LS_KEYS.FAVS, id);
     const isFav = nowFavs.includes(id);
 
-    // Si se añadió, persistir objeto compacto del evento;
-    // si se quitó, borrar el objeto.
     if (isFav) {
       const evt = (window._pagination?.data || []).find(e => String(e.id) === id);
       if (evt) {
@@ -360,22 +353,15 @@
       Store.removeById(LS_KEYS.FAV_ITEMS, id, 'id');
     }
 
-    // Refrescar estado visual del propio botón
     $(this)
       .attr("aria-pressed", isFav)
       .toggleClass("is-fav", isFav)
       .attr("title", isFav ? "Quitar de favoritos" : "Agregar a favoritos")
       .find("i").toggleClass("fa-solid", isFav).toggleClass("fa-regular", !isFav);
 
-    // Siempre refrescar Favoritos aunque el drawer esté cerrado
     renderFavoritos();
-
-    // Si está abierto el Historial, también refrescarlo
     if ($("#drawerHistorial[aria-hidden='false']").length) renderHistorial();
-
-    // Sincroniza las demás tarjetas visibles (útil si hay la misma card repetida en otra sección)
     syncFavIcons();
-
     showSnack(isFav ? "Se añadió a favoritos" : "Se quitó de favoritos", isFav ? "success" : "error");
   });
 
@@ -421,8 +407,8 @@ $(document).off("click", "#btnHistorial").on("click", "#btnHistorial", function 
      ======================= */
   window.addEventListener('storage', (e) => {
     if (e.key === LS_KEYS.FAVS || e.key === LS_KEYS.FAV_ITEMS) {
-      renderFavoritos();         // refresca el drawer de favoritos
-      syncFavIcons();            // refresca los corazones de las tarjetas
+      renderFavoritos();
+      syncFavIcons();
       if ($("#drawerHistorial[aria-hidden='false']").length) renderHistorial();
     }
     if (e.key === LS_KEYS.HIST) {
@@ -430,4 +416,4 @@ $(document).off("click", "#btnHistorial").on("click", "#btnHistorial", function 
     }
   });
 
-})();
+})(window.jQuery);

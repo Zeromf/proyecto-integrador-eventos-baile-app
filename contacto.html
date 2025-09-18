@@ -9,9 +9,12 @@
 
   <!-- CSS -->
   <link rel="stylesheet" href="css/estilos.css"/>
+  <link rel="stylesheet" href="css/modal-alerts.css" />
   <link rel="stylesheet" href="css/menu.css"/>
   <link rel="stylesheet" href="css/contacto.css"/>
   <link rel="stylesheet" href="css/carrito.css" />
+    <link rel="stylesheet" href="css/slider.css" />
+  <link rel="stylesheet" href="css/fav-hist.css" />
 
   <!-- Iconos -->
   <script src="https://kit.fontawesome.com/f222217ad3.js" crossorigin="anonymous"></script>
@@ -35,6 +38,19 @@
       <!-- Menú principal -->
       <nav class="menu-principal" aria-label="Menú principal">
         <ul class="menu">
+           <!-- Botones texto: Historial y Favoritos -->
+          <li>
+            <button id="btnHistorial" class="btn-link with-icon" title="Ver historial">
+              <i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i>
+              <span>Historial</span>
+            </button>
+          </li>
+          <li>
+            <button id="btnFavoritos" class="btn-link with-icon" title="Ver favoritos">
+              <i class="fa-regular fa-heart" aria-hidden="true"></i>
+              <span>Favoritos</span>
+            </button>
+          </li>
           <li><a href="categories.html">Clases</a></li>
           <li><a href="sociales.html">Sociales</a></li>
           <li><a class="is-active" href="contacto.html" aria-current="page">Contacto</a></li>
@@ -148,6 +164,30 @@
         </div>
       </aside>
     </div>
+      <!-- Drawer Favoritos -->
+      <aside class="drawer" id="drawerFavoritos" aria-hidden="true">
+        <header>
+          <h2>Favoritos</h2>
+          <button class="cerrar" data-close="#drawerFavoritos" aria-label="Cerrar">✕</button>
+        </header>
+        <div class="drawer-body" id="favoritosList"></div>
+      </aside>
+      <div class="drawer-overlay" data-close="#drawerFavoritos" hidden></div>
+
+      <!-- Drawer Historial -->
+     <aside id="drawerHistorial" class="drawer" aria-hidden="true">
+    <header>
+    <h2>Historial</h2>
+    <div class="header-actions">
+      <button id="clearHistorial" class="icon-btn" title="Vaciar historial" aria-label="Vaciar historial">
+        <i class="fa-solid fa-trash"></i>
+      </button>
+      <button class="cerrar" data-close="#drawerHistorial" aria-label="Cerrar">✕</button>
+    </div>
+  </header>
+  <div id="historialList" class="drawer-body"></div>
+</aside>
+      <div class="drawer-overlay" hidden data-close="#drawerHistorial"></div>
   </main>
 
   <!-- FOOTER -->
@@ -221,10 +261,21 @@
   -->
 
   <!-- JS -->
-  <script src="js/toast.js" defer></script>
-  <script src="js/app.js" defer></script>
-  <script src="js/carrito.js" defer></script>
-  <script src="js/encuesta.js" defer></script>
-  <script src="js/contacto.js" defer></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
+
+<script src="js/toast.js" defer></script>
+<script src="js/app.js" defer></script>
+<script src="js/carrito.js" defer></script>
+<script src="js/encuesta.js" defer></script>
+<script src="js/contacto.js" defer></script>
+
+<script src="js/loader.js" defer></script>
+<script src="js/slider.js" defer></script>
+
+<!-- Favoritos/Historial -->
+<script src="js/fav-hist.js" defer></script>
+<script src="js/filter-fav.js" defer></script>
+
+
 </body>
 </html>
