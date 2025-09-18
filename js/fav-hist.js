@@ -92,7 +92,8 @@ function renderList($container, items){
         <a class="icon-btn" href="${it.url}" target="_blank" rel="noopener" title="Ver en Eventbrite">
           <i class="fa-solid fa-arrow-up-right-from-square"></i>
         </a>
-        <button class="icon-btn fav-btn ${Store.hasId(LS_KEYS.FAVS, it.id) ? 'is-fav' : ''}" data-id="${it.id}" title="Alternar favorito" aria-pressed="${Store.hasId(LS_KEYS.FAVS, it.id)}">
+        <button class="icon-btn fav-btn ${Store.hasId(LS_KEYS.FAVS, it.id) ? 'is-fav' : ''}"
+                data-id="${it.id}" title="Alternar favorito" aria-pressed="${Store.hasId(LS_KEYS.FAVS, it.id)}">
           <i class="${Store.hasId(LS_KEYS.FAVS, it.id) ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
         </button>
       </div>
@@ -101,50 +102,41 @@ function renderList($container, items){
   $container.html(html);
 }
 
-
 /* ===== Favoritos (lee del store de objetos, no del paginador) ===== */
 function renderFavoritos(){
   const favIds = Store.get(LS_KEYS.FAVS, []).map(String);
   const favObjs = Store.get(LS_KEYS.FAV_ITEMS, []);
 
-  // Indexar objetos por id para acceso rápido
   const byId = Object.fromEntries(favObjs.map(o => [String(o.id), o]));
 
-  // Armar lista en el orden de favIds, con fallback si falta el objeto
   const items = favIds.map(id => {
     if (byId[id]) return byId[id];
 
-    // Fallback: intentar reconstruir desde _pagination.data
     const evt = (window._pagination?.data || []).find(e => String(e.id) === id);
     if (evt) {
       const m = mapEvt(evt);
-
       Store.upsertArr(LS_KEYS.FAV_ITEMS, m, 'id', 200);
       return m;
     }
-    // Placeholder si no hay data
     return { id, title:`Evento ${id}`, date:'—', place:'—', url:'#', img:FALLBACK_IMAGES?.default || '' };
   });
 
   renderList($("#favoritosList"), items);
 }
 
-
-// Vaciar todo el historial
+/* ===== Historial (render + limpiar) ===== */
 $(document).on("click", "#clearHistorial", function(e){
   e.preventDefault();
-  Store.set(LS_KEYS.HIST, []);     // limpia el localStorage
-  renderHistorial();               // refresca la vista
+  Store.set(LS_KEYS.HIST, []);
+  renderHistorial();
   showSnack("Historial eliminado", "success");
 });
 
-
-
 function renderHistorial(){
   const items = Store.get(LS_KEYS.HIST, []);
-  renderList($("#historialList"), items, "hist"); // 👈 ahora con "hist"
+  renderList($("#historialList"), items);
 
-  // refrescar estado de favoritos en historial (se mantiene igual)
+  // refrescar estado de favoritos en historial
   $("#historialList .fav-btn").each(function(){
     const id = String($(this).data("id"));
     const isFav = Store.hasId(LS_KEYS.FAVS, id);
@@ -228,7 +220,7 @@ function showSnack(msg, type = "success", timeout = 2300){
 /* =======================
    Listeners: favoritos / historial / drawers
    ======================= */
-// Alternar favorito (desde tarjetas y mini-listas)
+// Alternar favorito (desde tarjetas y mini-listas, incluso historial)
 $(document).on("click", ".fav-btn", function(e){
   e.preventDefault();
   const id = String($(this).attr("data-id") ?? $(this).data("id"));
@@ -240,12 +232,10 @@ $(document).on("click", ".fav-btn", function(e){
   // Si se añadió, persistir objeto compacto del evento;
   // si se quitó, borrar el objeto.
   if (isFav) {
-    // buscar en data viva (si existe) para guardar snapshot
     const evt = (window._pagination?.data || []).find(e => String(e.id) === id);
     if (evt) {
       Store.upsertArr(LS_KEYS.FAV_ITEMS, mapEvt(evt), 'id', 200);
     } else {
-      // si no está en el paginador, mantenemos al menos un registro mínimo
       Store.upsertArr(LS_KEYS.FAV_ITEMS, { id, title:`Evento ${id}`, date:'—', place:'—', url:'#', img:FALLBACK_IMAGES?.default || '', savedAt: Date.now() }, 'id', 200);
     }
   } else {
@@ -258,7 +248,10 @@ $(document).on("click", ".fav-btn", function(e){
     .attr("title", isFav ? "Quitar de favoritos" : "Agregar a favoritos")
     .find("i").toggleClass("fa-solid", isFav).toggleClass("fa-regular", !isFav);
 
-  if ($("#drawerFavoritos[aria-hidden='false']").length) renderFavoritos();
+  // Siempre refrescar Favoritos aunque el drawer esté cerrado
+  renderFavoritos();
+
+  // Si está abierto el Historial, también refrescarlo
   if ($("#drawerHistorial[aria-hidden='false']").length) renderHistorial();
 
   showSnack(isFav ? "Se añadió a favoritos" : "Se quitó de favoritos", isFav ? "success" : "error");
@@ -323,7 +316,6 @@ function initDrawerScrollbar(drawerEl){
     const vh = body.clientHeight;
     const st = body.scrollTop;
 
-    // altura del pulgar (mínimo 24px)
     const ratio  = vh / (h || 1);
     const tH     = Math.max(24, Math.round(vh * ratio));
     const maxTop = Math.max(0, vh - tH);
@@ -335,7 +327,6 @@ function initDrawerScrollbar(drawerEl){
 
   refresh();
 
-  // listeners (scroll / resize)
   const onScroll = () => {
     drawerEl.classList.add('show-scroll');
     refresh();
@@ -347,6 +338,5 @@ function initDrawerScrollbar(drawerEl){
   body.addEventListener('scroll', onScroll);
   window.addEventListener('resize', refresh);
 
-  // exponer para recalcular cuando se renderiza la lista
   drawerEl._refreshScrollbar = refresh;
 }
