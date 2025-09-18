@@ -97,30 +97,35 @@
   window.addToHistorialById = addToHistorialById;
 
   /* ===== Render de listas mini (para favoritos/historial) ===== */
-  function renderList($container, items){
-    if (!$container?.length) return;
-    if (!items?.length) return $container.html('<p class="empty">Nada por aquí…</p>');
+  /* ===== Render de listas mini (para favoritos/historial) ===== */
+function renderList($container, items){
+  if (!$container?.length) return;
+  if (!items?.length) return $container.html('<p class="empty">Nada por aquí…</p>');
 
-    const html = items.map(it => `
-      <div class="mini-card">
-        <img src="${it.img}" alt="${it.title}">
-        <div>
-          <h4>${it.title}</h4>
-          <div class="meta">🗓️ ${it.date} · 📍 ${it.place}</div>
-        </div>
-        <div class="actions">
-          <a class="icon-btn" href="${it.url}" target="_blank" rel="noopener" title="Ver en Eventbrite">
-            <i class="fa-solid fa-arrow-up-right-from-square"></i>
-          </a>
-          <button class="icon-btn fav-btn ${Store.hasId(LS_KEYS.FAVS, it.id) ? 'is-fav' : ''}"
-                  data-id="${it.id}" title="Alternar favorito" aria-pressed="${Store.hasId(LS_KEYS.FAVS, it.id)}">
-            <i class="${Store.hasId(LS_KEYS.FAVS, it.id) ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
-          </button>
-        </div>
+  const html = items.map(it => `
+    <div class="mini-card">
+      <img src="${it.img}" alt="${it.title}">
+      <div>
+        <h4>${it.title}</h4>
+        <div class="meta">🗓️ ${it.date} · 📍 ${it.place}</div>
       </div>
-    `).join('');
-    $container.html(html);
-  }
+      <div class="actions">
+        <!-- Antes: <a href="..." target="_blank"> -->
+        <!-- Ahora: botón que abre el modal del evento -->
+        <button class="icon-btn btn-detalle" data-id="${it.id}" title="Ver detalle del evento">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </button>
+
+        <button class="icon-btn fav-btn ${Store.hasId(LS_KEYS.FAVS, it.id) ? 'is-fav' : ''}"
+                data-id="${it.id}" title="Alternar favorito" aria-pressed="${Store.hasId(LS_KEYS.FAVS, it.id)}">
+          <i class="${Store.hasId(LS_KEYS.FAVS, it.id) ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
+        </button>
+      </div>
+    </div>
+  `).join('');
+  $container.html(html);
+}
+
 
   /* ===== Favoritos ===== */
   function renderFavoritos(){
@@ -366,13 +371,23 @@
   });
 
   // Guardar en historial y abrir modal de detalle (si existe esa función global)
-  $(document).on("click", ".btn-detalle", function(e){
-    e.preventDefault();
-    const id = String($(this).attr("data-id") ?? $(this).data("id"));
-    if (!id) return;
-    addToHistorialById(id);
-    if (typeof abrirDetalleEvento === "function") abrirDetalleEvento(id);
-  });
+$(document).on("click", ".btn-detalle", function (e) {
+  e.preventDefault();
+  const id = String($(this).data("id") ?? $(this).attr("data-id"));
+  if (!id) return;
+
+  addToHistorialById(id);
+
+  // Si hay un drawer abierto, cerralo para quitar su overlay oscuro
+  const $openDrawer = $(".drawer[aria-hidden='false']");
+  if ($openDrawer.length) {
+    Drawer.close("#" + $openDrawer.attr("id"));
+  }
+
+  // Ahora abrí el modal del evento
+  if (typeof abrirDetalleEvento === "function") abrirDetalleEvento(id);
+});
+
 
  // Botones del header (delegado)
 $(document).off("click", "#btnFavoritos").on("click", "#btnFavoritos", function (e) {
