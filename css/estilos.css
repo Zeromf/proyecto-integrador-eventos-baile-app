@@ -572,3 +572,40 @@ textarea{ min-height: 110px; resize: vertical; }
   height: 100%;
   border: 0;
 }
+
+/* ===== Publicidad ===== */
+.publicidad {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto 1rem auto;
+  padding: 0 0.25rem;
+  background: var(--panel-2);
+  border: 1px solid #232a37;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  text-align: center;
+  overflow: hidden;
+  line-height: 0;
+
+}
+
+.publicidad img {
+  width: 100%;
+  height: 200px;                
+  object-fit: cover;           
+  border-radius: calc(var(--radius) - 2px);
+  display: block;
+  transition: transform 0.2s ease;
+}
+
+.publicidad img:hover {
+  transform: scale(1.01);
+  cursor: pointer;
+}
+
+/* Ocultar en mobile */
+@media (max-width: 768px) {
+  .publicidad {
+    display: none;
+  }
+}
