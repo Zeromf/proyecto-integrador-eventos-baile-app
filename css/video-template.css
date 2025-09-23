@@ -67,7 +67,7 @@
 
 .split-hero__right .cover{
   width: 100%;
-  aspect-ratio: 16 / 9; /* igualar alto al del video */
+  aspect-ratio: 16 / 9;
   border-radius: 14px;
   border: 1px solid #232a37;
   box-shadow: var(--shadow);
@@ -152,12 +152,6 @@
   .features__grid{ grid-template-columns: 1fr; }
 }
 
-/* =========================================================
-   Utilidades opcionales
-   ========================================================= */
-
-/* Acento alternativo para la cinta */
 :root{
-  /* --accent: #ff4d5a; */
 }
 .headline--ribbon.use-accent{ background: var(--accent, var(--primary)); }
