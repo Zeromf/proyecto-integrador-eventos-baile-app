@@ -323,3 +323,10 @@ $(document).on("click", "#paginacion .page-btn", function(){
 
 /* Primera carga */
 $(function(){ buscarEventos(""); });
+
+const menuToggle = document.getElementById("menu-toggle");
+const menu = document.querySelector(".menu-principal");
+
+menuToggle.addEventListener("click", () => {
+  menu.classList.toggle("active");
+});

@@ -35,7 +35,11 @@ header{
   background: linear-gradient(180deg, #191f2a 0%, #141923 100%);
   border-bottom: 1px solid #232a37;
   padding: .9rem 1rem;
-  display: flex; align-items: center; justify-content: center; gap:1rem;
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  gap:1rem;
+  height: 4rem;
 }
 
 /* Logo contenedor */
@@ -71,7 +75,19 @@ header .logo img {
 }
 
 header h1{
-  margin:0; text-align:center; font-size: clamp(1.1rem, 2vw, 1.6rem);
+  margin:0; 
+  text-align:center; 
+  font-size: clamp(1.1rem, 2vw, 1.6rem);
+}
+
+/* Botón menú (mobile) */
+.menu-toggle {
+  display: none;            /* oculto en desktop */
+  font-size: 1.8rem;
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
 }
 
 /* Layout principal */
@@ -607,5 +623,74 @@ textarea{ min-height: 110px; resize: vertical; }
 @media (max-width: 768px) {
   .publicidad {
     display: none;
+  }
+}
+
+@media (max-width: 1359px) and (min-width: 768px) {
+  header h1 {
+    display: none;
+  }
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  /* Mostrar botón hamburguesa */
+  .menu-toggle:hover ,
+  .menu-toggle {
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 30px;
+    transform: translateY(-50%);
+    z-index: 1001;
+  }
+
+  /* Menú principal oculto por defecto */
+  .menu-principal {
+    position: absolute;
+    top: 4rem;     
+    right: 0;
+    width: 200px;
+    background: #1c2230;
+    border: 1px solid #2c3446;
+    border-radius: 8px;
+    display: none;  
+    flex-direction: column;
+    padding: .5rem 0;
+    z-index: 1000;
+    transform: translateY(0%);
+  }
+  .menu-principal.active {
+    display: flex;
+  }
+
+  /* Lista vertical */
+  .menu {
+    flex-direction: column;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+  .menu li {
+    width: 100%;
+  }
+
+  .menu a, .menu button {
+    display: block;
+    width: 100%;
+    padding: .6rem 1rem;
+    text-align: left;
+    border-radius: 0;
+  }
+  header {
+    flex-direction: column;  
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  header h1 {
+    font-size: 1.3rem;
+    margin: 0;
   }
 }
