@@ -1,10 +1,3 @@
-/* =======================================================================
-   Favoritos + Historial (LocalStorage)
-   - Mantiene el corazón activo tras paginar y recargar
-   - Cross-tab sync (si abrís otra pestaña)
-   - Drawer accesible con barrita de scroll flotante historial y favoritos
-   - Badges (contadores) en botones de header
-   ======================================================================= */
 
 (function ($) {
   /* =======================
@@ -171,7 +164,7 @@
     const dr = document.querySelector("#drawerHistorial");
     if (dr && typeof dr._refreshScrollbar === "function") dr._refreshScrollbar();
 
-    updateBadges(); // 🔔 actualizar contador
+    updateBadges(); // actualizar contador
   }
   window.renderHistorial = renderHistorial;
 
@@ -339,7 +332,7 @@
       const res = __origRenderEventos.apply(this, args);
       requestAnimationFrame(() => {
         syncFavIcons();
-        updateBadges(); // 🔔 actualizar contador tras render
+        updateBadges(); // actualizar contador tras render
       });
       return res;
     };
@@ -348,7 +341,7 @@
 
   $(document).ready(() => {
     syncFavIcons();
-    updateBadges(); // 🔔 primera carga
+    updateBadges(); // primera carga
   });
 
   $(document).on('click', '.btn-next, .btn-prev, [data-page]', function () {

@@ -2,7 +2,7 @@
 
 /* Estilo base de los iconos */
 .icon-btn {
-  color: #d1d5db; /* gris claro neutro */
+  color: #d1d5db; 
   font-size: 1.2rem;
   transition: color 0.25s ease, transform 0.2s ease;
   margin-left: 6px;
@@ -15,23 +15,23 @@
 
 /* WhatsApp */
 .icon-btn .fa-whatsapp {
-  color: #25D366; /* Verde WhatsApp */
+  color: #25D366; 
 }
 .icon-btn:hover .fa-whatsapp {
-  color: #128C7E; /* Verde oscuro al hover */
+  color: #128C7E; 
 }
 
 /* Calendario */
 .icon-btn .fa-calendar {
-  color: #e0cc15; /* Azul */
+  color: #e0cc15;
 }
 .icon-btn:hover .fa-calendar {
-  color: #758a1b; /* Azul más intenso */
+  color: #758a1b; 
 }
 
 /* Favorito (corazón vacío/lleno) */
 .icon-btn .fa-heart {
-  color: #ef4444; /* Rojo */
+  color: #ef4444; 
 }
 .icon-btn:hover .fa-heart {
   color: #b91c1c;
@@ -39,7 +39,7 @@
 
 /* Encuesta */
 .icon-btn .fa-clipboard-list {
-  color: #2740ad; /* Naranja */
+  color: #2740ad; 
 }
 .icon-btn:hover .fa-clipboard-list {
   color: #4143a8;

@@ -3,8 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("btnCerrarModal").addEventListener("click", () => {
     document.getElementById("modalDetalle").style.display = "none";
   });
-
-  // Abrir detalle con el id correcto (botones con .btn-detalle y data-id)
+  
   document.addEventListener("click", (e) => {
     const btn = e.target.closest(".btn-detalle");
     if (btn) {

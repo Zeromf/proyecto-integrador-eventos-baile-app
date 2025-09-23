@@ -67,7 +67,7 @@ function renderCarrito() {
     </div>
   `;
 
-  updateCarritoBadge(); // 🔔 actualizar badge
+  updateCarritoBadge(); // actualizar badge
 }
 
 // ===========================
@@ -77,7 +77,7 @@ function updateCarritoBadge() {
   const carrito = getCarrito();
   const count = carrito.length;
 
-  // Puede haber más de un botón de carrito (header, menú móvil, etc.)
+  // actualizar todos los badges (puede haber más de uno)
   document.querySelectorAll(".btn-carrito").forEach(btn => {
     // limpiar previo
     btn.querySelector(".carrito-badge")?.remove();
@@ -170,7 +170,7 @@ document.getElementById("btnConfirmar").addEventListener("click", () => {
 
   vaciarCarrito();
 
-  cerrarTimeout = setTimeout(cerrarYRestaurarModal, 5000); // ⏱️ cierre automático (5s)
+  cerrarTimeout = setTimeout(cerrarYRestaurarModal, 5000); // cierre automático (5s)
 });
 
 // Botón cruz

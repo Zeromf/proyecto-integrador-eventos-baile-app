@@ -1,7 +1,12 @@
-/* ===== Menú principal (en línea) ===== */
-/*.menu-principal { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); }*/
 
-.menu { list-style: none; display: flex; gap: .6rem; margin: 0; padding: 0; }
+.menu {
+  list-style: none;
+  display: flex;
+  gap: .6rem;
+  margin: 0;
+  padding: 0;
+}
+
 .menu a {
   display: inline-block;
   padding: .35rem .6rem;
@@ -11,10 +16,14 @@
   background: #1c2230;
   border: 1px solid #2c3446;
 }
-.menu a:hover { filter: brightness(1.08); transform: translateY(-1px); }
+
+.menu a:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
 
 /* Botones de texto con icono en el menú */
-.menu .btn-link.with-icon{
+.menu .btn-link.with-icon {
   display: inline-flex;
   align-items: center;
   gap: .5rem;
@@ -24,27 +33,31 @@
   color: var(--text);
   font: inherit;
   cursor: pointer;
-  border-radius: 999px;            /* look de píldora como los demás */
+  border-radius: 999px;
 }
-.menu .btn-link.with-icon i{
-  font-size: .95em;                /* icono alineado al texto */
+
+.menu .btn-link.with-icon i {
+  font-size: .95em;
   line-height: 1;
 }
-.menu .btn-link.with-icon:hover{
-  background: rgba(255,255,255,.06);
+
+.menu .btn-link.with-icon:hover {
+  background: rgba(255, 255, 255, .06);
 }
-.menu .btn-link.with-icon:focus{
+
+.menu .btn-link.with-icon:focus {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
 }
 
 
 /* Estado activo para los botones de texto con ícono del header */
-.menu .btn-link.with-icon.active{
-  background: rgba(241,139,16,.15);   /* leve highlight */
+.menu .btn-link.with-icon.active {
+  background: rgba(241, 139, 16, .15);
   border-radius: 999px;
 }
-.menu .btn-link.with-icon.active:focus{
+
+.menu .btn-link.with-icon.active:focus {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
 }
@@ -58,7 +71,7 @@
   position: absolute;
   top: -6px;
   right: -8px;
-  background: #ef4444; /* rojo */
+  background: #ef4444;
   color: #fff;
   font-size: 0.75rem;
   font-weight: bold;
@@ -71,9 +84,20 @@
 
 /* Animación pop del badge */
 @keyframes badge-pop {
-  0%   { transform: scale(0.6); opacity: 0; }
-  60%  { transform: scale(1.2); opacity: 1; }
-  100% { transform: scale(1);   opacity: 1; }
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+
+  60% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .btn-badge {
@@ -89,9 +113,7 @@
   line-height: 1;
   min-width: 20px;
   text-align: center;
-  box-shadow: 0 1px 3px rgba(0,0,0,.4);
-  animation: badge-pop 0.35s ease-out; /* animación al aparecer/actualizar */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .4);
+  animation: badge-pop 0.35s ease-out;
+  /* animación al aparecer/actualizar */
 }
-
-
-
