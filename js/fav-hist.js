@@ -3,6 +3,7 @@
    - Mantiene el corazón activo tras paginar y recargar
    - Cross-tab sync (si abrís otra pestaña)
    - Drawer accesible con barrita de scroll flotante historial y favoritos
+   - Badges (contadores) en botones de header
    ======================================================================= */
 
 (function ($) {
@@ -96,36 +97,32 @@
   }
   window.addToHistorialById = addToHistorialById;
 
-  /* ===== Render de listas mini (para favoritos/historial) ===== */
-  /* ===== Render de listas mini (para favoritos/historial) ===== */
-function renderList($container, items){
-  if (!$container?.length) return;
-  if (!items?.length) return $container.html('<p class="empty">Nada por aquí…</p>');
+  /* ===== Render de listas mini ===== */
+  function renderList($container, items){
+    if (!$container?.length) return;
+    if (!items?.length) return $container.html('<p class="empty">Nada por aquí…</p>');
 
-  const html = items.map(it => `
-    <div class="mini-card">
-      <img src="${it.img}" alt="${it.title}">
-      <div>
-        <h4>${it.title}</h4>
-        <div class="meta">🗓️ ${it.date} · 📍 ${it.place}</div>
+    const html = items.map(it => `
+      <div class="mini-card">
+        <img src="${it.img}" alt="${it.title}">
+        <div>
+          <h4>${it.title}</h4>
+          <div class="meta">🗓️ ${it.date} · 📍 ${it.place}</div>
+        </div>
+        <div class="actions">
+          <button class="icon-btn btn-detalle" data-id="${it.id}" title="Ver detalle del evento">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+          </button>
+
+          <button class="icon-btn fav-btn ${Store.hasId(LS_KEYS.FAVS, it.id) ? 'is-fav' : ''}"
+                  data-id="${it.id}" title="Alternar favorito" aria-pressed="${Store.hasId(LS_KEYS.FAVS, it.id)}">
+            <i class="${Store.hasId(LS_KEYS.FAVS, it.id) ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
+          </button>
+        </div>
       </div>
-      <div class="actions">
-        <!-- Antes: <a href="..." target="_blank"> -->
-        <!-- Ahora: botón que abre el modal del evento -->
-        <button class="icon-btn btn-detalle" data-id="${it.id}" title="Ver detalle del evento">
-          <i class="fa-solid fa-arrow-up-right-from-square"></i>
-        </button>
-
-        <button class="icon-btn fav-btn ${Store.hasId(LS_KEYS.FAVS, it.id) ? 'is-fav' : ''}"
-                data-id="${it.id}" title="Alternar favorito" aria-pressed="${Store.hasId(LS_KEYS.FAVS, it.id)}">
-          <i class="${Store.hasId(LS_KEYS.FAVS, it.id) ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
-        </button>
-      </div>
-    </div>
-  `).join('');
-  $container.html(html);
-}
-
+    `).join('');
+    $container.html(html);
+  }
 
   /* ===== Favoritos ===== */
   function renderFavoritos(){
@@ -145,10 +142,11 @@ function renderList($container, items){
     });
 
     renderList($("#favoritosList"), items);
+    updateBadges(); // 🔔 actualizar contador
   }
   window.renderFavoritos = renderFavoritos;
 
-  /* ===== Historial (render + limpiar) ===== */
+  /* ===== Historial ===== */
   $(document).on("click", "#clearHistorial", function(e){
     e.preventDefault();
     Store.set(LS_KEYS.HIST, []);
@@ -172,14 +170,38 @@ function renderList($container, items){
 
     const dr = document.querySelector("#drawerHistorial");
     if (dr && typeof dr._refreshScrollbar === "function") dr._refreshScrollbar();
+
+    updateBadges(); // 🔔 actualizar contador
   }
   window.renderHistorial = renderHistorial;
+
+  /* =======================
+     Badges en botones header
+     ======================= */
+  function updateBadges() {
+    const favCount = Store.get(LS_KEYS.FAVS, []).length;
+    const histCount = Store.get(LS_KEYS.HIST, []).length;
+
+    // Favoritos
+    const $favBtn = $("#btnFavoritos");
+    $favBtn.find(".btn-badge").remove();
+    if (favCount > 0) {
+      $favBtn.append(`<span class="btn-badge">${favCount > 9 ? "9+" : favCount}</span>`);
+    }
+
+    // Historial
+    const $histBtn = $("#btnHistorial");
+    $histBtn.find(".btn-badge").remove();
+    if (histCount > 0) {
+      $histBtn.append(`<span class="btn-badge">${histCount > 9 ? "9+" : histCount}</span>`);
+    }
+  }
+  window.updateBadges = updateBadges;
 
   /* =======================
      Drawer accesible + Header state
      ======================= */
   let __lastDrawerTrigger = null;
-
   const Drawer = {
     open(sel, trigger){
       const $d = $(sel), $o = $d.next(".drawer-overlay");
@@ -194,7 +216,6 @@ function renderList($container, items){
       const $close = $d.find("[data-close]")[0] || $d.find("button,a,input,select,textarea")[0];
       if ($close) $close.focus();
 
-      // 👉 Barrita de scroll SOLO para Historial
       if (sel === "#drawerHistorial") {
         initDrawerScrollbar($d[0]);
       }
@@ -244,15 +265,14 @@ function renderList($container, items){
   }
   window.showSnack = showSnack;
 
-  /* ======================================================
-     Barra de scroll flotante SOLO para #drawerHistorial
-     ====================================================== */
+  /* =======================
+     Barra de scroll flotante
+     ======================= */
   function initDrawerScrollbar(drawerEl){
     if (!drawerEl) return;
     const body = drawerEl.querySelector('.drawer-body');
     if (!body) return;
 
-    // crear contenedor si no existe
     let track = drawerEl.querySelector('.drawer-scrollbar');
     if (!track){
       track = document.createElement('div');
@@ -262,7 +282,6 @@ function renderList($container, items){
     }
     const thumb = track.querySelector('.drawer-scrollbar__thumb');
 
-    // función para actualizar tamaño/posición
     const refresh = () => {
       const h  = body.scrollHeight;
       const vh = body.clientHeight;
@@ -294,13 +313,13 @@ function renderList($container, items){
   }
   window.initDrawerScrollbar = initDrawerScrollbar;
 
-  /* ======================================================
-     Sincronización visual de favoritos en tarjetas (♥)
-     ====================================================== */
+  /* =======================
+     Sync de iconos favoritos
+     ======================= */
   function syncFavIcons(root = document) {
     const $scope = root === document ? $(document) : $(root);
     $scope.find('.fav-btn').each(function () {
-      const id = String($(this).data('id') ?? $(this).attr('data-id'));
+      const id = String($(this).data("id") ?? $(this).attr("data-id"));
       if (!id) return;
       const isFav = Store.hasId(LS_KEYS.FAVS, id);
       $(this)
@@ -314,31 +333,34 @@ function renderList($container, items){
   }
   window.syncFavIcons = syncFavIcons;
 
-  // Envolver renderEventos si existe, para sincronizar luego de cada render
   if (typeof window.renderEventos === 'function' && !window.renderEventos.__wrapped) {
     const __origRenderEventos = window.renderEventos;
     window.renderEventos = function (...args) {
       const res = __origRenderEventos.apply(this, args);
-      requestAnimationFrame(() => syncFavIcons());
+      requestAnimationFrame(() => {
+        syncFavIcons();
+        updateBadges(); // 🔔 actualizar contador tras render
+      });
       return res;
     };
     window.renderEventos.__wrapped = true;
   }
 
-  // Al cargar la página, sincronizar por si ya hay cards
   $(document).ready(() => {
     syncFavIcons();
+    updateBadges(); // 🔔 primera carga
   });
 
-  // Si tenés botones de paginación, sincroniza después de usarlos
   $(document).on('click', '.btn-next, .btn-prev, [data-page]', function () {
-    requestAnimationFrame(() => syncFavIcons());
+    requestAnimationFrame(() => {
+      syncFavIcons();
+      updateBadges();
+    });
   });
 
   /* =======================
      Listeners globales
      ======================= */
-  // Alternar favorito (desde tarjetas y mini-listas, incluso historial)
   $(document).on("click", ".fav-btn", function(e){
     e.preventDefault();
     const id = String($(this).attr("data-id") ?? $(this).data("id"));
@@ -367,48 +389,42 @@ function renderList($container, items){
     renderFavoritos();
     if ($("#drawerHistorial[aria-hidden='false']").length) renderHistorial();
     syncFavIcons();
+    updateBadges();
     showSnack(isFav ? "Se añadió a favoritos" : "Se quitó de favoritos", isFav ? "success" : "error");
   });
 
-  // Guardar en historial y abrir modal de detalle (si existe esa función global)
-$(document).on("click", ".btn-detalle", function (e) {
-  e.preventDefault();
-  const id = String($(this).data("id") ?? $(this).attr("data-id"));
-  if (!id) return;
+  $(document).on("click", ".btn-detalle", function (e) {
+    e.preventDefault();
+    const id = String($(this).data("id") ?? $(this).attr("data-id"));
+    if (!id) return;
 
-  addToHistorialById(id);
+    addToHistorialById(id);
 
-  // Si hay un drawer abierto, cerralo para quitar su overlay oscuro
-  const $openDrawer = $(".drawer[aria-hidden='false']");
-  if ($openDrawer.length) {
-    Drawer.close("#" + $openDrawer.attr("id"));
-  }
+    const $openDrawer = $(".drawer[aria-hidden='false']");
+    if ($openDrawer.length) {
+      Drawer.close("#" + $openDrawer.attr("id"));
+    }
 
-  // Ahora abrí el modal del evento
-  if (typeof abrirDetalleEvento === "function") abrirDetalleEvento(id);
-});
+    if (typeof abrirDetalleEvento === "function") abrirDetalleEvento(id);
+    updateBadges();
+  });
 
+  $(document).off("click", "#btnFavoritos").on("click", "#btnFavoritos", function (e) {
+    e.preventDefault();
+    renderFavoritos();
+    Drawer.open("#drawerFavoritos", this);
+  });
+  $(document).off("click", "#btnHistorial").on("click", "#btnHistorial", function (e) {
+    e.preventDefault();
+    renderHistorial();
+    Drawer.open("#drawerHistorial", this);
+  });
 
- // Botones del header (delegado)
-$(document).off("click", "#btnFavoritos").on("click", "#btnFavoritos", function (e) {
-  e.preventDefault();
-  renderFavoritos();
-  Drawer.open("#drawerFavoritos", this);
-});
-$(document).off("click", "#btnHistorial").on("click", "#btnHistorial", function (e) {
-  e.preventDefault();
-  renderHistorial();
-  Drawer.open("#drawerHistorial", this);
-});
-
-
-  // Cerrar drawer por botón/overlay
   $(document).on("click", "[data-close]", function(){
     const sel = $(this).data("close");
     if (sel) Drawer.close(sel);
   });
 
-  // Cerrar con ESC
   $(document).on("keydown", function(e){
     if (e.key === "Escape") {
       $(".drawer[aria-hidden='false']").each(function(){
@@ -417,16 +433,15 @@ $(document).off("click", "#btnHistorial").on("click", "#btnHistorial", function 
     }
   });
 
-  /* =======================
-     Cross-tab: refleja cambios de favoritos/historial
-     ======================= */
   window.addEventListener('storage', (e) => {
     if (e.key === LS_KEYS.FAVS || e.key === LS_KEYS.FAV_ITEMS) {
       renderFavoritos();
       syncFavIcons();
+      updateBadges();
       if ($("#drawerHistorial[aria-hidden='false']").length) renderHistorial();
     }
     if (e.key === LS_KEYS.HIST) {
+      updateBadges();
       if ($("#drawerHistorial[aria-hidden='false']").length) renderHistorial();
     }
   });

@@ -48,3 +48,50 @@
   outline: 2px solid var(--primary);
   outline-offset: 2px;
 }
+
+
+.btn-link.with-icon {
+  position: relative;
+}
+
+.btn-badge {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background: #ef4444; /* rojo */
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 9999px;
+  line-height: 1;
+  min-width: 20px;
+  text-align: center;
+}
+
+/* Animación pop del badge */
+@keyframes badge-pop {
+  0%   { transform: scale(0.6); opacity: 0; }
+  60%  { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1);   opacity: 1; }
+}
+
+.btn-badge {
+  position: absolute;
+  top: -6px;
+  right: -2px;
+  background: #ef4444;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 9999px;
+  line-height: 1;
+  min-width: 20px;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0,0,0,.4);
+  animation: badge-pop 0.35s ease-out; /* animación al aparecer/actualizar */
+}
+
+
+
