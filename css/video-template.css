@@ -1,19 +1,6 @@
 /* =========================================================
-   HERO PARTIDO + FEATURES (Flow Dance)
+   HERO DIVIDIDO (video + imagen + título + features)
    ========================================================= */
-
-/* --------- Variables utilizadas aquí (por si faltan) --------- */
-/* :root{
-  --primary: #F18B10;
-  --shadow: 0 8px 24px rgba(0,0,0,.25);
-} */
-
-/* =========================================================
-   HERO (GRID con áreas)
-   - Fila 1: título centrado
-   - Fila 2: video (izq) + imagen (der) con misma relación de aspecto
-   ========================================================= */
-
 .split-hero{
   display: grid;
   grid-template-columns: minmax(520px, 1fr) minmax(520px, 1fr);
@@ -56,10 +43,10 @@
   padding: .12em .35em;
   border-radius: .5rem;
   box-shadow: 0 4px 0 rgba(0,0,0,.15);
-  margin: 0 auto; /* centra el bloque */
+  margin: 0 auto; 
   text-align: center;
 }
-/* Si venías usando <span class="hl">…</span>, no interferir aquí */
+
 .headline .hl{ background: transparent; padding: 0; }
 
 /* =========================================================
@@ -80,7 +67,7 @@
 
 .split-hero__right .cover{
   width: 100%;
-  aspect-ratio: 16 / 9; /* clave para igualar alto al del video */
+  aspect-ratio: 16 / 9; /* igualar alto al del video */
   border-radius: 14px;
   border: 1px solid #232a37;
   box-shadow: var(--shadow);
@@ -146,7 +133,7 @@
 
 @media (max-width: 1100px){
   .split-hero{
-    grid-template-columns: 1fr 1fr; /* se relaja antes del corte */
+    grid-template-columns: 1fr 1fr; 
   }
 }
 

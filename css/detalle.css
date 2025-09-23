@@ -1,10 +1,13 @@
 /* ===== Modal ===== */
 .modal {
-  display: none; /* oculto por defecto */
+  display: none;
   position: fixed;
   z-index: 20;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.65);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.65);
   backdrop-filter: blur(4px);
   justify-content: center;
   align-items: center;
@@ -37,7 +40,7 @@
 .detalle-actions {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* distribuye botones */
+  justify-content: space-between;
   flex-wrap: wrap;
   margin-top: 1rem;
 }
@@ -46,7 +49,7 @@
 .detalle-actions .btn-comprar-container {
   flex: 1;
   display: flex;
-  justify-content: left; 
+  justify-content: left;
 }
 
 /* Botón principal */
@@ -61,6 +64,7 @@
   cursor: pointer;
   transition: all 0.2s ease;
 }
+
 .detalle-actions .btn-comprar:hover {
   background: #f39c12;
   color: #fff;
@@ -71,6 +75,7 @@
   display: flex;
   gap: 0.6rem;
 }
+
 .detalle-actions .icon-btn {
   width: 40px;
   height: 40px;
@@ -84,6 +89,7 @@
   border: 1px solid #2c3446;
   transition: all 0.15s ease;
 }
+
 .detalle-actions .icon-btn:hover {
   background: #273046;
   transform: translateY(-2px);
@@ -98,21 +104,28 @@
 
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: scale(.95); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 /* Estilo precio */
 #precioContainer p {
-  font-size: 1.25rem;       
-  font-weight: 700;         
-  color: var(--primary, #f39c12); 
-  margin: 0.8rem 0;         
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--primary, #f39c12);
+  margin: 0.8rem 0;
 }
 
 #precioContainer strong {
   font-weight: 600;
-  color: #ccc; 
+  color: #ccc;
 }
 
 /* En pantallas grandes, acercamos el precio al botón */
@@ -122,12 +135,10 @@
   }
 }
 
-
-
 /* Botón de Encuesta */
 .btn-encuesta {
   display: inline-block;
-  background-color: #2563eb;   
+  background-color: #2563eb;
   color: #fff !important;
   border: none;
   border-radius: 8px;
@@ -136,11 +147,11 @@
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.25s ease, transform 0.15s ease;
-  margin-left: 10px; /* separarlo del botón carrito */
+  margin-left: 10px;
 }
 
 .btn-encuesta:hover {
-  background-color: #1e40af; 
+  background-color: #1e40af;
   transform: translateY(-2px);
 }
 

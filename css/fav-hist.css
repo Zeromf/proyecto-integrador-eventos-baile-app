@@ -1,84 +1,177 @@
 /* Corazón de favoritos */
-.icon-btn.fav-btn.is-fav i { color: #ff6b8a; }
-.icon-btn.fav-btn:hover i { transform: scale(1.05); }
-
-/* Drawers reutilizando tu estética */
-.drawer{
-  position: fixed; top: 0; right: 0; height: 100vh; width: min(480px, 100%);
-  background: var(--panel); border-left: 1px solid #232a37; box-shadow: var(--shadow);
-  transform: translateX(110%); transition: transform .25s ease; z-index: 60;
-  display:flex; flex-direction:column;
+.icon-btn.fav-btn.is-fav i {
+  color: #ff6b8a;
 }
-.drawer[aria-hidden="false"]{ transform: translateX(0); }
-.drawer header{ display:flex; align-items:center; justify-content:space-between; padding: .9rem 1rem; border-bottom:1px solid #232a37; }
-.drawer header h2{ margin:0; font-size:1.1rem; }
-.drawer .cerrar{ background:#242b3a; border:1px solid #2c3446; color:#e7eaf0; border-radius:10px; padding:.35rem .6rem; cursor:pointer; }
-.drawer-body{ padding: .9rem; overflow:auto; display:grid; gap:.75rem; }
+
+.icon-btn.fav-btn:hover i {
+  transform: scale(1.05);
+}
+
+/* Drawers */
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: min(480px, 100%);
+  background: var(--panel);
+  border-left: 1px solid #232a37;
+  box-shadow: var(--shadow);
+  transform: translateX(110%);
+  transition: transform .25s ease;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+}
+
+.drawer[aria-hidden="false"] {
+  transform: translateX(0);
+}
+
+.drawer header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: .9rem 1rem;
+  border-bottom: 1px solid #232a37;
+}
+
+.drawer header h2 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.drawer .cerrar {
+  background: #242b3a;
+  border: 1px solid #2c3446;
+  color: #e7eaf0;
+  border-radius: 10px;
+  padding: .35rem .6rem;
+  cursor: pointer;
+}
+
+.drawer-body {
+  padding: .9rem;
+  overflow: auto;
+  display: grid;
+  gap: .75rem;
+}
 
 /* Tarjeta compacta para listas de favoritos/historial */
-.mini-card{
-  display:grid; grid-template-columns: 96px 1fr auto; gap:.75rem; align-items:center;
-  background: var(--panel-2); border:1px solid #232a37; border-radius:12px; padding:.6rem;
+.mini-card {
+  display: grid;
+  grid-template-columns: 96px 1fr auto;
+  gap: .75rem;
+  align-items: center;
+  background: var(--panel-2);
+  border: 1px solid #232a37;
+  border-radius: 12px;
+  padding: .6rem;
 }
-.mini-card img{ width:96px; height:64px; object-fit:cover; border-radius:8px; border:1px solid #2c3446; }
-.mini-card h4{ margin:.1rem 0; font-size:1rem; }
-.mini-card .meta{ color:var(--muted); font-size:.9rem; }
-.mini-card .actions{ display:flex; gap:.4rem; }
+
+.mini-card img {
+  width: 96px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #2c3446;
+}
+
+.mini-card h4 {
+  margin: .1rem 0;
+  font-size: 1rem;
+}
+
+.mini-card .meta {
+  color: var(--muted);
+  font-size: .9rem;
+}
+
+.mini-card .actions {
+  display: flex;
+  gap: .4rem;
+}
 
 /* Overlays para cada drawer */
-.drawer-overlay{
-  position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:55;
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .45);
+  z-index: 55;
 }
-.drawer[aria-hidden="true"] + .drawer-overlay { display:none; }
+
+.drawer[aria-hidden="true"]+.drawer-overlay {
+  display: none;
+}
 
 
 /* ==== Scrollbar flotante para drawer Historial ==== */
-.drawer-body{ position: relative; }  /* importante */
+.drawer-body {
+  position: relative;
+}
 
-.drawer-scrollbar{
+/* importante */
+
+.drawer-scrollbar {
   position: absolute;
-  top: 8px; bottom: 8px; right: 6px;
+  top: 8px;
+  bottom: 8px;
+  right: 6px;
   width: 6px;
-  pointer-events: none;   /* no tapa clics */
+  pointer-events: none;
+  /* no tapa clics */
   z-index: 1;
 }
-.drawer-scrollbar__thumb{
+
+.drawer-scrollbar__thumb {
   position: absolute;
-  left: 0; width: 100%;
-  height: 32px;                  /* se recalcula por JS */
+  left: 0;
+  width: 100%;
+  height: 32px;
+  /* se recalcula por JS */
   border-radius: 4px;
   background: #3a4154;
   opacity: .35;
   transition: opacity .2s, transform .08s linear;
 }
-.drawer.show-scroll .drawer-scrollbar__thumb{ opacity: .75; }
+
+.drawer.show-scroll .drawer-scrollbar__thumb {
+  opacity: .75;
+}
 
 
 /* Evitar que el <aside.drawer> agregue su propio scroll */
-.drawer { overflow: hidden; }
+.drawer {
+  overflow: hidden;
+}
 
 /* Historial: ocultar la barra nativa y usar solo la custom */
 #drawerHistorial .drawer-body {
-  scrollbar-width: none;        
-  -ms-overflow-style: none;    
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
+
 #drawerHistorial .drawer-body::-webkit-scrollbar {
-  width: 0; height: 0;        
+  width: 0;
+  height: 0;
 }
 
 /* === Menú hamburguesa: badges pegados al ícono en Historial y Favoritos === */
 .menu-principal.active .btn-link.with-icon {
-  display: inline-flex;        /* icono + badge alineados */
+  display: inline-flex;
+  /* icono + badge alineados */
   align-items: center;
-  gap: .4rem;                  /* espacio entre icono y número */
+  gap: .4rem;
+  /* espacio entre icono y número */
   width: 100%;
-  justify-content: flex-start; /* alinear a la izquierda */
+  justify-content: flex-start;
+  /* alinear a la izquierda */
   position: relative;
 }
 
 .menu-principal.active .btn-link.with-icon .btn-badge {
-  position: static;        
+  position: static;
   margin: 0;
-  transform: translateY(-4px); /* subir un poquito */
-  animation: none;           
+  transform: translateY(-4px);
+  animation: none;
 }

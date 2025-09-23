@@ -1,9 +1,5 @@
-/* =========================================================
-   MODALES & SNACKBAR – Flow Dance (FIX)
-   ========================================================= */
-
 /* ---------- Snackbar ---------- */
-.snackbar{
+.snackbar {
   position: fixed;
   left: 50%;
   bottom: 24px;
@@ -14,144 +10,259 @@
   border-left: 4px solid #16a34a;
   padding: .6rem .9rem;
   border-radius: 10px;
-  box-shadow: var(--shadow, 0 8px 24px rgba(0,0,0,.25));
+  box-shadow: var(--shadow, 0 8px 24px rgba(0, 0, 0, .25));
   font-size: .95rem;
   display: none;
   z-index: 10000;
 }
-.snackbar.show{
+
+.snackbar.show {
   display: block;
   animation: snack-in .18s ease, snack-out .20s ease 2.3s forwards;
 }
-.snackbar.error{ border-left-color: #ef4444; }
-.snackbar .icon{ margin-right:.5rem; }
 
-@keyframes snack-in { from { opacity: 0; transform: translate(-50%, 8px); }
-                      to   { opacity: 1; transform: translate(-50%, 0); } }
-@keyframes snack-out{ to   { opacity: 0; transform: translate(-50%, 8px); } }
+.snackbar.error {
+  border-left-color: #ef4444;
+}
 
-/* =========================================================
-   FAVORITOS (#favModal + #favModalBackdrop)
-   ========================================================= */
+.snackbar .icon {
+  margin-right: .5rem;
+}
 
+@keyframes snack-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+@keyframes snack-out {
+  to {
+    opacity: 0;
+    transform: translate(-50%, 8px);
+  }
+}
+
+/* ---------- Modales ---------- */
 /* Backdrop favoritos */
-#favModalBackdrop{
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,.55);
-  opacity: 0; pointer-events: none;
+#favModalBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .55);
+  opacity: 0;
+  pointer-events: none;
   transition: opacity .18s ease;
   z-index: 9998;
 }
-#favModalBackdrop.is-open{ opacity: 1; pointer-events: auto; }
+
+#favModalBackdrop.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
 
 /* Contenedor favoritos (no captura eventos) */
-#favModal{
-  position: fixed; inset: 0;
-  display: flex; align-items: center; justify-content: center;
+#favModal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 1rem;
   z-index: 9999;
   pointer-events: none;
 }
-#favModal[hidden]{ display: none; }
+
+#favModal[hidden] {
+  display: none;
+}
 
 /* Tarjeta favoritos (sí clickeable) */
-#favModal .modal__card{
+#favModal .modal__card {
   pointer-events: auto;
   width: min(680px, 92vw);
   background: var(--panel, #161a22);
   border: 1px solid #232a37;
   border-radius: 16px;
-  box-shadow: var(--shadow, 0 8px 24px rgba(0,0,0,.25));
+  box-shadow: var(--shadow, 0 8px 24px rgba(0, 0, 0, .25));
   transform: translateY(6px) scale(.98);
   opacity: 0;
   transition: transform .18s ease, opacity .18s ease;
 }
-#favModal.is-open .modal__card{ transform: translateY(0) scale(1); opacity: 1; }
+
+#favModal.is-open .modal__card {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
 
 /* Partes internas */
 #favModal .modal__header,
-#favModal .modal__footer{ padding:.9rem 1rem; }
-#favModal .modal__header{
-  display:flex; align-items:center; justify-content:space-between;
-  border-bottom:1px solid #232a37;
+#favModal .modal__footer {
+  padding: .9rem 1rem;
 }
-#favModal .modal__body{ padding:1rem; max-height:60vh; overflow:auto; }
-#favModal .modal__close{
-  background:#1c2230; border:1px solid #2c3446; color:#fff;
-  width:36px; height:36px; border-radius:8px; cursor:pointer;
+
+#favModal .modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #232a37;
 }
-#favModal .modal__pre{
+
+#favModal .modal__body {
+  padding: 1rem;
+  max-height: 60vh;
+  overflow: auto;
+}
+
+#favModal .modal__close {
+  background: #1c2230;
+  border: 1px solid #2c3446;
+  color: #fff;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+#favModal .modal__pre {
   white-space: pre-wrap;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  background:#10151e; border:1px solid #273046; border-radius:10px; padding:.75rem;
+  background: #10151e;
+  border: 1px solid #273046;
+  border-radius: 10px;
+  padding: .75rem;
 }
-#favModal .modal__footer{ display:flex; gap:.6rem; justify-content:flex-end; }
-#favModal .modal__card--success{ border: 2px solid #16a34a; }
-#favModal .modal__body--center{ text-align:center; }
-#favModal .checkmark{ font-size:3rem; color:#16a34a; font-weight:bold; margin-bottom:.8rem; }
 
-/* =========================================================
-   BASE GENÉRICA DE MODALES (Encuesta: #backdrop + .modal)
-   ========================================================= */
+#favModal .modal__footer {
+  display: flex;
+  gap: .6rem;
+  justify-content: flex-end;
+}
+
+#favModal .modal__card--success {
+  border: 2px solid #16a34a;
+}
+
+#favModal .modal__body--center {
+  text-align: center;
+}
+
+#favModal .checkmark {
+  font-size: 3rem;
+  color: #16a34a;
+  font-weight: bold;
+  margin-bottom: .8rem;
+}
+
 
 /* Backdrop genérico (encuesta) */
 .modal-backdrop,
-#backdrop{
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,.55);
-  opacity: 0; pointer-events: none;
+#backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .55);
+  opacity: 0;
+  pointer-events: none;
   transition: opacity .18s ease;
   z-index: 1000;
 }
+
 .modal-backdrop.is-open,
-#backdrop.is-open{ opacity: 1; pointer-events: auto; }
+#backdrop.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
 
 /* Contenedor base (centrado, NO clickeable) */
-.modal{
-  position: fixed; inset: 0;
-  display: flex; align-items: center; justify-content: center;
+.modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 1rem;
   z-index: 1001;
-  pointer-events: none;                 /* <- clave */
+  pointer-events: none;
 }
+
 /* Habilitar interacción en el modal de detalle de categorías */
 #modalDetalle .modal-content-detalle,
 .modal .modal-content-detalle {
   pointer-events: auto;
 }
 
-.modal[hidden]{ display: none; }
+.modal[hidden] {
+  display: none;
+}
 
 /* Tarjeta base (sí clickeable) */
-.modal__card{
-  pointer-events: auto;                 /* <- clave */
+.modal__card {
+  pointer-events: auto;
   width: min(680px, 92vw);
   background: var(--panel, #161a22);
   border: 1px solid #232a37;
   border-radius: 16px;
-  box-shadow: var(--shadow, 0 8px 24px rgba(0,0,0,.25));
+  box-shadow: var(--shadow, 0 8px 24px rgba(0, 0, 0, .25));
   transform: translateY(6px) scale(.985);
   opacity: 0;
   transition: transform .18s ease, opacity .18s ease;
 }
-.modal.is-open .modal__card{ transform: translateY(0) scale(1); opacity: 1; }
+
+.modal.is-open .modal__card {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
 
 /* Partes internas */
-.modal__header, .modal__footer{ padding:.9rem 1rem; }
-.modal__header{
-  display:flex; align-items:center; justify-content:space-between;
-  border-bottom:1px solid #232a37;
+.modal__header,
+.modal__footer {
+  padding: .9rem 1rem;
 }
-.modal__body{ padding:1rem; max-height:60vh; overflow:auto; }
-.modal__close{
-  background:#1c2230; border:1px solid #2c3446; color:#fff;
-  width:36px; height:36px; border-radius:8px; cursor:pointer;
+
+.modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #232a37;
 }
-.modal__pre{
+
+.modal__body {
+  padding: 1rem;
+  max-height: 60vh;
+  overflow: auto;
+}
+
+.modal__close {
+  background: #1c2230;
+  border: 1px solid #2c3446;
+  color: #fff;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.modal__pre {
   white-space: pre-wrap;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  background:#10151e; border:1px solid #273046; border-radius:10px; padding:.75rem;
+  background: #10151e;
+  border: 1px solid #273046;
+  border-radius: 10px;
+  padding: .75rem;
 }
-.modal__card--success{ border: 2px solid #16a34a; }
-.modal__body--center{ text-align: center; }
-.modal--sm .modal__card{ width: min(520px, 92vw); }
+
+.modal__card--success {
+  border: 2px solid #16a34a;
+}
+
+.modal__body--center {
+  text-align: center;
+}
+
+.modal--sm .modal__card {
+  width: min(520px, 92vw);
+}

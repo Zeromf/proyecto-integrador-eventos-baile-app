@@ -1,33 +1,35 @@
 @import url("./toast.css");
 
 .btn-carrito {
-    background: #f39d1200;
-    color:#f39c12 !important ;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-weight: bold;
-    border-radius: 8px;
-    font-size: 1rem;
-    position: relative;
+  background: #f39d1200;
+  color: #f39c12 !important;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 8px;
+  font-size: 1rem;
+  position: relative;
 }
 
 /* Panel carrito */
 .carrito {
   position: fixed;
   top: 0;
-  right: -4000px; /* oculto */
+  right: -4000px;
   width: 350px;
   height: 100%;
   background: #1e1e1e;
-  box-shadow: -2px 0 10px rgba(0,0,0,0.5);
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.5);
   transition: right 0.3s ease;
   display: flex;
   flex-direction: column;
   z-index: 1000;
 }
 
-.carrito.open { right: 0; }
+.carrito.open {
+  right: 0;
+}
 
 .carrito-content {
   display: flex;
@@ -43,7 +45,7 @@
   padding: 16px 18px;
   background: #1e1e1e;
   border-bottom: 1px solid #333;
-  border-top-left-radius: 16px; 
+  border-top-left-radius: 16px;
 }
 
 .carrito header h2 {
@@ -57,7 +59,10 @@
   font-size: 1.5rem;
   color: #aaa;
 }
-.carrito .cerrar:hover { color: #fff; }
+
+.carrito .cerrar:hover {
+  color: #fff;
+}
 
 /* zona scroll */
 .carrito-items {
@@ -77,19 +82,24 @@
   border-radius: 10px;
   transition: background .2s;
 }
-.item:hover { background: #2f3644; }
+
+.item:hover {
+  background: #2f3644;
+}
 
 .item-info p {
   margin: 0;
   font-weight: 600;
   color: #fff;
 }
+
 .item-info small {
   display: block;
   font-size: 0.85rem;
   color: #bbb;
   margin: 4px 0;
 }
+
 .item-info p:last-child {
   color: #f39c12;
   font-weight: bold;
@@ -103,7 +113,11 @@
   font-size: 1.2rem;
   cursor: pointer;
 }
-.btn-eliminar:hover { color: #ff4444; transform: scale(1.1); }
+
+.btn-eliminar:hover {
+  color: #ff4444;
+  transform: scale(1.1);
+}
 
 /* footer fijo */
 .carrito footer {
@@ -135,17 +149,34 @@
   cursor: pointer;
   transition: transform .15s, opacity .2s;
 }
-.btn-vaciar { background: #dc3545; color: #fff; }
-.btn-vaciar:hover { background: #c82333; transform: translateY(-1px); }
-.btn-checkout { background: #28a745; color: #fff; }
-.btn-checkout:hover { background: #218838; transform: translateY(-1px); }
+
+
+.btn-vaciar {
+  background: #dc3545;
+  color: #fff;
+}
+
+.btn-vaciar:hover {
+  background: #c82333;
+  transform: translateY(-1px);
+}
+
+.btn-checkout {
+  background: #28a745;
+  color: #fff;
+}
+
+.btn-checkout:hover {
+  background: #218838;
+  transform: translateY(-1px);
+}
 
 /* Modal Finalizar compra*/
 .modal-confirmar {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0, 0, 0, 0.6);
   justify-content: center;
   align-items: center;
   z-index: 2000;
@@ -171,8 +202,21 @@
   gap: 3rem;
 }
 
-.btn-confirmar { background: #F18B10; color: #fff; padding: 10px 16px; border-radius: 6px; font-weight: bold; }
-.btn-cancelar  { background: #b1b1b100; color: #F18B10; padding: 10px 16px; border-radius: 6px; border-color: #F18B10; }
+.btn-confirmar {
+  background: #F18B10;
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-weight: bold;
+}
+
+.btn-cancelar {
+  background: #b1b1b100;
+  color: #F18B10;
+  padding: 10px 16px;
+  border-radius: 6px;
+  border-color: #F18B10;
+}
 
 #gracias {
   display: flex;
@@ -199,27 +243,45 @@
   transition: color 0.3s;
 }
 
-.cerrar-confirmar:hover { color: #fff; }
+.cerrar-confirmar:hover {
+  color: #fff;
+}
 
 @keyframes popIn {
-  from { opacity: 0; transform: scale(0.8); }
-  to   { opacity: 1; transform: scale(1); }
-}
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to   { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
-@media (max-width: 768px){
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 768px) {
   .carrito header {
-    flex-direction: row;  
+    flex-direction: row;
     align-items: center;
     justify-content: space-between;
     height: auto;
   }
+
   .carrito {
-   z-index: 2001; 
-   width: 100vw;
+    z-index: 2001;
+    width: 100vw;
   }
 }
 
@@ -238,20 +300,32 @@
   line-height: 1;
   min-width: 18px;
   text-align: center;
-  box-shadow: 0 1px 3px rgba(0,0,0,.4);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .4);
   animation: badge-pop 0.35s ease-out;
   z-index: 5;
   pointer-events: none;
 }
 
 @keyframes badge-pop {
-  0%   { transform: scale(0.6); opacity: 0; }
-  60%  { transform: scale(1.2); opacity: 1; }
-  100% { transform: scale(1);   opacity: 1; }
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+
+  60% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 /* En mobile inline (pero lo anulamos en menú hamburguesa con override abajo) */
 @media (max-width: 600px) {
+
   .btn-badge,
   .carrito-badge {
     position: static;
@@ -259,11 +333,15 @@
     margin-left: 6px;
     animation: none;
   }
+
   .menu .btn-link.with-icon {
     padding: .45rem .7rem;
     gap: .4rem;
   }
-  .menu a:hover { transform: none; }
+
+  .menu a:hover {
+    transform: none;
+  }
 }
 
 /* === OVERRIDE: menú hamburguesa abierto => badge arriba === */
@@ -283,7 +361,7 @@
 
 .menu-principal.active .btn-carrito .carrito-badge {
   position: absolute;
-  top: -12px;   /* un poquito más alto para el carrito */
+  top: -12px;
   right: -6px;
   margin: 0;
   animation: badge-pop 0.35s ease-out;
@@ -292,17 +370,17 @@
 
 /* === SOLO carrito en menú hamburguesa: badge pegado al ícono === */
 .menu-principal.active .btn-carrito {
-  display: inline-flex;        /* ícono + badge alineados */
+  display: inline-flex;
   align-items: center;
-  gap: .4rem;                  /* espacio entre carrito y número */
+  gap: .4rem;
   position: relative;
   width: 100%;
-  justify-content: flex-start; /* ícono y badge alineados a la izquierda */
+  justify-content: flex-start;
 }
 
 /* badge del carrito inline (pegado al ícono) */
 .menu-principal.active .btn-carrito .carrito-badge {
-  position: static;          
+  position: static;
   margin: 0;
   font-size: 0.7rem;
   min-width: 18px;
@@ -315,6 +393,5 @@
 .menu-principal.active .btn-carrito .carrito-badge {
   position: static;
   margin: 0;
-  transform: translateY(-9px); 
+  transform: translateY(-9px);
 }
-
