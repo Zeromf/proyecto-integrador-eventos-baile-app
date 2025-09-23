@@ -69,14 +69,13 @@
       </nav>
     </div>
 
-    <!-- Carrito lateral -->
-    <aside class="carrito" id="carrito" aria-hidden="true" aria-label="Carrito de compras">
+      <!-- Carrito lateral -->
+    <aside class="carrito" id="carrito" aria-label="Carrito de compras" hidden>
       <header>
         <h2>Tu carrito</h2>
         <button class="cerrar" onclick="cerrarCarrito()" aria-label="Cerrar carrito">&times;</button>
       </header>
-      <!-- Contenido del carrito renderizado por js/carrito.js -->
-      <div class="carrito-content" id="carritoContent"></div>
+      <!-- contenido del carrito -->
     </aside>
   </header>
 
@@ -248,38 +247,37 @@
     </div>
   </div>
 
-  <!-- ========= (Opcional) Modal de confirmación de compra del carrito =========
-       Si este modal pertenece solo a páginas de compra, podés quitarlo de contacto.html -->
-  <!--
-  <div id="modalConfirmar" class="modal-confirmar">
-    <div class="modal-content" id="modalContent">
-      <div id="confirmar">
-        <i class="fa-solid fa-cart-shopping"></i>
-        <h3>¿Deseás finalizar la compra?</h3>
-        <div id="precioFinal" class="precio-final"></div>
-        <div class="modal-actions">
-          <button id="btnCancelar" class="btn btn-cancelar">Volver</button>
-          <button id="btnConfirmar" class="btn btn-confirmar">Confirmar</button>
-        </div>
+<!-- Modal Confirmación carrito -->
+<div id="modalConfirmar" class="modal-confirmar">
+  <div class="modal-content" id="modalContent">
+
+    <div id="confirmar">
+      <i class="fa-solid fa-cart-shopping"></i>
+      <h3>¿Deseás finalizar la compra?</h3>
+      <!-- Precio total -->
+      <div id="precioFinal" class="precio-final"></div>
+      <div class="modal-actions">
+        <button id="btnCancelar" class="btn btn-cancelar"> Volver</button>
+        <button id="btnConfirmar" class="btn btn-confirmar"> Confirmar</button>
       </div>
-      <div id="gracias" style="display: none;">
-        <button id="modalCerrarconfirmar" class="cerrar-confirmar" aria-label="Cerrar">&times;</button>
-        <div class="success-message">
-          🎉
+    </div>
+     <div id="gracias" style="display: none;">
+      <span id="modalCerrarconfirmar" class="cerrar-confirmar">&times;</span>
+       <div class="success-message">
+          🎉 
           <h3>¡Compra finalizada con éxito!</h3>
           <p>Gracias por confiar en nosotros.</p>
-        </div>
       </div>
     </div>
   </div>
-  -->
+</div>
 
   <!-- JS -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
-
+<script src="js/utils.js"></script>
+<script src="js/carrito.js" defer></script>
 <script src="js/toast.js" defer></script>
 <script src="js/app.js" defer></script>
-<script src="js/carrito.js" defer></script>
 <script src="js/encuesta.js" defer></script>
 <script src="js/contacto.js" defer></script>
 
