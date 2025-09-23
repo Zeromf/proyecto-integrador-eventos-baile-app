@@ -1,0 +1,46 @@
+
+
+/* Estilo base de los iconos */
+.icon-btn {
+  color: #d1d5db; /* gris claro neutro */
+  font-size: 1.2rem;
+  transition: color 0.25s ease, transform 0.2s ease;
+  margin-left: 6px;
+}
+
+/* Hover común */
+.icon-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* WhatsApp */
+.icon-btn .fa-whatsapp {
+  color: #25D366; /* Verde WhatsApp */
+}
+.icon-btn:hover .fa-whatsapp {
+  color: #128C7E; /* Verde oscuro al hover */
+}
+
+/* Calendario */
+.icon-btn .fa-calendar {
+  color: #e0cc15; /* Azul */
+}
+.icon-btn:hover .fa-calendar {
+  color: #758a1b; /* Azul más intenso */
+}
+
+/* Favorito (corazón vacío/lleno) */
+.icon-btn .fa-heart {
+  color: #ef4444; /* Rojo */
+}
+.icon-btn:hover .fa-heart {
+  color: #b91c1c;
+}
+
+/* Encuesta */
+.icon-btn .fa-clipboard-list {
+  color: #2740ad; /* Naranja */
+}
+.icon-btn:hover .fa-clipboard-list {
+  color: #4143a8;
+}
