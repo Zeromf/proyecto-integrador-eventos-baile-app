@@ -59,9 +59,26 @@
 
 /* Historial: ocultar la barra nativa y usar solo la custom */
 #drawerHistorial .drawer-body {
-  scrollbar-width: none;        /* Firefox */
-  -ms-overflow-style: none;     /* IE/Edge Legacy */
+  scrollbar-width: none;        
+  -ms-overflow-style: none;    
 }
 #drawerHistorial .drawer-body::-webkit-scrollbar {
-  width: 0; height: 0;          /* Chrome/Safari/Edge (Blink/WebKit) */
+  width: 0; height: 0;        
+}
+
+/* === Menú hamburguesa: badges pegados al ícono en Historial y Favoritos === */
+.menu-principal.active .btn-link.with-icon {
+  display: inline-flex;        /* icono + badge alineados */
+  align-items: center;
+  gap: .4rem;                  /* espacio entre icono y número */
+  width: 100%;
+  justify-content: flex-start; /* alinear a la izquierda */
+  position: relative;
+}
+
+.menu-principal.active .btn-link.with-icon .btn-badge {
+  position: static;        
+  margin: 0;
+  transform: translateY(-4px); /* subir un poquito */
+  animation: none;           
 }

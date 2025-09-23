@@ -9,6 +9,7 @@
     font-weight: bold;
     border-radius: 8px;
     font-size: 1rem;
+    position: relative;
 }
 
 /* Panel carrito */
@@ -26,9 +27,7 @@
   z-index: 1000;
 }
 
-.carrito.open {
-  right: 0;
-}
+.carrito.open { right: 0; }
 
 .carrito-content {
   display: flex;
@@ -45,7 +44,6 @@
   background: #1e1e1e;
   border-bottom: 1px solid #333;
   border-top-left-radius: 16px; 
-  
 }
 
 .carrito header h2 {
@@ -201,9 +199,7 @@
   transition: color 0.3s;
 }
 
-.cerrar-confirmar:hover {
-  color: #fff;
-}
+.cerrar-confirmar:hover { color: #fff; }
 
 @keyframes popIn {
   from { opacity: 0; transform: scale(0.8); }
@@ -226,3 +222,99 @@
    width: 100vw;
   }
 }
+
+/* Badges generales */
+.carrito-badge,
+.btn-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #e62208;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 9999px;
+  line-height: 1;
+  min-width: 18px;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0,0,0,.4);
+  animation: badge-pop 0.35s ease-out;
+  z-index: 5;
+  pointer-events: none;
+}
+
+@keyframes badge-pop {
+  0%   { transform: scale(0.6); opacity: 0; }
+  60%  { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1);   opacity: 1; }
+}
+
+/* En mobile inline (pero lo anulamos en menú hamburguesa con override abajo) */
+@media (max-width: 600px) {
+  .btn-badge,
+  .carrito-badge {
+    position: static;
+    display: inline-block;
+    margin-left: 6px;
+    animation: none;
+  }
+  .menu .btn-link.with-icon {
+    padding: .45rem .7rem;
+    gap: .4rem;
+  }
+  .menu a:hover { transform: none; }
+}
+
+/* === OVERRIDE: menú hamburguesa abierto => badge arriba === */
+.menu-principal.active .btn-link.with-icon,
+.menu-principal.active .btn-carrito {
+  position: relative;
+  overflow: visible;
+}
+
+.menu-principal.active .btn-link.with-icon .btn-badge {
+  position: absolute;
+  top: -10px;
+  right: -6px;
+  margin: 0;
+  animation: badge-pop 0.35s ease-out;
+}
+
+.menu-principal.active .btn-carrito .carrito-badge {
+  position: absolute;
+  top: -12px;   /* un poquito más alto para el carrito */
+  right: -6px;
+  margin: 0;
+  animation: badge-pop 0.35s ease-out;
+}
+
+
+/* === SOLO carrito en menú hamburguesa: badge pegado al ícono === */
+.menu-principal.active .btn-carrito {
+  display: inline-flex;        /* ícono + badge alineados */
+  align-items: center;
+  gap: .4rem;                  /* espacio entre carrito y número */
+  position: relative;
+  width: 100%;
+  justify-content: flex-start; /* ícono y badge alineados a la izquierda */
+}
+
+/* badge del carrito inline (pegado al ícono) */
+.menu-principal.active .btn-carrito .carrito-badge {
+  position: static;          
+  margin: 0;
+  font-size: 0.7rem;
+  min-width: 18px;
+  padding: 2px 6px;
+  line-height: 1;
+  animation: none;
+}
+
+/* Ajuste de posición del badge del carrito en menú hamburguesa */
+.menu-principal.active .btn-carrito .carrito-badge {
+  position: static;
+  margin: 0;
+  transform: translateY(-9px); 
+}
+

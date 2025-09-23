@@ -1,19 +1,22 @@
-// Obtener carrito de localStorage
+// ===========================
+// Utils LocalStorage Carrito
+// ===========================
 function getCarrito() {
   return JSON.parse(localStorage.getItem("carrito")) || [];
 }
 
-// Guardar carrito
 function setCarrito(carrito) {
   localStorage.setItem("carrito", JSON.stringify(carrito));
 }
 
-// Renderizar carrito 
+// ===========================
+// Renderizar carrito
+// ===========================
 function renderCarrito() {
   const carrito = getCarrito();
   const carritoDiv = document.getElementById("carrito");
 
-   if (!carrito.length) {
+  if (!carrito.length) {
     // Carrito vacío
     carritoDiv.innerHTML = `
       <header>
@@ -22,49 +25,84 @@ function renderCarrito() {
       </header>
       <p>Tu carrito está vacío</p>
     `;
-    return; 
+    updateCarritoBadge();
+    return;
   }
 
-  // carrito con items 
- const itemsHTML = carrito.map((item, index) => `
-  <div class="item">
-    <div class="item-info">
-      <p>${item.nombre}</p>
-      <small>${item.fecha} - ${item.lugar}</small>
-      <p>${formatPrecioARS(item.precio)}</p>
+  // carrito con items
+  const itemsHTML = carrito.map((item, index) => `
+    <div class="item">
+      <div class="item-info">
+        <p>${item.nombre}</p>
+        <small>${item.fecha} - ${item.lugar}</small>
+        <p>${formatPrecioARS(item.precio)}</p>
+      </div>
+      <button class="btn-eliminar" onclick="eliminarDelCarrito(${index})" title="Eliminar">
+        <i class="fa-solid fa-trash"></i>
+      </button>
     </div>
-    <button class="btn-eliminar" onclick="eliminarDelCarrito(${index})" title="Eliminar">
-      <i class="fa-solid fa-trash"></i>
-    </button>
-  </div>
-`).join("");
+  `).join("");
 
- // total
+  // total
   const total = carrito.reduce((acc, i) => acc + (i.precio || 0), 0);
 
   carritoDiv.innerHTML = `
-  <div class="carrito-content">
-    <header>
-      <h2><i class="fa-solid fa-cart-shopping" aria-hidden="true"></i> Tu carrito</h2>
-      <span class="cerrar" onclick="cerrarCarrito()">&times;</span>
-    </header>
+    <div class="carrito-content">
+      <header>
+        <h2><i class="fa-solid fa-cart-shopping" aria-hidden="true"></i> Tu carrito</h2>
+        <span class="cerrar" onclick="cerrarCarrito()">&times;</span>
+      </header>
 
-    <div class="carrito-items">
-      ${itemsHTML}
-    </div>
-
-    <footer>
-      <div class="total">Total: ${formatPrecioARS(total)}</div>
-      <div class="carrito-actions">
-        <button class="btn-vaciar" onclick="vaciarCarrito()">Vaciar</button>
-        <button class="btn-checkout" data-total="${total}">Finalizar Compra</button>
+      <div class="carrito-items">
+        ${itemsHTML}
       </div>
-    </footer>
-  </div>
-`;
+
+      <footer>
+        <div class="total">Total: ${formatPrecioARS(total)}</div>
+        <div class="carrito-actions">
+          <button class="btn-vaciar" onclick="vaciarCarrito()">Vaciar</button>
+          <button class="btn-checkout" data-total="${total}">Finalizar Compra</button>
+        </div>
+      </footer>
+    </div>
+  `;
+
+  updateCarritoBadge(); // 🔔 actualizar badge
 }
 
-// Agregar evento al carrito
+// ===========================
+// Badge del carrito
+// ===========================
+function updateCarritoBadge() {
+  const carrito = getCarrito();
+  const count = carrito.length;
+
+  // Puede haber más de un botón de carrito (header, menú móvil, etc.)
+  document.querySelectorAll(".btn-carrito").forEach(btn => {
+    // limpiar previo
+    btn.querySelector(".carrito-badge")?.remove();
+
+    if (count > 0) {
+      const badge = document.createElement("span");
+      badge.className = "carrito-badge";
+      badge.textContent = count > 9 ? "9+" : count;
+
+      // Forzar animación pop cada vez
+      badge.style.animation = "none";
+      // reflow
+      // eslint-disable-next-line no-unused-expressions
+      badge.offsetHeight;
+      badge.style.animation = null;
+
+      btn.appendChild(badge);
+    }
+  });
+}
+
+
+// ===========================
+// Operaciones del carrito
+// ===========================
 function agregarAlCarrito(evento) {
   const carrito = getCarrito();
   carrito.push({
@@ -76,23 +114,26 @@ function agregarAlCarrito(evento) {
   });
   setCarrito(carrito);
   renderCarrito();
+  mostrarToast("🛒 Evento agregado al carrito");
 }
 
 function eliminarDelCarrito(index) {
   const carrito = getCarrito();
-  carrito.splice(index, 1); 
+  carrito.splice(index, 1);
   setCarrito(carrito);
   renderCarrito();
   mostrarToast("🗑️ Evento eliminado del carrito");
 }
 
 function vaciarCarrito() {
-  setCarrito([]); 
+  setCarrito([]);
   renderCarrito();
   mostrarToast("🗑️ Se vació el carrito");
 }
 
-// Carrito: abrir/cerrar sidebar
+// ===========================
+// Sidebar carrito
+// ===========================
 const carritoAside = document.getElementById("carrito");
 
 function abrirCarrito() {
@@ -103,9 +144,9 @@ function cerrarCarrito() {
   carritoAside.classList.remove("open");
 }
 
-//finaizar compra
-
-// Abrir modal de confirmación
+// ===========================
+// Finalizar compra (modal)
+// ===========================
 document.addEventListener("click", e => {
   if (e.target.classList.contains("btn-checkout")) {
     const total = e.target.getAttribute("data-total");
@@ -114,40 +155,35 @@ document.addEventListener("click", e => {
       <strong>Total:</strong> ${formatPrecioARS(total)}
     `;
 
-    // Mostrar modal con la parte de confirmar
     document.getElementById("modalConfirmar").style.display = "flex";
     document.getElementById("confirmar").style.display = "block";
     document.getElementById("gracias").style.display = "none";
   }
 });
 
-let cerrarTimeout; // variable global para guardar el timeout
+let cerrarTimeout;
 
 // Confirmar compra
 document.getElementById("btnConfirmar").addEventListener("click", () => {
-  // Oculto el bloque confirmar y muestro gracias
   document.getElementById("confirmar").style.display = "none";
   document.getElementById("gracias").style.display = "flex";
 
   vaciarCarrito();
 
-  cerrarTimeout = setTimeout(cerrarYRestaurarModal, 5000000000);
+  cerrarTimeout = setTimeout(cerrarYRestaurarModal, 5000); // ⏱️ cierre automático (5s)
 });
 
-// Botón de la cruz
+// Botón cruz
 document.getElementById("modalCerrarconfirmar").addEventListener("click", () => {
-  clearTimeout(cerrarTimeout); // cancelar el cierre automático si estaba corriendo
+  clearTimeout(cerrarTimeout);
   cerrarYRestaurarModal();
 });
 
-// Función para cerrar y restaurar modal
+// Función cerrar modal y restaurar estado
 function cerrarYRestaurarModal() {
   document.getElementById("modalConfirmar").style.display = "none";
-
-  // Restaurar estado inicial (confirmar visible, gracias oculto)
   document.getElementById("confirmar").style.display = "block";
   document.getElementById("gracias").style.display = "none";
-
   renderCarrito();
 }
 
@@ -156,5 +192,10 @@ document.getElementById("btnCancelar").addEventListener("click", () => {
   document.getElementById("modalConfirmar").style.display = "none";
 });
 
-// Render inicial al cargar
-document.addEventListener("DOMContentLoaded", renderCarrito);
+// ===========================
+// Render inicial
+// ===========================
+document.addEventListener("DOMContentLoaded", () => {
+  renderCarrito();
+  updateCarritoBadge();
+});
