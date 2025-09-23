@@ -241,12 +241,14 @@ a:focus, button:focus, input:focus, select:focus{ outline:2px solid var(--primar
   .section-title{ flex-wrap: wrap; }
 }
 
-/* opcional: que el header de la sección quede sticky */
+/* Barra “Clases / Categorías” pegada justo debajo del header */
 #eventbrite-resultados .section-title{
-  position: sticky; top: 76px; /* ajusta según alto de tu header */
+  position: sticky;
+  top: var(--header-h);   /* usa la altura real del header */
   background: var(--bg);
   z-index: 3;
-  padding-top:.25rem; padding-bottom:.25rem;
+  padding-block: .25rem;
+  margin-top: 0;          /* evita colapso de márgenes con lo de arriba */
 }
 
 .evento-precio {

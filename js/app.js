@@ -330,3 +330,18 @@ const menu = document.querySelector(".menu-principal");
 menuToggle.addEventListener("click", () => {
   menu.classList.toggle("active");
 });
+
+(function () {
+  function setHeaderHeightVar() {
+    const h = document.querySelector('header');
+    if (!h) return;
+    const hh = h.offsetHeight || 0;
+    document.documentElement.style.setProperty('--header-h', hh + 'px');
+  }
+  setHeaderHeightVar();
+  window.addEventListener('resize', setHeaderHeightVar);
+
+  // si abrís/cerrás el menú, la altura del header cambia → refrescar
+  const toggle = document.getElementById('menu-toggle');
+  if (toggle) toggle.addEventListener('click', setHeaderHeightVar);
+})();
